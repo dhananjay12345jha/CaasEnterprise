@@ -1,0 +1,151 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "$defs": {
+    "status": {
+      "type": "string",
+      "enum": ["PLACED", "SHIPPED", "COMPLETED", "CANCELLED"]
+    }
+  },
+  "required": ["version", "id", "detail-type", "detail", "time"],
+  "properties": {
+    "version": {
+      "type": "number"
+    },
+    "id": {
+      "type": "string"
+    },
+    "detail-type": {
+      "type": "string",
+      "enum": ["order.status.changed"]
+    },
+    "source": {
+      "type": "string"
+    },
+    "account": {
+      "type": "string"
+    },
+    "time": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "region": {
+      "type": "string"
+    },
+    "correlationId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "detail": {
+      "type": "object",
+      "required": ["payload", "metadata"],
+      "properties": {
+        "payload": {
+          "type": "object",
+          "required": ["orderId", "status", "time"],
+          "properties": {
+            "orderId": {
+              "type": "string"
+            },
+            "status": {
+              "type": "object",
+              "required": ["current"],
+              "properties": {
+                "previous": {
+                  "$ref": "#/$defs/status"
+                },
+                "current": {
+                  "$ref": "#/$defs/status"
+                }
+              }
+            },
+            "time": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "delivery": {
+              "type": "object",
+              "properties": {
+                "trackingUrl": {
+                  "type": "string",
+                  "format": "url"
+                },
+                "courier": {
+                  "type": "object",
+                  "required": ["companyName"],
+                  "properties": {
+                    "companyName": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "expectedDeliveryWindow": {
+                  "type": "object",
+                  "required": ["value", "type"],
+                  "properties": {
+                    "value": {
+                      "type": "number",
+                      "format": "integer",
+                      "minimum": 0
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["days", "hours"],
+                      "default": "days"
+                    }
+                  }
+                },
+                "lineItems": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "sku",
+                      "status",
+                      "quantity",
+                      "dispatchedQuantity"
+                    ],
+                    "properties": {
+                      "sku": {
+                        "type": "string"
+                      },
+                      "status": {
+                        "$ref": "#/$defs/status",
+                        "description": "Items may be cancelled, shipped, still in processing somewhat independently of each other"
+                      },
+                      "quantity": {
+                        "type": "number",
+                        "format": "integer",
+                        "minimum": 1
+                      },
+                      "dispatchedQuantity": {
+                        "type": "number",
+                        "format": "integer",
+                        "minimum": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "metadata": {
+          "type": "object",
+          "required": ["x-emc-ubid"],
+          "properties": {
+            "x-emc-ubid": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "x-amzn-RequestId": {
+              "type": "string"
+            },
+            "x-lambda-RequestId": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

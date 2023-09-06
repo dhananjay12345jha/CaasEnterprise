@@ -1,0 +1,47 @@
+{
+  "root": "mocks/apps/commerce-tools",
+  "sourceRoot": "mocks/apps/commerce-tools/src",
+  "projectType": "application",
+  "targets": {
+    "serve": {
+      "executor": "@nrwl/node:node",
+      "options": {
+        "inspect": false,
+        "buildTarget": "commerce-tools:_build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/commerce-tools/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/commerce-tools"],
+      "options": {
+        "jestConfig": "apps/commerce-tools/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "_build": {
+      "executor": "@nrwl/node:webpack",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "apps/dist/commerce-tools",
+        "main": "apps/commerce-tools/src/main.ts",
+        "externalDependencies": "none",
+        "tsConfig": "apps/commerce-tools/tsconfig.app.json",
+        "assets": [
+          {
+            "input": "apps/commerce-tools/src",
+            "glob": "**/*",
+            "output": "."
+          }
+        ]
+      }
+    }
+  },
+  "tags": []
+}

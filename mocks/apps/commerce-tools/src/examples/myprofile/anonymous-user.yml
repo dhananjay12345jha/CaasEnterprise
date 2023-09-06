@@ -1,0 +1,7 @@
+statusCode: 403
+message: This endpoint requires an access token issued with the 'Resource Owner Password Credentials Grant'.
+errors:
+  - code: insufficient_token_grant_type
+    message: This endpoint requires an access token issued with the 'Resource Owner Password Credentials Grant'.
+error: insufficient_token_grant_type
+error_description: This endpoint requires an access token issued with the 'Resource Owner Password Credentials Grant'.

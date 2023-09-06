@@ -1,0 +1,28 @@
+steps:
+  # This step ensures that PR titles follow commitlint standards, so that if we enable squash commits (as opposed to rebasing) we still get changelog parseable history
+  # Bit cumbersome, but there doesn't seem to be another way to get the PR subject message
+  # The PR title isn't part of the new commit, so we have to go back and get it from the PR using the CLI
+  - script: |
+      az devops configure \
+          --defaults organization=$(System.TeamFoundationCollectionUri) project=$(System.TeamProject) \
+          --use-git-aliases true
+
+      PR_TITLE=$(az repos pr show \
+          --id "${SYSTEM_PULLREQUEST_PULLREQUESTID}" \
+          --output json \
+          |jq -r .title)
+
+      # equivalent to what commitlint does locally, except it uses an env var
+      echo "Validating PR Title: '${PR_TITLE}'"
+      echo "${PR_TITLE}" | yarn commitlint --verbose
+
+      if [ "$?" -ne 0 ]
+      then
+          echo "##vso[task.logissue type=error] PR Title does not match project standards.";
+          exit 1;
+      else
+          echo "OK!"
+      fi
+    displayName: "[setup pr] validate PR title"
+    env:
+      AZURE_DEVOPS_EXT_PAT: $(System.AccessToken)

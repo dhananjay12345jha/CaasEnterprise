@@ -1,0 +1,114 @@
+{
+  "root": "apps/payments/provider-callback/",
+  "sourceRoot": "apps/payments/provider-callback/src",
+  "projectType": "application",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["apps/payments/provider-callback/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/payments/provider-callback"],
+      "options": {
+        "jestConfig": "apps/payments/provider-callback/jest.config.js",
+        "passWithNoTests": true,
+        "testPathPattern": ["./src"]
+      }
+    },
+    "terminate": {
+      "builder": "@nrwl/workspace:run-commands",
+      "options": {
+        "envFile": "apps/payments/provider-callback/.test.env",
+        "commands": ["yarn kill-port --port ${HTTP_SERVER_PORT}"],
+        "cwd": "apps/payments/provider-callback",
+        "parallel": true
+      }
+    },
+    "e2e:feature:env": {
+      "builder": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "echo \"Get the Base URLs for localhost and write them somewhere jest can find\"",
+        "cwd": "apps/payments/provider-callback",
+        "parallel": false
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "envFile": "apps/payments/provider-callback/.test.env",
+        "command": "yarn sls offline start --noPrependStageInUrl --httpPort=${HTTP_SERVER_PORT} --lambdaPort=${LAMBDA_SERVER_PORT} --stage=local",
+        "color": true,
+        "cwd": "apps/payments/provider-callback"
+      },
+      "dependsOn": [
+        {
+          "target": "terminate",
+          "projects": "self"
+        }
+      ]
+    },
+    "info": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn sls print --verbose",
+        "color": true,
+        "cwd": "apps/payments/provider-callback"
+      }
+    },
+    "build": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn sls package --verbose",
+        "color": true,
+        "cwd": "apps/payments/provider-callback"
+      }
+    },
+    "deploy": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn sls deploy --verbose",
+        "color": true,
+        "cwd": "apps/payments/provider-callback"
+      }
+    },
+    "e2e-run-tests": {
+      "executor": "@nrwl/jest:jest",
+      "options": {
+        "jestConfig": "apps/payments/provider-callback/jest.config.js",
+        "testPathPattern": ["./test/e2e"],
+        "runInBand": true,
+        "passWithNoTests": true
+      }
+    },
+    "e2e-feature": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "envFile": "apps/payments/provider-callback/.test.env",
+        "command": "yarn start-test \"yarn nx run payments-provider-callback:serve\" tcp:localhost:${HTTP_SERVER_PORT} \"yarn nx run payments-provider-callback:e2e-run-tests\"",
+        "color": true,
+        "cwd": "apps/payments/provider-callback"
+      }
+    },
+    "_e2e": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "echo \"Tests not impleneted yet\"",
+        "color": true,
+        "cwd": "apps/payments/provider-callback"
+      }
+    },
+    "destroy": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn sls remove --verbose",
+        "color": true,
+        "cwd": "apps/payments/provider-callback"
+      }
+    }
+  },
+  "tags": ["scope:orders", "type:app"],
+  "implicitDependencies": []
+}

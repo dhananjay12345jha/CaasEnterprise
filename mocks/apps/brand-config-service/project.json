@@ -1,0 +1,67 @@
+{
+  "root": "apps/brand-config-service",
+  "sourceRoot": "apps/brand-config-service/src",
+  "projectType": "application",
+  "targets": {
+    "terminate": {
+      "builder": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "yarn kill-port ${MOCK_GRAPH_SERVER_PORT:-9111}",
+            "forwardAllArgs": true
+          }
+        ],
+        "parallel": false
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/brand-config-service/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["../../../coverage/mocks/apps/brand-config-service"],
+      "options": {
+        "jestConfig": "apps/brand-config-service/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/node:node",
+      "options": {
+        "inspect": false,
+        "buildTarget": "brand-config-service:_build"
+      }
+    },
+    "_build": {
+      "executor": "@nrwl/node:webpack",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "apps/dist/brand-config-service",
+        "main": "apps/brand-config-service/src/main.ts",
+        "externalDependencies": "none",
+        "tsConfig": "apps/brand-config-service/tsconfig.app.json",
+        "assets": [
+          {
+            "input": "apps/brand-config-service/src",
+            "glob": "**/*",
+            "output": "."
+          }
+        ]
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false,
+          "fileReplacements": []
+        }
+      }
+    }
+  },
+  "tags": ["type:mock"]
+}

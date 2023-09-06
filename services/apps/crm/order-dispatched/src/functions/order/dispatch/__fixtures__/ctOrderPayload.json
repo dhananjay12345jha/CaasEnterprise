@@ -1,0 +1,330 @@
+{
+  "type": "Order",
+  "id": "d431c9a8-9f18-49e4-9af8-7c0cc0111304",
+  "version": 2,
+  "versionModifiedAt": "2022-08-04T15:46:29.223Z",
+  "lastMessageSequenceNumber": 2,
+  "createdAt": "2022-07-25T15:23:15.899Z",
+  "lastModifiedAt": "2022-08-04T15:46:29.223Z",
+  "lastModifiedBy": {
+    "isPlatformClient": true,
+    "user": {
+      "typeId": "user",
+      "id": "1344e87b-e80b-474d-92bb-21fc5a359aef"
+    }
+  },
+  "createdBy": {
+    "clientId": "GT2r8VdNdJcGnVZ_8nG1MUAi",
+    "isPlatformClient": false
+  },
+  "orderNumber": "2042602712",
+  "customerEmail": "test1@test.com",
+  "customerId": "e25ef1bb-a8a7-48ee-bb33-391a72e13081",
+  "locale": "de-DE",
+  "totalPrice": {
+    "type": "centPrecision",
+    "currencyCode": "GBP",
+    "centAmount": 8000,
+    "fractionDigits": 2
+  },
+  "taxedPrice": {
+    "totalNet": {
+      "type": "centPrecision",
+      "currencyCode": "GBP",
+      "centAmount": 6667,
+      "fractionDigits": 2
+    },
+    "totalGross": {
+      "type": "centPrecision",
+      "currencyCode": "GBP",
+      "centAmount": 8000,
+      "fractionDigits": 2
+    },
+    "taxPortions": [
+      {
+        "rate": 0.2,
+        "amount": {
+          "type": "centPrecision",
+          "currencyCode": "GBP",
+          "centAmount": 1333,
+          "fractionDigits": 2
+        },
+        "name": "flat-tax-gb"
+      }
+    ],
+    "totalTax": {
+      "type": "centPrecision",
+      "currencyCode": "GBP",
+      "centAmount": 1333,
+      "fractionDigits": 2
+    }
+  },
+  "orderState": "Open",
+  "shipmentState": "Shipped",
+  "syncInfo": [],
+  "returnInfo": [],
+  "taxMode": "Platform",
+  "inventoryMode": "None",
+  "taxRoundingMode": "HalfEven",
+  "taxCalculationMode": "LineItemLevel",
+  "origin": "Customer",
+  "shippingMode": "Single",
+  "shippingInfo": {
+    "shippingMethodName": "Standard-UK",
+    "price": {
+      "type": "centPrecision",
+      "currencyCode": "GBP",
+      "centAmount": 0,
+      "fractionDigits": 2
+    },
+    "shippingRate": {
+      "price": {
+        "type": "centPrecision",
+        "currencyCode": "GBP",
+        "centAmount": 1500,
+        "fractionDigits": 2
+      },
+      "freeAbove": {
+        "type": "centPrecision",
+        "currencyCode": "GBP",
+        "centAmount": 2000,
+        "fractionDigits": 2
+      },
+      "tiers": []
+    },
+    "taxRate": {
+      "name": "flat-tax-gb",
+      "amount": 0.2,
+      "includedInPrice": true,
+      "country": "GB",
+      "state": "HERTS",
+      "id": "39LTMmJu",
+      "subRates": []
+    },
+    "taxCategory": {
+      "typeId": "tax-category",
+      "id": "c01af6dc-7be6-4abf-8a6b-c9b8ae807166"
+    },
+    "deliveries": [],
+    "shippingMethod": {
+      "typeId": "shipping-method",
+      "id": "4220c2dc-6f65-4d71-b876-b0eb365f31ba"
+    },
+    "taxedPrice": {
+      "totalNet": {
+        "type": "centPrecision",
+        "currencyCode": "GBP",
+        "centAmount": 0,
+        "fractionDigits": 2
+      },
+      "totalGross": {
+        "type": "centPrecision",
+        "currencyCode": "GBP",
+        "centAmount": 0,
+        "fractionDigits": 2
+      },
+      "totalTax": {
+        "type": "centPrecision",
+        "currencyCode": "GBP",
+        "centAmount": 0,
+        "fractionDigits": 2
+      }
+    },
+    "shippingMethodState": "MatchesCart"
+  },
+  "shippingAddress": {
+    "id": "2",
+    "salutation": "SIR",
+    "firstName": "JAMES",
+    "lastName": "BOND",
+    "streetName": "Clarendon Rd",
+    "streetNumber": "36",
+    "additionalStreetInfo": "OPP CHURCH",
+    "postalCode": "SL1 1JJ",
+    "city": "WATFORD",
+    "region": "NORTH",
+    "state": "HERTS",
+    "country": "GB",
+    "company": "EVERYMILE",
+    "building": "Greater london house",
+    "apartment": "N/A",
+    "pOBox": "5555",
+    "phone": "+447799882",
+    "mobile": "+447799888120",
+    "email": "test1@test.com",
+    "additionalAddressInfo": "NEAR HIGH STREET"
+  },
+  "shipping": [],
+  "lineItems": [
+    {
+      "id": "8d79b46c-6bb2-4238-8be2-2e527a39e8a2",
+      "productId": "4f39ee73-7adb-4e73-8f55-43438d05233b",
+      "productKey": "diapers",
+      "name": {
+        "en-US": "diapers",
+        "en-GB": "diapers"
+      },
+      "productType": {
+        "typeId": "product-type",
+        "id": "b57389c5-19a4-4984-9aa8-ad80e40527be",
+        "version": 1
+      },
+      "productSlug": {
+        "en-US": "diapers",
+        "en-GB": "diapers"
+      },
+      "variant": {
+        "id": 1,
+        "sku": "diapers-large",
+        "key": "diapers-large",
+        "prices": [
+          {
+            "id": "7a9a1a44-fbc2-4a40-9d2a-f97787390a1c",
+            "value": {
+              "type": "centPrecision",
+              "currencyCode": "EUR",
+              "centAmount": 1200,
+              "fractionDigits": 2
+            }
+          },
+          {
+            "id": "c35ef092-2e38-4fc2-94c4-3f76eae6e2aa",
+            "value": {
+              "type": "centPrecision",
+              "currencyCode": "GBP",
+              "centAmount": 1000,
+              "fractionDigits": 2
+            }
+          }
+        ],
+        "images": [
+          {
+            "url": "https://508e783672d7a8c6e604-3efe86e685dcfbe81036dae242695d2a.ssl.cf3.rackcdn.com/diapers-KQie_uZ5.JPG",
+            "dimensions": {
+              "w": 763,
+              "h": 419
+            }
+          }
+        ],
+        "attributes": [],
+        "assets": [],
+        "availability": {
+          "isOnStock": true,
+          "availableQuantity": 200,
+          "version": 65,
+          "id": "82c00d52-46ef-42ca-9120-5a2aff1bb8ed"
+        }
+      },
+      "price": {
+        "id": "c35ef092-2e38-4fc2-94c4-3f76eae6e2aa",
+        "value": {
+          "type": "centPrecision",
+          "currencyCode": "GBP",
+          "centAmount": 1000,
+          "fractionDigits": 2
+        }
+      },
+      "quantity": 8,
+      "discountedPricePerQuantity": [],
+      "taxRate": {
+        "name": "flat-tax-gb",
+        "amount": 0.2,
+        "includedInPrice": true,
+        "country": "GB",
+        "state": "HERTS",
+        "id": "39LTMmJu",
+        "subRates": []
+      },
+      "perMethodTaxRate": [],
+      "addedAt": "2022-07-25T15:21:30.462Z",
+      "lastModifiedAt": "2022-07-25T15:21:30.462Z",
+      "state": [
+        {
+          "quantity": 8,
+          "state": {
+            "typeId": "state",
+            "id": "0b98cb1b-7034-43b3-be04-968d9d49e5e2"
+          }
+        }
+      ],
+      "priceMode": "Platform",
+      "lineItemMode": "Standard",
+      "totalPrice": {
+        "type": "centPrecision",
+        "currencyCode": "GBP",
+        "centAmount": 8000,
+        "fractionDigits": 2
+      },
+      "taxedPrice": {
+        "totalNet": {
+          "type": "centPrecision",
+          "currencyCode": "GBP",
+          "centAmount": 6667,
+          "fractionDigits": 2
+        },
+        "totalGross": {
+          "type": "centPrecision",
+          "currencyCode": "GBP",
+          "centAmount": 8000,
+          "fractionDigits": 2
+        },
+        "totalTax": {
+          "type": "centPrecision",
+          "currencyCode": "GBP",
+          "centAmount": 1333,
+          "fractionDigits": 2
+        }
+      },
+      "taxedPricePortions": []
+    }
+  ],
+  "customLineItems": [],
+  "transactionFee": true,
+  "discountCodes": [],
+  "directDiscounts": [],
+  "cart": {
+    "typeId": "cart",
+    "id": "7532fe11-d9fc-4f8b-bbd3-40b71e23d59b"
+  },
+  "custom": {
+    "type": {
+      "typeId": "type",
+      "id": "6febc33c-e7a8-4d54-9004-fc594b83dab3"
+    },
+    "fields": {
+      "emcOrderId": "2042602712"
+    }
+  },
+  "paymentInfo": {
+    "payments": [
+      {
+        "typeId": "payment",
+        "id": "3662708d-abc1-4512-ae5f-b797c2f07a93"
+      }
+    ]
+  },
+  "billingAddress": {
+    "id": "3",
+    "salutation": "SIR",
+    "title": "MR",
+    "firstName": "JOHNSON",
+    "lastName": "BORIS",
+    "streetName": "DOWING STREET",
+    "streetNumber": "10",
+    "additionalStreetInfo": "OPP BIG BEN",
+    "postalCode": "E1 1JJ",
+    "city": "LONDON",
+    "region": "CENTRAL",
+    "state": "LONDON",
+    "country": "GB",
+    "company": "EVERYMILE",
+    "building": "PARLIAMENT HOUSE",
+    "apartment": "N/A",
+    "pOBox": "111",
+    "email": "PM@EVERYMILE.com",
+    "additionalAddressInfo": "NEAR THAMES",
+    "key": "AS0Zrb_N8B03cGeqpcTGqj5KkEjtG-nlEULbMt6vNU8j-tqcQbTclFjJkfit5N3xrbI-TBnGN4vBWnkwSKTyhHmY-bYbB9PwM28_-Y6Nas65nJxkmaulbBpeTFnIsOKLWEQL-3XUHq-d0kkJrqLF97rJui52qkXrV9VfEb2OZRFSIeU_tqkjXmv35eOD-6OvRkbxB-qpo4_j5sc2sWtoz2CUomZXO4ba2UtIpUzJQse6T7jITg2xxCwmEhpDf0nA"
+  },
+  "itemShippingAddresses": [],
+  "refusedGifts": []
+}

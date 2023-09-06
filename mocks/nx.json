@@ -1,0 +1,44 @@
+{
+  "extends": "@nrwl/workspace/presets/core.json",
+  "npmScope": "ei-mocks",
+  "affected": {
+    "defaultBase": "develop"
+  },
+  "workspaceLayout": {
+    "appsDir": "apps",
+    "libsDir": "libs"
+  },
+  "cli": {
+    "defaultCollection": "@nrwl/js"
+  },
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "@nrwl/workspace/tasks-runners/default",
+      "options": {
+        "cacheableOperations": ["build", "lint", "test", "e2e"],
+        "runtimeCacheInputs": [
+          "echo BUILD_CONTEXT=${BUILD_CONTEXT:=local}",
+          "echo DELIVERY_CONTEXT=${DELIVERY_CONTEXT:=sandbox}",
+          "echo DELIVERY_STAGE=${DELIVERY_STAGE:=dev}"
+        ]
+      }
+    }
+  },
+  "targetDependencies": {
+    "serve": [
+      {
+        "target": "terminate",
+        "projects": "self"
+      }
+    ]
+  },
+  "implicitDependencies": {
+    "workspace.json": "*",
+    "package.json": {
+      "dependencies": "*",
+      "devDependencies": "*"
+    },
+    "tsconfig.base.json": "*",
+    "nx.json": "*"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "root": "libs/shared/dlq/client",
+  "sourceRoot": "libs/shared/dlq/client/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/shared/dlq/client/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/shared/dlq/client"],
+      "options": {
+        "jestConfig": "libs/shared/dlq/client/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["type:lib"]
+}

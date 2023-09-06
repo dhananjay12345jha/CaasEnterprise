@@ -1,0 +1,152 @@
+{
+  "root": "apps/crm/order-confirmation/",
+  "sourceRoot": "apps/crm/order-confirmation/src",
+  "projectType": "application",
+  "targets": {
+    "serve-all": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "yarn kill-port 9005 && cd ../mocks && nx run braze:serve",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "yarn kill-port 9111 && cd ../mocks && nx run brand-config-service:serve",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "nx run crm-order-confirmation:serve --stage={args.stage}"
+          }
+        ],
+        "parallel": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["apps/crm/order-confirmation/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/crm/order-confirmation"],
+      "options": {
+        "jestConfig": "apps/crm/order-confirmation/jest.config.js",
+        "testPathIgnorePatterns": ["./test/e2e"],
+        "color": true,
+        "testPathPattern": ["./src"]
+      }
+    },
+    "terminate": {
+      "builder": "@nrwl/workspace:run-commands",
+      "options": {
+        "envFile": "apps/crm/order-confirmation/.env",
+        "commands": [
+          "yarn kill-port --port ${HTTP_SERVER_PORT}",
+          "yarn kill-port --port ${LAMBDA_SERVER_PORT}",
+          "yarn kill-port --port ${SLS_OFFLINE_EVENTBRIDGE_PORT}",
+          "yarn kill-port --port ${SLS_OFFLINE_EVENTBRIDGE_PUB_SUB_PORT}"
+        ],
+        "cwd": "apps/crm/order-confirmation",
+        "parallel": true
+      }
+    },
+    "e2e:feature:env": {
+      "builder": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "echo \"Get the Base URLs for localhost and write them somewhere jest can find\"",
+        "cwd": "apps/crm/order-confirmation",
+        "parallel": false
+      }
+    },
+    "e2e-run-tests": {
+      "executor": "@nrwl/jest:jest",
+      "options": {
+        "jestConfig": "apps/crm/order-confirmation/jest.config.js",
+        "testPathPattern": ["./test/e2e"],
+        "runInBand": true,
+        "passWithNoTests": true
+      }
+    },
+    "e2e-feature": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn start-test \"yarn nx run crm-order-confirmation:serve\" tcp:localhost:${SLS_OFFLINE_EVENTBRIDGE_PORT} \"yarn nx run crm-order-confirmation:e2e-run-tests\"",
+        "color": true,
+        "cwd": "apps/crm/order-confirmation"
+      }
+    },
+    "info": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "cwd": "apps/crm/order-confirmation",
+        "color": true,
+        "command": "yarn sls print --verbose"
+      }
+    },
+    "build": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "cwd": "apps/crm/order-confirmation",
+        "color": true,
+        "command": "yarn sls package --verbose"
+      }
+    },
+    "deploy": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn sls deploy --verbose",
+        "color": true,
+        "cwd": "apps/crm/order-confirmation"
+      }
+    },
+    "e2e:env": {
+      "builder": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "echo \"Get the Base URLs from SERVERLESS_CONFIG_JSON and write them somewhere jest can find\"",
+        "cwd": "apps/crm/order-confirmation",
+        "parallel": false
+      }
+    },
+    "_e2e": {
+      "executor": "@nrwl/jest:jest",
+      "options": {
+        "jestConfig": "apps/crm/order-confirmation/jest.config.js",
+        "testPathPattern": ["./test/e2e"],
+        "runInBand": true,
+        "passWithNoTests": true
+      },
+      "dependsOn": [
+        {
+          "target": "e2e:env",
+          "projects": "self"
+        }
+      ]
+    },
+    "destroy": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn sls remove --verbose",
+        "color": true,
+        "cwd": "apps/crm/order-confirmation"
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "cwd": "apps/crm/order-confirmation",
+        "color": true,
+        "command": "yarn sls offline start --noPrependStageInUrl --httpPort=${HTTP_SERVER_PORT} --lambdaPort=${LAMBDA_SERVER_PORT}"
+      },
+      "dependsOn": [
+        {
+          "target": "terminate",
+          "projects": "self"
+        }
+      ]
+    }
+  },
+  "tags": ["scope:crm", "type:app"],
+  "implicitDependencies": []
+}

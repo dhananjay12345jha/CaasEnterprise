@@ -1,0 +1,8 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+. "$(dirname "$0")/common.sh"
+
+echo "Husky: "
+nvm use $(cat $(git rev-parse --show-toplevel)/.nvmrc)
+echo "- check unit tests with coverage"
+yarn affected:test:unit --codeCoverage

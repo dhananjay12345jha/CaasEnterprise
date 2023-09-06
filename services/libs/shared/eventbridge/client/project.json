@@ -1,0 +1,23 @@
+{
+  "root": "libs/shared/eventbridge/client",
+  "sourceRoot": "libs/shared/eventbridge/client/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/shared/eventbridge/client/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/shared/eventbridge/client"],
+      "options": {
+        "jestConfig": "libs/shared/eventbridge/client/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["type:lib"]
+}

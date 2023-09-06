@@ -1,0 +1,86 @@
+{
+  "build": {
+    "context": "${env:BUILD_CONTEXT}"
+  },
+  "delivery": {
+    "stage": "${env:DELIVERY_STAGE}",
+    "context": "${env:DELIVERY_CONTEXT}",
+    "tags": {
+      "Delivery Context": "${env:DELIVERY_CONTEXT_RESOURCE_TAG, \"Test\"}",
+      "Project": "${env:DEPLOY_CONTEXT_RESOURCE_TAG, \"Enterprise Integration\"}"
+    },
+    "resourceTags": [
+      {
+        "Key": "Delivery Context",
+        "Value": "${env:DELIVERY_CONTEXT_RESOURCE_TAG, \"Test\"}"
+      },
+      {
+        "Key": "Project",
+        "Value": "${env:DEPLOY_CONTEXT_RESOURCE_TAG, \"Enterprise Integration\"}"
+      }
+    ]
+  },
+  "deploy": {
+    "context": {
+      "name": "${env:DEPLOY_CONTEXT}",
+      "key": "${env:DEPLOY_CONTEXT_KEY, \"ei\"}"
+    },
+    "target": {
+      "accountId": "530360045496",
+      "region": "eu-west-1",
+      "bucket": "${ssm:/platform/deploy/enterprise-integration/sls/state/bucket, \"SSM_RESOURCE_NOT_FOUND\"}",
+      "role": "${ssm:/platform/deploy/enterprise-integration/sls/role, env:AWS_ROLE_ARN, \"SSM_RESOURCE_NOT_FOUND\"}"
+    }
+  },
+  "provider": {
+    "newrelic": {
+      "nrRegion": "${ssm:/platform/provider/newrelic/region, \"SSM_RESOURCE_NOT_FOUND\"}",
+      "accountId": "${ssm:/platform/provider/newrelic/accountId, \"SSM_RESOURCE_NOT_FOUND\"}",
+      "apiKey": "${ssm:/platform/provider/newrelic/apiKey, \"SSM_RESOURCE_NOT_FOUND\"}"
+    }
+  },
+  "service": {
+    "brandconfig": {
+      "endpoint": "${ssm:/platform/service/${self:custom.stage}/shard-config/endpoint, ssm:/platform/service/shard-config/endpoint, \"SSM_RESOURCE_NOT_FOUND\"}",
+      "policy": {
+        "read": {
+          "arn": "${ssm:/platform/service/${self:custom.stage}/shard-config/policy/read/arn, ssm:/platform/service/shard-config/policy/read/arn, \"SSM_RESOURCE_NOT_FOUND\"}"
+        }
+      }
+    },
+    "transactbus": {
+      "arn": "${ssm:/platform/service/${self:custom.stage}/bus/transact/arn, ssm:/platform/service/bus/transact/arn, \"SSM_RESOURCE_NOT_FOUND\"}",
+      "name": "${ssm:/platform/service/${self:custom.stage}/bus/transact/name, ssm:/platform/service/bus/transact/name, \"SSM_RESOURCE_NOT_FOUND\"}",
+      "dlq": {
+        "name": "${ssm:/platform/service/${self:custom.stage}/bus/transact/dlq/name, ssm:/platform/service/bus/transact/dlq/name, \"SSM_RESOURCE_NOT_FOUND\"}",
+        "arn": "${ssm:/platform/service/${self:custom.stage}/bus/transact/dlq/arn, ssm:/platform/service/bus/transact/dlq/arn, \"SSM_RESOURCE_NOT_FOUND\"}",
+        "url": "${ssm:/platform/service/${self:custom.stage}/bus/transact/dlq/url, ssm:/platform/service/bus/transact/dlq/url, \"SSM_RESOURCE_NOT_FOUND\"}"
+      }
+    },
+    "insightbus": {
+      "arn": "${ssm:/platform/service/${self:custom.stage}/bus/insight/arn, ssm:/platform/service/bus/insight/arn, \"SSM_RESOURCE_NOT_FOUND\"}",
+      "name": "${ssm:/platform/service/${self:custom.stage}/bus/insight/name, ssm:/platform/service/bus/insight/name, \"SSM_RESOURCE_NOT_FOUND\"}"
+    },
+    "syncbus": {
+      "arn": "${ssm:/platform/service/${self:custom.stage}/bus/sync/arn, ssm:/platform/service/bus/sync/arn, \"SSM_RESOURCE_NOT_FOUND\"}",
+      "name": "${ssm:/platform/service/${self:custom.stage}/bus/sync/name, ssm:/platform/service/bus/sync/name, \"SSM_RESOURCE_NOT_FOUND\"}",
+      "dlq": {
+        "name": "${ssm:/platform/service/${self:custom.stage}/bus/sync/dlq/name, ssm:/platform/service/bus/sync/dlq/name, \"SSM_RESOURCE_NOT_FOUND\"}",
+        "arn": "${ssm:/platform/service/${self:custom.stage}/bus/sync/dlq/arn, ssm:/platform/service/bus/sync/dlq/arn, \"SSM_RESOURCE_NOT_FOUND\"}",
+        "url": "${ssm:/platform/service/${self:custom.stage}/bus/sync/dlq/url, ssm:/platform/service/bus/sync/dlq/url, \"SSM_RESOURCE_NOT_FOUND\"}"
+      }
+    },
+    "commercetoolsingressbus": {
+      "name": "${ssm:/platform/service/bus/commercetools-ingress/name, \"SSM_RESOURCE_NOT_FOUND\"}",
+      "arn": "${ssm:/platform/service/bus/commercetools-ingress/arn, \"SSM_RESOURCE_NOT_FOUND\"}",
+      "dlq": {
+        "name": "${ssm:/platform/service/bus/commercetools-ingress/dlq/name, \"SSM_RESOURCE_NOT_FOUND\"}",
+        "arn": "${ssm:/platform/service/bus/commercetools-ingress/dlq/arn, \"SSM_RESOURCE_NOT_FOUND\"}",
+        "url": "${ssm:/platform/service/bus/commercetools-ingress/dlq/url, \"SSM_RESOURCE_NOT_FOUND\"}"
+      }
+    },
+    "webhooks": {
+      "apiId": "${ssm:/platform/service/${self:custom.stage}/webhooks/gateway/id, ssm:/platform/service/webhooks/gateway/id, \"SSM_RESOURCE_NOT_FOUND\"}"
+    }
+  }
+}

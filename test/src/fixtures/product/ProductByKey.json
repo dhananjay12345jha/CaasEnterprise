@@ -1,0 +1,64 @@
+{
+  "id": "4f39ee73-7adb-4e73-8f55-43438d05233b",
+  "version": 15,
+  "productType": {
+    "typeId": "product-type",
+    "id": "b57389c5-19a4-4984-9aa8-ad80e40527be"
+  },
+  "name": {
+    "en-US": "diapers"
+  },
+  "categories": [],
+  "categoryOrderHints": {},
+  "slug": {
+    "en-US": "diapers"
+  },
+  "metaTitle": {
+    "de-DE": "",
+    "en-US": ""
+  },
+  "masterVariant": {
+    "id": 1,
+    "sku": "diapers-large",
+    "key": "diapers-large",
+    "prices": [
+      {
+        "id": "abd59c33-08fa-4e32-aa93-d8d078077f65",
+        "value": {
+          "type": "centPrecision",
+          "currencyCode": "EUR",
+          "centAmount": 200,
+          "fractionDigits": 2
+        }
+      }
+    ],
+    "images": [
+      {
+        "url": "https://508e783672d7a8c6e604-3efe86e685dcfbe81036dae242695d2a.ssl.cf3.rackcdn.com/diapers-KQie_uZ5.JPG",
+        "dimensions": {
+          "w": 763,
+          "h": 419
+        }
+      }
+    ],
+    "attributes": [],
+    "assets": [],
+    "availability": {
+      "isOnStock": true,
+      "availableQuantity": 100,
+      "version": 1,
+      "id": "396efc54-a8d2-48fd-a506-5953adc2223e"
+    }
+  },
+  "variants": [],
+  "searchKeywords": {},
+  "hasStagedChanges": false,
+  "published": true,
+  "key": "diapers",
+  "taxCategory": {
+    "typeId": "tax-category",
+    "id": "c01af6dc-7be6-4abf-8a6b-c9b8ae807166"
+  },
+  "createdAt": "2022-04-11T12:07:32.344Z",
+  "lastModifiedAt": "2022-04-14T20:20:32.044Z"
+}

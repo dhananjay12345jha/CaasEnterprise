@@ -1,0 +1,201 @@
+openapi: 3.0.0
+info:
+  title: The CaaS Private Stock API
+  version: "1.0"
+  description: |
+    A document that details the Private-facing CaaS Stock API.
+
+    #### What is the private API?
+
+    The CaaS private API is designed to be facing trusted, internal applications.
+servers:
+  - url: "https"
+    description: Production server (uses live data)
+  - url: "https:///webhooks.dev.eu-w1.everymile.works"
+    description: Dev server (uses test data)
+  - url: "https:///webhooks.qa1.eu-w1.everymile.works"
+    description: Qa1 server (uses test data)
+paths:
+  /cg/v1/stockquantityupdate:
+    put:
+      summary: |
+        Receives realtime stock updates.
+      tags:
+        - Service
+      security:
+        - PskAuth: []
+      responses:
+        200:
+          $ref: "#/components/responses/200EmptySuccessResponse"
+        400:
+          $ref: "#/components/responses/400BadRequest"
+        401:
+          $ref: "#/components/responses/401Unauthorised"
+        500:
+          description: Internal Server Error
+      operationId: CGTokenIntrospect
+      requestBody:
+        $ref: "#/components/requestBodies/CGStockUpdateRequestBody"
+      x-internal: true
+    parameters: []
+  /ccp/v1/stockquantityupdate:
+    put:
+      summary: |
+        Receives realtime stock updates.
+      tags:
+        - Service
+      security:
+        - PskAuth: []
+      responses:
+        200:
+          $ref: "#/components/responses/200EmptySuccessResponse"
+        400:
+          $ref: "#/components/responses/400BadRequest"
+        401:
+          $ref: "#/components/responses/401Unauthorised"
+        500:
+          description: Internal Server Error
+      operationId: CCPTokenIntrospect
+      requestBody:
+        $ref: "#/components/requestBodies/CCPStockUpdateRequestBody"
+      x-internal: true
+    parameters: []
+components:
+  securitySchemes:
+    PskAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: PSK
+  schemas:
+    BadRequestErrorResponse:
+      properties:
+        error:
+          type: object
+          properties:
+            requestParameters:
+              type: object
+            requestHeaders:
+              type: object
+            details:
+              type: array
+              items:
+                type: object
+                properties:
+                  errorType:
+                    type: string
+                    enum: ["ValidationError"]
+                  message:
+                    type: string
+                    example: "Expected string value, received a boolean"
+                  metadata:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                        example: "invalid-type"
+                      path:
+                        type: array
+                        items:
+                          type: string
+                          example: "brand"
+                required:
+                  - errorType
+                  - message
+    CCPStockUpdateRequestData:
+      type: object
+      required:
+        - time
+        - brand
+        - sku
+        - quantity
+        - updateType
+      properties:
+        time:
+          type: string
+          format: date-time
+          description: A time when the product stock quantity information changed in their internal system. Expected date format is ISO_8601.
+        brand:
+          type: string
+          description: This is OMS specific brand ID.
+          example: 3402
+        sku:
+          type: string
+          description: Product SKU.
+        quantity:
+          type: number
+          format: integer
+          description: Total product stock quantity.
+          minimum: 0
+        updateType:
+          type: string
+          enum:
+            - increment
+            - decrement
+          description: Type of stock quantity update operation. Ie. did the total product quantity increase or decrease.
+    CGStockUpdateRequestData:
+      type: object
+      required:
+        - datetime
+        - organisationUnitId
+        - sku
+        - available
+        - updateType
+      properties:
+        datetime:
+          type: string
+          format: date-time
+          description: A time when the product stock quantity information changed in their internal system. Expected date format is ISO_8601.
+        organisationUnitId:
+          type: string
+          description: This is OMS specific brand ID.
+          example: 3402
+        sku:
+          type: string
+          description: Product SKU.
+        available:
+          type: number
+          format: integer
+          description: Total product stock quantity.
+          minimum: 0
+        updateType:
+          type: string
+          enum:
+            - increment
+            - decrement
+          description: Type of stock quantity update operation. Ie. did the total product quantity increase or decrease.
+  requestBodies:
+    CCPStockUpdateRequestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/CCPStockUpdateRequestData"
+    CGStockUpdateRequestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/CGStockUpdateRequestData"
+  responses:
+    200EmptySuccessResponse:
+      description: Standard empty JSON object success response.
+      content:
+        application/json:
+          schema:
+            type: object
+            example: {}
+    400BadRequest:
+      description: |
+        A response given when the request is invalid, i.e. the request deviates from the given schema. Examples of
+        this would be illegal request bodies, missing mandatory fields, incorrect value types for a given field etc.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/BadRequestErrorResponse"
+    401Unauthorised:
+      description: |
+        A response given when the PSK is invalid, been tampered with, dont relate etc.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/BadRequestErrorResponse"

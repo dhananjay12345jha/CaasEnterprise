@@ -1,0 +1,55 @@
+{
+  "globals": {
+    "shardConfig": {
+      "baseURL": "https://api.whitelabel.dev.test.good-numbers.com",
+      "auth_baseURL": "https://api.whitelabel.dev.test.good-numbers.com/auth",
+      "bcs_baseURL": "https://s2m3csvsyjes3icemfp7lvrole.appsync-api.eu-west-1.amazonaws.com",
+      "xApiKey": "da2-ruzmzq3vezbq7env4atv7j7lmq",
+      "webhook_baseURL": "https://webhooks.dev.eu-w1.everymile.works",
+      "emc_transact_bus": "arn:aws:events:eu-west-1:537531907570:event-bus/emc-transact-bus"
+    },
+    "commercetools": {
+      "ctAPIURL": "https://api.europe-west1.gcp.commercetools.com",
+      "ctAuthAPIURL": "https://auth.europe-west1.gcp.commercetools.com",
+      "ctAPIVersion": "v1"
+    },
+    "oms": {
+      "baseURL": "https://staging.api.cloudcommercepro.com",
+      "clientId": "iz19HVEpX3vjnH17JbdCurugK1khx6RBiehgLyICTAw=",
+      "clientSecret": "J9iiyzsGTqGMJDFzyIwIrXFGhpCsq7C4Z0PqL4L1RsE=",
+      "grantType": "client_credentials"
+    },
+    "testConfig": {
+      "logLevel": "debug",
+      "authAPIVersion": "v1",
+      "resultsLocation": "../../../target/",
+      "openAPISchemaLocation": "../contracts/private/api/",
+      "isMock": false
+    }
+  },
+  "brandA": {
+    "brandId": "8db3855c-3573-5fa4-b578-c7f45e8d41d2",
+    "projectKey": "8db3855c-3573-5fa4-b578-c7f45e8d41d2",
+    "country": "GB",
+    "currency": "GBP",
+    "LineItem_1": "AT1234-90679100",
+    "LineItem_2": "AT1234-90679101",
+    "LineItem_3": "AUTO-TEST-3",
+    "LineItem_1_ProductKey": "AT-TEST-1",
+    "LineItem_2_ProductKey": "AT-TEST-2",
+    "FamilyKey_1": "AUTOTEST-NO-VARIANT",
+    "FamilyKey_2": "AUTOTEST-SINGLE-VARIANT",
+    "password": "Pa$sword1",
+    "CTclient_id": "Zfx1025QKXZjsLSRVWYxge3b",
+    "CTclient_secret": "p9617AUuBWHl6PWk3zbom_pjoWbE34Ne",
+    "paymentSessionReturnUrl": "http://checkout.wppcaas.com",
+    "refOrderNumber": "4601534165",
+    "refCartId": "fc5f0183-ff74-439b-9064-b4bdc3beb7bd",
+    "refCartId_2SKU": "5a7c0ec0-d6c0-42df-a475-5b421b3b5591",
+    "oms_brandId": 3402
+  },
+  "brandB": {
+    "brandId": "b2fb1c54-8e9f-407e-9533-6064a6a0d44b",
+    "password": "Pa$sword1"
+  }
+}

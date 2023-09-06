@@ -1,0 +1,21 @@
+{
+  "root": "qa/sanity",
+  "sourceRoot": "qa/sanity",
+  "projectType": "library",
+  "targets": {
+    "deploy": {
+      "builder": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "cucumber-js --profile sanity --profile {args.profile}",
+            "forwardAllArgs": true
+          }
+        ],
+        "parallel": false
+      }
+    }
+  },
+  "tags": ["scope:test", "type:sanity"],
+  "implicitDependencies": []
+}

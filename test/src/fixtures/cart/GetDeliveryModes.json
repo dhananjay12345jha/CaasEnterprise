@@ -1,0 +1,100 @@
+[
+  {
+    "id": "4220c2dc-6f65-4d71-b876-b0eb365f31ba",
+    "version": 7,
+    "createdAt": "2022-05-03T09:59:41.843Z",
+    "lastModifiedAt": "2022-05-04T12:56:19.173Z",
+    "lastModifiedBy": {
+      "isPlatformClient": true,
+      "user": {
+        "typeId": "user",
+        "id": "1344e87b-e80b-474d-92bb-21fc5a359aef"
+      }
+    },
+    "createdBy": {
+      "isPlatformClient": true,
+      "user": {
+        "typeId": "user",
+        "id": "3857545a-7d76-4775-8469-58dc1c017fab"
+      }
+    },
+    "name": "DHL-Standard-UK",
+    "localizedDescription": {
+      "en-US": "DHL Standard UK"
+    },
+    "taxCategory": {
+      "typeId": "tax-category",
+      "id": "c01af6dc-7be6-4abf-8a6b-c9b8ae807166"
+    },
+    "zoneRates": [
+      {
+        "zone": {
+          "typeId": "zone",
+          "id": "1967b365-442d-4025-8d44-576d44f338f3"
+        },
+        "shippingRates": [
+          {
+            "price": {
+              "type": "centPrecision",
+              "currencyCode": "GBP",
+              "centAmount": 1500,
+              "fractionDigits": 2
+            },
+            "freeAbove": {
+              "type": "centPrecision",
+              "currencyCode": "GBP",
+              "centAmount": 20000,
+              "fractionDigits": 2
+            },
+            "isMatching": false,
+            "tiers": []
+          },
+          {
+            "price": {
+              "type": "centPrecision",
+              "currencyCode": "EUR",
+              "centAmount": 2000,
+              "fractionDigits": 2
+            },
+            "isMatching": true,
+            "tiers": []
+          }
+        ]
+      },
+      {
+        "zone": {
+          "typeId": "zone",
+          "id": "be8dfbcd-2a25-4f00-8fa2-a9fa930296b0"
+        },
+        "shippingRates": [
+          {
+            "price": {
+              "type": "centPrecision",
+              "currencyCode": "EUR",
+              "centAmount": 1500,
+              "fractionDigits": 2
+            },
+            "isMatching": false,
+            "tiers": []
+          },
+          {
+            "price": {
+              "type": "centPrecision",
+              "currencyCode": "GBP",
+              "centAmount": 1000,
+              "fractionDigits": 2
+            },
+            "isMatching": false,
+            "tiers": []
+          }
+        ]
+      }
+    ],
+    "isDefault": false,
+    "references": [],
+    "attributeTypes": {},
+    "cartFieldTypes": {},
+    "lineItemFieldTypes": {},
+    "customLineItemFieldTypes": {}
+  }
+]

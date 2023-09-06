@@ -1,0 +1,9 @@
+{
+  "version": 2,
+  "projects": {
+    "order-created-schema": "private/jsonSchema/order/created",
+    "order-status-changed-schema": "private/jsonSchema/order/status-changed",
+    "payment-received-schema": "private/jsonSchema/payment/received",
+    "stock-quantity-updated-schema": "private/jsonSchema/stock/quantity-updated"
+  }
+}

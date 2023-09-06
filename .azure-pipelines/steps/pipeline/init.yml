@@ -1,0 +1,48 @@
+parameters:
+  - name: overrideAffectedBase
+    type: string
+    default: "default"
+
+steps:
+  # first we could check that if this is a PR build, there is no Individual CI build triggered, using the az cli
+
+  - checkout: self
+    persistCredentials: true
+    fetchDepth: 0
+    displayName: "[init] checkout"
+
+  ## Install dependencies
+  - script: |
+      NODE_VERSION=$(cat .nvmrc)
+      npm config delete prefix  # avoid a warning
+      . ${NVM_DIR}/nvm.sh
+      nvm install ${NODE_VERSION}
+      nvm use ${NODE_VERSION}
+      nvm alias default ${NODE_VERSION}
+      VERSION_PATH="$(nvm_version_path ${NODE_VERSION})"
+      echo "##vso[task.prependPath]$VERSION_PATH"
+      corepack enable
+    displayName: "[init] nvm use"
+
+  - script: |
+      set -e
+      echo "Installing at repo root"
+      yarn install --immutable --immutable-cache # --check-cache
+    displayName: "[init] yarn install"
+
+  - script: |
+      # equivalent to what git-branch-is does, except ADO checks out the code in a headless way
+      echo "Validating Branch name: $(Build.SourceBranchName)"
+      [[ "$(Build.SourceBranchName)" =~ ^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]{0,32}$ ]] ||
+      { echo "##vso[task.logissue type=error] Branch name does not match project standards.";
+      echo "##[warning] A branch name must be valid ASCII and may contain lowercase and uppercase letters, digits, underscores and dashes.";
+      echo "##[warning] A branch name may not start with a period or a dash and may contain a maximum of 32 characters.";
+      echo "##[warning] Regex: '^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]{0,32}$'";
+      exit 1; }
+    displayName: "[init] validate branch name"
+
+  # - bash: |
+  #     echo "##vso[task.setvariable variable=AWS_REGION;isOutput=true]$(AWS.Region)"
+  #     echo "##vso[task.setvariable variable=AWS_EXTERNAL_ID;isOutput=true]$(AWS.ExternalId)"
+  #     echo "##vso[task.setvariable variable=AWS_ROLE_SESSION_NAME;isOutput=true]$(AWS.RoleSessionName)"
+  #   displayName: "[init] setup AWS env vars"

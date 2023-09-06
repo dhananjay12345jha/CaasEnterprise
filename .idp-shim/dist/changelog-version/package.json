@@ -1,0 +1,49 @@
+{
+  "name": "@everymile-idp/changelog-version",
+  "version": "0.1.0",
+  "engines": {
+    "node": ">=16"
+  },
+  "bin": "cli.mjs",
+  "files": [
+    "cli.mjs",
+    "defaults.mjs",
+    "index.mjs"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://WTC-IT-WT@dev.azure.com/WTC-IT-WT/WPPCAAS/_git/internal-developer-platform",
+    "directory": "packages/npm/changelog-version"
+  },
+  "devDependencies": {
+    "@nrwl/cli": "13.10.1",
+    "@nrwl/js": "13.10.1",
+    "@nrwl/node": "13.10.1",
+    "@types/conventional-changelog": "^3",
+    "@types/conventional-changelog-config-spec": "^2",
+    "@types/conventional-recommended-bump": "^6",
+    "@types/git-semver-tags": "^4",
+    "@types/lodash": "^4",
+    "@types/node": "^18.8.2",
+    "@types/semver": "^7"
+  },
+  "dependencies": {
+    "ansi-styles": "^6.1.1",
+    "chalk": "^5.1.0",
+    "conventional-changelog": "^3.1.25",
+    "conventional-changelog-cli": "^2.2.2",
+    "conventional-changelog-config-spec": "^2.1.0",
+    "conventional-changelog-conventionalcommits": "^5.0.0",
+    "conventional-recommended-bump": "^6.1.0",
+    "detect-indent": "^7.0.1",
+    "detect-newline": "^4.0.0",
+    "dotgitignore": "^2.1.0",
+    "figures": "^5.0.0",
+    "git-semver-tags": "^4.1.1",
+    "lodash": "^4.17.21",
+    "meow": "8.0.0",
+    "semver": "^7.3.7",
+    "stringify-package": "^1.0.1",
+    "supports-color": "^9.2.3"
+  }
+}

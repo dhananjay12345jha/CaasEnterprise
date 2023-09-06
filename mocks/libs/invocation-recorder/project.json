@@ -1,0 +1,23 @@
+{
+  "root": "libs/invocation-recorder",
+  "sourceRoot": "libs/invocation-recorder/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/invocation-recorder/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/invocation-recorder"],
+      "options": {
+        "jestConfig": "libs/invocation-recorder/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

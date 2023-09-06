@@ -1,0 +1,34 @@
+
+steps:
+  - task: AWSShellScript@1
+    inputs:
+      scriptType: "inline"
+      inlineScript: |
+        aws sts get-caller-identity
+    displayName: "[aws.vars] whoami"
+
+  - task: AWSShellScript@1
+    inputs:
+      scriptType: "inline"
+      inlineScript: |
+        echo "AWS Environment Info"
+        env | sort -h
+    displayName: "[aws.vars] env"
+
+  #  This is platform config for docs/contracts to be published, and for mock endpoint info
+  - task: AWSShellScript@1
+    inputs:
+      scriptType: "inline"
+      inlineScript: |
+        # Get the SSM data from AWS IDP (our default account we log in to as ADO))
+        AWS_SSM_IDP_DATA=$(echo $(aws ssm get-parameters-by-path --path '/platform' --output json --query "Parameters[*].{Name:Name,Value:Value}" --recursive --with-decryption))
+
+        # Transform the SSM data into a JSON structure, splitting the Name of the SSM var to a object path, and changing the root to EMC.idp from the /platform/config path
+        IDP_JSON_DATA=$(echo $AWS_SSM_IDP_DATA | jq --arg root_key "EMC" 'reduce (.[] | [(.Name | split("/")[1:]), .Value]) as [$p,$v] ({}; setpath($p; $v)) | .platform|= with_entries( if .key == "config" then .key |= "idp" else . end) | {($root_key): .platform}')
+
+        FULL_IDP_JSON_DATA_FILE_NAME=$(System.DefaultWorkingDirectory)/${PLATFORM_CONFIG_DATA}
+        mkdir -p $(dirname $FULL_IDP_JSON_DATA_FILE_NAME)
+
+        echo "${IDP_JSON_DATA}" > "${FULL_IDP_JSON_DATA_FILE_NAME}"
+        echo "${IDP_JSON_DATA}" | jq .
+    displayName: '[aws.vars] IDP meta data'

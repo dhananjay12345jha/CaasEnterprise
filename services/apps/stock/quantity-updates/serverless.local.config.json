@@ -1,0 +1,46 @@
+{
+  "build": {
+    "context": "local"
+  },
+  "delivery": {
+    "stage": "local",
+    "context": "localdev",
+    "tags": {}
+  },
+  "deploy": {
+    "context": {
+      "name": "${env:DEPLOY_CONTEXT, env:GIT_REPOSITORY_NAME, \"enterprise-integration\"}",
+      "key": "${env:DEPLOY_CONTEXT_KEY, \"ei\"}"
+    },
+    "target": {
+      "accountId": "000",
+      "region": "eu-west-2",
+      "bucket": "local",
+      "role": ""
+    }
+  },
+  "provider": {
+    "newrelic": {
+      "nrRegion": "eu",
+      "accountId": "",
+      "apiKey": ""
+    }
+  },
+  "service": {
+    "brandconfig": {
+      "endpoint": "http://localhost:9111/graph",
+      "policy": {
+        "read": {
+          "arn": "arn:aws:iam::00000000:policy/shard_config_server_live_graphql_read_policy"
+        }
+      }
+    },
+    "syncbus": {
+      "arn": "arn:aws:events:eu-west-1:00000000:event-bus/test-event-bus",
+      "name": "test-event-bus"
+    },
+    "webhooks": {
+      "apiId": ""
+    }
+  }
+}

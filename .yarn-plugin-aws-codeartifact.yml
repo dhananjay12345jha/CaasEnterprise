@@ -1,0 +1,13 @@
+npmScopes:
+  everymile-idp:
+    npmRegistryServerConfig:
+      awsProfile: everymile
+      preferAwsEnvironmentCredentials: true
+    npmPublishRegistryConfig:
+      preferAwsEnvironmentCredentials: true
+  everymile-schemas:
+    npmRegistryServerConfig:
+      awsProfile: everymile
+      preferAwsEnvironmentCredentials: true
+    npmPublishRegistryConfig:
+      preferAwsEnvironmentCredentials: true

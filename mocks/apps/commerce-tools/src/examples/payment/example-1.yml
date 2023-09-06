@@ -1,0 +1,27 @@
+# https://docs.commercetools.com/api/projects/payments#payment
+
+results:
+  - type: Payment
+    id: b2f2f0dc-dc4a-4aeb-827c-af28de048f64
+    version: 2
+    createdAt: "2022-02-01"
+    lastModifiedAt: "2022-02-01"
+    interfaceId: b2f2f0dc-dc4a-4aeb-827c-af28de048f64
+    amountPlanned:
+      type: centPrecision
+      centAmount: 1000
+      currencyCode: GBP
+      fractionDigits: 2
+    transactions:
+      - id: b2f2f0dc-dc4a-4aeb-827c-af28de048f64
+        timestamp: "2022-02-01"
+        type: Authorization
+        state: Initial
+        amount:
+          type: centPrecision
+          centAmount: 1000
+          currencyCode: GBP
+          fractionDigits: 2
+    paymentMethodInfo:
+      paymentInterface: Adyen
+    paymentStatus: Initial

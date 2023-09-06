@@ -1,0 +1,16 @@
+{
+  "baseURL": "http://localhost:3100/dev",
+  "bcs_baseURL": "http://localhost:8102/graphql",
+  "brandA_brandId": "746120b5-702d-44a1-9c7e-e8c46b3a6e17",
+  "brandB_brandId": "b2fb1c54-8e9f-407e-9533-6064a6a0d44b",
+  "brandY_brandId": "b2fb1c54-8e9f-407e-9533-6064a6a0d44y",
+  "logLevel": "info",
+  "ctAPIVersion": "v1",
+  "resultsLocation": "../target/",
+  "openAPISchemaLocation": "../docs/api/",
+  "isMock": true,
+  "xApiKey": "da2-fakeApiId123456",
+  "authAPIVersion": "v1",
+  "brandA_password": "Pa$sword1",
+  "brandB_password": "Pa$sword1"
+}

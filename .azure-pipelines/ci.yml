@@ -1,0 +1,71 @@
+trigger:
+  branches:
+    include:
+      - "*"
+    exclude:
+      - develop
+      - main
+      - test
+      - release*
+  tags:
+    exclude:
+      - "*"
+
+pool:
+  vmImage: ubuntu-latest
+
+parameters:
+  - name: overrideAffectedBase
+    displayName: Override the gitref to set for affected resolution base value
+    type: string
+    default: "default"
+
+variables:
+  - name: BUILD_CONTEXT
+    value: ci
+  - name: DELIVERY_CONTEXT
+    value: test
+  - name: DELIVERY_STAGE
+    ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+      value: pr
+    ${{ else }}:
+      value: feature
+  - name: DEPLOY_CONTEXT
+    value: "${{ variables['Build.Repository.Name'] }}"
+  - name: BUILD_META_FILE
+    value: ".azure-pipelines/.config-root/deploy-target/${{ variables.BUILD_CONTEXT }}/${{ variables.DELIVERY_CONTEXT }}/${{ variables.DELIVERY_STAGE }}/request.json"
+  - group: "aws-${{ variables.DELIVERY_CONTEXT }}-${{ variables['Build.Repository.Name'] }}"
+  - template: ./vars/global.yml
+  - template: ./vars/${{ variables.DELIVERY_CONTEXT }}.yml
+  - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+    - template: ./vars/pull-request.yml
+  - ${{ if ne(variables['Build.Reason'], 'PullRequest') }}:
+    - name: OVERRIDE_SLS_STAGE
+      value: "local"
+  - name: BUILD_TITLE
+    ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+      value: PR - $(Build.SourceBranchName)
+    ${{ else }}:
+      value: Feature - $(Build.SourceBranchName)
+
+name: ${{ variables.BUILD_TITLE }}
+steps:
+  - template: ./steps/pipeline/init.yml
+  - template: ./steps/setup/build.yml
+    parameters:
+      overrideAffectedBase: ${{ parameters.overrideAffectedBase }}
+      buildMetaFile: ${{ variables.BUILD_META_FILE }}
+      buildMetaJSON: "NA"
+  - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+      - template: ./steps/setup/pull-request.yml
+  # the next steps could be parallelised?
+  - template: ./steps/workspaces/test/static_analysis.yml
+  - template: ./steps/workspaces/test/unit.yml
+  - template: ./steps/workspaces/info.yml
+  - template: ./steps/workspaces/build.yml
+  - ${{ if ne(variables['Build.Reason'], 'PullRequest') }}:
+      - template: ./steps/workspaces/test/feature.yml
+  - ${{ else }}:
+      - template: ./steps/workspaces/deploy.yml
+      - template: ./steps/workspaces/test/component.yml
+      - template: ./steps/workspaces/destroy.yml

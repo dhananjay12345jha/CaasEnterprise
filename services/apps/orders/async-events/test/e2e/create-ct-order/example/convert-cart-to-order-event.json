@@ -1,0 +1,8 @@
+[
+  {
+    "Source": "payment.order.auth.accepted",
+    "DetailType": "payment.order.auth.accepted",
+    "Detail": "{\"payload\":{\"notificationItems\":[{\"NotificationRequestItem\":{\"additionalData\":{\"checkoutSessionId\":\"some-id\",\"metadata.cartId\":\"558f1f80-47cc-4a16-a60d-b77c24125df2\",\"metadata.cartDigest\":\"some-hash\"},\"merchantReference\":\"some-merchant-reference\",\"success\":\"true\",\"amount\":{\"currency\":\"GBP\",\"value\":1000},\"pspReference\":\"some-reference\",\"eventCode\":\"AUTHORISATION\",\"eventDate\":\"2022-08-15T12:28:29.181Z\"}}],\"live\":\"true\"},\"metadata\":{\"x-emc-ubid\":\"f8e12168-f03b-4f21-8893-60c0d7df9100\"}}",
+    "EventBusName": "emc-transact-bus"
+  }
+]

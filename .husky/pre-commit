@@ -1,0 +1,13 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+. "$(dirname "$0")/common.sh"
+echo "Husky: "
+nvm use $(cat $(git rev-parse --show-toplevel)/.nvmrc)
+echo "- check branch format"
+yarn run git-branch-is -v -r '^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]{0,32}$'
+echo "- check workspaces linting"
+yarn workspaces:lint
+echo "- check workspaces format"
+yarn workspaces:format
+echo "- check affected linting"
+yarn affected:lint

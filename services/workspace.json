@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "projects": {
+    "brand-config": "libs/brand-config",
+    "braze-service": "libs/braze-service",
+    "commerce-tools": "libs/commerce-tools",
+    "common-http": "libs/common/http",
+    "common-lambda": "libs/common/lambda",
+    "common-middleware": "libs/common/middleware",
+    "crm-newsletter-profile": "apps/crm/newsletter-profile",
+    "crm-order-confirmation": "apps/crm/order-confirmation",
+    "crm-order-dispatched": "apps/crm/order-dispatched",
+    "crm-password-reset": "apps/crm/password-reset",
+    "crm-user-registered": "apps/crm/user-registered",
+    "order-management-service": "libs/order-management-service",
+    "orders-async-events": "apps/orders/async-events",
+    "orders-e2e": "apps/orders-e2e",
+    "orders-status-changes": "apps/orders/status-changes",
+    "orders-update-order-ct": "apps/orders/update-order-ct",
+    "payments-e2e": "apps/payments-e2e",
+    "payments-provider-callback": "apps/payments/provider-callback",
+    "services": "libs/services",
+    "shared-dlq-client": "libs/shared/dlq/client",
+    "shared-eventbridge-client": "libs/shared/eventbridge/client",
+    "stock-quantity-updates": "apps/stock/quantity-updates",
+    "stock-update-quantity-ct": "apps/stock/update-quantity-ct"
+  }
+}

@@ -1,0 +1,59 @@
+# https://docs.commercetools.com/api/projects/carts#cart
+type: Cart
+id: ab46db01-3e5c-4e9e-a50a-76f811b357c4
+version: 1
+lastMessageSequenceNumber: 1
+createdAt: "2022-03-31T13:38:36.711Z"
+lastModifiedAt: "2022-03-31T13:38:36.711Z"
+lastModifiedBy:
+  customer:
+    typeId: customer
+    id: d12ac76a-bb4f-4453-9c90-18e349888ae1
+createdBy:
+  customer:
+    typeId: customer
+    id: d12ac76a-bb4f-4453-9c90-18e349888ae1
+customerId: d12ac76a-bb4f-4453-9c90-18e349888ae1
+customerEmail: test@test.com
+lineItems: []
+cartState: Active
+locale: en-US
+totalPrice:
+  type: centPrecision
+  currencyCode: GBP
+  centAmount: 4000
+  fractionDigits: 2
+customLineItems: []
+discountCodes: []
+directDiscounts: []
+inventoryMode: None
+taxMode: Platform
+taxRoundingMode: HalfEven
+taxCalculationMode: LineItemLevel
+deleteDaysAfterLastModification: 90
+refusedGifts: []
+origin: Customer
+itemShippingAddresses: []
+billingAddress:
+  country: GB
+  id: d12ac76a-bb4f-4453-9c90-18e349888ae1
+  key: home-address
+  firstName: person
+  lastName: stillperson
+  city: London
+  email: test@test.com
+shippingAddress:
+  country: GB
+  id: d12ac76a-bb4f-4453-9c90-18e349888ae1
+  key: home-address
+  firstName: person
+  lastName: stillperson
+  city: London
+custom:
+  type:
+    typeId: type
+    id: 6febc33c-e7a8-4d54-9004-fc594b83dab3
+  fields:
+    emcOrderId: "7098638243"
+payments:
+  id: b2f2f0dc-dc4a-4aeb-827c-af28de048f64

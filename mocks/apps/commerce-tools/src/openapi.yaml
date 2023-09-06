@@ -1,0 +1,595 @@
+openapi: 3.0.3
+info:
+  title: Commercetools
+  version: v1
+servers:
+  - url: "https://api.{region}.commercetools.com"
+    variables:
+      region:
+        default: us-central1.gcp
+        enum:
+          - us-central1.gcp
+          - us-east-2.aws
+          - europe-west1.gcp
+          - eu-central-1.aws
+          - australia-southeast1.gcp
+        description: |
+          [Region](/../api/general-concepts#hosts) in which the Project is hosted.
+tags:
+  - name: projectKey
+    description: The Project
+paths:
+  /commercetools/oauth/token:
+    post:
+      tags:
+        - projectKey
+      security:
+        - basicAuth: []
+      operationId: getToken
+      summary: Get an access token
+      description: The token endpoint returns a token object.
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/TokenRequest"
+      responses:
+        "200":
+          $ref: "#/components/responses/Token"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "502":
+          $ref: "#/components/responses/BadGateway"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+  "/commercetools/{projectKey}/payments":
+    parameters:
+      - $ref: "#/components/parameters/ProjectKey"
+    get:
+      tags:
+        - projectKey
+      security:
+        - oauth_2_0:
+            - "view_orders:{projectKey}"
+      operationId: getPayment
+      summary: Gets a payment
+      description: Returns the retrieved payment.
+      parameters:
+        - in: query
+          name: where
+          schema:
+            type: string
+      responses:
+        "200":
+          $ref: "#/components/responses/Payment"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "502":
+          $ref: "#/components/responses/BadGateway"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+  "/commercetools/{projectKey}/carts/{cartId}":
+    parameters:
+      - $ref: "#/components/parameters/ProjectKey"
+      - $ref: "#/components/parameters/CartId"
+    get:
+      tags:
+        - projectKey
+      security:
+        - oauth_2_0:
+            - "view_orders:{projectKey}"
+      operationId: getCart
+      summary: Get cart by id
+      description: Returns a CT cart
+      responses:
+        "200":
+          $ref: "#/components/responses/Cart"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "502":
+          $ref: "#/components/responses/BadGateway"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+  "/commercetools/{projectKey}/orders":
+    parameters:
+      - $ref: "#/components/parameters/ProjectKey"
+    post:
+      tags:
+        - projectKey
+      security:
+        - oauth_2_0:
+            - "view_orders:{projectKey}"
+      operationId: postOrder
+      summary: Creates an order from a cart
+      description: Returns a CT order
+      responses:
+        "200":
+          $ref: "#/components/responses/Order"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "502":
+          $ref: "#/components/responses/BadGateway"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+  "/commercetools/{projectKey}/orders/{orderId}":
+    parameters:
+      - $ref: "#/components/parameters/ProjectKey"
+      - $ref: "#/components/parameters/OrderID"
+    get:
+      tags:
+        - projectKey
+      security:
+        - oauth_2_0:
+            - "view_orders:{projectKey}"
+      operationId: getOrder
+      summary: Gets order by ID
+      description: Returns a CT order
+      responses:
+        "200":
+          $ref: "#/components/responses/Order"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "502":
+          $ref: "#/components/responses/BadGateway"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    oauth_2_0:
+      type: oauth2
+      description: "HTTP API authorization uses [OAuth2](http://tools.ietf.org/html/rfc6750)."
+      flows:
+        clientCredentials:
+          tokenUrl: "https://auth.europe-west1.gcp.commercetools.com/oauth/token"
+          scopes:
+            "view_orders:{projectKey}": view orders
+            "view_products:{projectKey}": view products
+  responses:
+    Token:
+      description: "200"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Token"
+          examples:
+            application/json:
+              value:
+                access_token: faketoken1
+                expires_in: 172800
+                scope: "view-products:my-project"
+                token_type: Bearer
+    Project:
+      description: "200"
+      content:
+        application/json:
+          schema:
+            properties:
+              languages:
+                type: array
+                items:
+                  type: string
+                  default: en-US
+          examples:
+            application/json:
+              value:
+                languages:
+                  - en-US
+    Cart:
+      description: "200"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Cart"
+          examples:
+            faketoken1:
+              value:
+                $ref: ./examples/carts/example-1.yml
+    Payment:
+      description: "200"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Payment"
+          examples:
+            faketoken1:
+              value:
+                $ref: "./examples/payment/example-1.yml"
+    Order:
+      description: "200"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Order"
+          examples:
+            faketoken1:
+              value:
+                $ref: "./examples/order/example-1.yml"
+            faketoken2:
+              value:
+                $ref: "./examples/order/example-2.yml"
+    BadRequest:
+      description: |-
+        ## Bad Request
+
+        A 400 is the most commonly expected error response and indicates that a request failed due to providing bad input.
+        Bad input can be a malformed request body, missing required parameters, wrongly typed or malformed parameters or
+        a parameter that references another resource that does not exist. Clients need to resolve the problems mentioned
+        in the response before re-sending the request.
+
+        The following general error codes can appear in responses with the HTTP status code `400`:
+
+        * `InvalidInput`
+          Invalid input has been sent to the service.
+          The client application should validate the input according to the constraints described in the error message
+          before sending the request.
+
+        * `InvalidOperation`
+          The resource(s) involved in the request are not in a valid state for the operation. The client application
+          should validate the constraints described in the error message before sending the request.
+
+        * `InvalidField`
+          A field has an invalid value.
+          Extra fields:
+          * `field` - String
+            The name of the field.
+          * `invalidValue` - *
+            The invalid value.
+          * `allowedValues` - Array of * - Optional
+            A fixed set of allowed values for the field, if any.
+
+        * `RequiredField`
+          A required field is missing a value.
+          Extra fields:
+          * `field` - String
+            The name of the field.
+
+        * `DuplicateField`
+          A value for a field conflicts with an existing duplicate value.
+          Extra fields:
+          * `field` - String
+            The name of the field.
+          * `duplicateValue` - *
+            The offending duplicate value.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          examples:
+            application/json:
+              value:
+                statusCode: 400
+                message: Bad Request
+                errors:
+                  - code: "400"
+                  - message: Bad Request
+    Unauthorized:
+      description: |-
+        ## Unauthorized
+
+        A 401 indicates that the request is not properly authenticated.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          examples:
+            application/json:
+              value:
+                statusCode: 401
+                message: Unauthorized
+                errors:
+                  - code: "401"
+                  - message: Unauthorized
+    Forbidden:
+      description: |-
+        ## Forbidden
+
+        A 403 indicates that the authenticated client is not allowed to perform the request.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          examples:
+            anonymous-user:
+              value:
+                $ref: ./examples/myprofile/anonymous-user.yml
+            application/json:
+              value:
+                statusCode: 403
+                message: Forbidden
+                errors:
+                  - code: "403"
+                  - message: Forbidden
+    NotFound:
+      description: |-
+        ## Not Found
+
+        A 404 indicates that the addressed resource was not found / does not exist.
+
+        The following general error codes can appear in responses with the HTTP status code `404`:
+
+        * `ResourceNotFound`
+          The resource addressed by the request URL does not exist.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          examples:
+            application/json:
+              value:
+                statusCode: 404
+                message: Not Found
+                errors:
+                  - code: "404"
+                  - message: Not Found
+    InternalServerError:
+      description: |-
+        ## Internal Server Error
+
+        A 500 indicates that a request failed due to a server-side problem that needs to be resolved before subsequent
+        requests can succeed. It either indicates a temporary unavailability or permanent server-side problem that needs
+        to be reported and resolved.
+
+        The following general error codes can appear in responses with the HTTP status code `500`:
+
+        * `General`
+          A server-side problem occurred that is not further specified.
+          These errors [should be reported](http://support.commercetools.com/).
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          examples:
+            application/json:
+              value:
+                statusCode: 500
+                message: Internal Server Error
+                errors:
+                  - code: "500"
+                  - message: Internal Server Error
+    BadGateway:
+      description: |-
+        ## Bad Gateway
+
+        A 502 indicates that a request failed due to a server-side problem caused by platform scaling.
+        The client application should retry the request with exponential backoff up to a point where further delay is unacceptable.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          examples:
+            application/json:
+              value:
+                statusCode: 502
+                message: Bad Gateway
+                errors:
+                  - code: "502"
+                  - message: Bad Gateway
+    ServiceUnavailable:
+      description: |-
+        ## Service Unavailable
+
+        The following general error codes can appear in responses with the HTTP status code `503`:
+
+        * `OverCapacity`
+          The service is having trouble handling the load. The client application should retry the request with
+          exponential backoff up to a point where further delay is unacceptable.
+
+        * `PendingOperation`
+          A previous conflicting operation is still pending and needs to finish before the request can succeed.
+          The client application should retry the request with exponential backoff up to a point where further delay
+          is unaceptable. If these errors persist, [should be reported](http://support.commercetools.com/).
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          examples:
+            application/json:
+              value:
+                statusCode: 503
+                message: Service Unavailable
+                errors:
+                  - code: "503"
+                  - message: Service Unavailable
+  schemas:
+    Token:
+      type: object
+      properties:
+        access_token:
+          type: string
+        expires_in:
+          type: number
+        scope:
+          type: string
+        token_type:
+          type: string
+    TokenRequest:
+      type: object
+      properties:
+        grant_type:
+          type: string
+        scope:
+          type: string
+    CreateCart:
+      type: object
+      properties:
+        currency:
+          type: string
+    Cart:
+      type: object
+      properties:
+        id:
+          type: string
+      additionalProperties: true
+    Order:
+      type: object
+      properties:
+        id:
+          type: string
+      additionalProperties: true
+    Payment:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        version:
+          type: number
+        createdAt:
+          type: string
+          format: date-time
+        lastModifiedAt:
+          type: string
+          format: date-time
+        interfaceId:
+          type: string
+          format: uuid
+        amountPlanned:
+          $ref: "#/components/schemas/CentAmount"
+        transactions:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+              timestamp:
+                type: string
+                format: date-time
+              type:
+                type: string
+              state:
+                type: string
+              amount:
+                $ref: "#/components/schemas/CentAmount"
+        paymentMethodInfo:
+          properties:
+            paymentInterface:
+              type: string
+        paymentStatus:
+          type: string
+
+    Error:
+      type: object
+      required:
+        - statusCode
+        - message
+        - errors
+      properties:
+        statusCode:
+          type: integer
+          format: int32
+          description: The HTTP status code corresponding to the error
+        message:
+          type: string
+          description: The message field of the first error in the errors array
+        errors:
+          type: array
+          description: An array containing all errors which occured for this request
+          items:
+            type: object
+            properties:
+              code:
+                type: string
+                description: A String error identifier
+              message:
+                type: string
+                description: A plain language description of the cause of the error.
+      additionalProperties: false
+    Customer:
+      title: Customer
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        version:
+          type: integer
+        createdAt:
+          type: string
+        lastModifiedAt:
+          type: string
+    ShippingMethod:
+      title: ShippingMethod
+      type: object
+      properties:
+        id:
+          type: string
+    CentAmount:
+      type: object
+      additionalProperties: true
+      properties:
+        centAmount:
+          type: number
+          format: integer
+        currencyCode:
+          type: string
+          minLength: 3
+          maxLength: 3
+  parameters:
+    CartId:
+      name: cartId
+      in: path
+      required: true
+      description: Cart ID
+      schema:
+        type: string
+    ProjectKey:
+      name: projectKey
+      in: path
+      required: true
+      description: Project Key
+      schema:
+        type: string
+    OrderID:
+      name: orderId
+      in: path
+      required: true
+      description: Order ID
+      schema:
+        type: string

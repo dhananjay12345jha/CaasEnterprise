@@ -1,0 +1,132 @@
+{
+  "root": "apps/stock/quantity-updates/",
+  "sourceRoot": "apps/stock/quantity-updates/src",
+  "projectType": "application",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["apps/stock/quantity-updates/src/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/stock/quantity-updates"],
+      "options": {
+        "jestConfig": "apps/stock/quantity-updates/jest.config.js",
+        "passWithNoTests": true,
+        "testPathPattern": ["./src"],
+        "testPathIgnorePatterns": ["./test/e2e"]
+      }
+    },
+    "terminate": {
+      "builder": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "yarn kill-port --port ${HTTP_SERVER_PORT}",
+          "yarn kill-port --port ${LAMBDA_SERVER_PORT}",
+          "yarn kill-port --port ${SLS_OFFLINE_EVENTBRIDGE_PORT}",
+          "yarn kill-port --port ${SLS_OFFLINE_EVENTBRIDGE_PUB_SUB_PORT}"
+        ],
+        "cwd": "apps/stock/quantity-updates",
+        "parallel": true
+      }
+    },
+    "e2e:feature:env": {
+      "builder": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "echo \"Get the Base URLs for localhost and write them somewhere jest can find\"",
+        "cwd": "apps/stock/quantity-updates",
+        "parallel": false
+      }
+    },
+    "e2e-run-tests": {
+      "executor": "@nrwl/jest:jest",
+      "options": {
+        "jestConfig": "apps/stock/quantity-updates/jest.config.js",
+        "testPathPattern": ["./test/e2e"],
+        "runInBand": true,
+        "passWithNoTests": true
+      }
+    },
+    "e2e-feature": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn start-test \"yarn nx run stock-quantity-updates:serve\" tcp:localhost:${HTTP_SERVER_PORT} \"yarn nx run stock-quantity-updates:e2e-run-tests\"",
+        "color": true,
+        "cwd": "apps/stock/quantity-updates"
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn sls offline start --noPrependStageInUrl --httpPort=${HTTP_SERVER_PORT} --lambdaPort=${LAMBDA_SERVER_PORT}",
+        "color": true,
+        "cwd": "apps/stock/quantity-updates"
+      },
+      "dependsOn": [
+        {
+          "target": "terminate",
+          "projects": "self"
+        }
+      ]
+    },
+    "info": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn sls print --verbose",
+        "color": true,
+        "cwd": "apps/stock/quantity-updates"
+      }
+    },
+    "build": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn sls package --verbose",
+        "color": true,
+        "cwd": "apps/stock/quantity-updates"
+      }
+    },
+    "deploy": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn sls deploy --verbose",
+        "color": true,
+        "cwd": "apps/stock/quantity-updates"
+      }
+    },
+    "e2e:env": {
+      "builder": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "echo \"Get the Base URLs from SERVERLESS_CONFIG_JSON and write them somewhere jest can find\"",
+        "cwd": "apps/stock/quantity-updates",
+        "parallel": false
+      }
+    },
+    "_e2e": {
+      "executor": "@nrwl/jest:jest",
+      "options": {
+        "jestConfig": "apps/payments/provider-callback/jest.config.js",
+        "testPathPattern": ["./test/e2e"],
+        "runInBand": true,
+        "passWithNoTests": true
+      },
+      "dependsOn": [
+        {
+          "target": "e2e:env",
+          "projects": "self"
+        }
+      ]
+    },
+    "destroy": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn sls remove --verbose",
+        "color": true,
+        "cwd": "apps/stock/quantity-updates"
+      }
+    }
+  },
+  "tags": ["scope:stock", "type:app"],
+  "implicitDependencies": []
+}

@@ -1,0 +1,385 @@
+openapi: 3.0.3
+info:
+  title: braze
+  version: "1.0"
+servers:
+  - url: "http://localhost:3000"
+paths:
+  /users/track:
+    parameters: []
+    post:
+      summary: Tracks a user event
+      operationId: trackUser
+      responses:
+        "201":
+          $ref: "#/components/responses/TrackUserResponse"
+      description: |-
+        Use this endpoint to record custom events, purchases, and update user profile attributes.
+        https://www.braze.com/docs/api/endpoints/user_data/post_user_track/
+      requestBody:
+        $ref: "#/components/requestBodies/TrackUserRequestBody"
+  /canvas/trigger/send:
+    parameters: []
+    post:
+      summary: Send canvas messages via API-triggered delivery
+      operationId: canvasTriggerSend
+      responses:
+        "200":
+          $ref: "#/components/responses/CanvasTriggerResponse"
+      description: |-
+        Use this endpoint to send API-trigger canvas emails.
+        https://www.braze.com/docs/api/endpoints/messaging/send_messages/post_send_triggered_canvases/
+      requestBody:
+        $ref: "#/components/requestBodies/CanvasTriggerRequestBody"
+components:
+  schemas:
+    URL:
+      type: object
+      properties:
+        pwd_reset_url:
+          type: string
+        expiry:
+          type: string
+    CanvasEntryProperties:
+      type: object
+      properties:
+        url:
+          $ref: "#/components/schemas/URL"
+    CanvasTriggerResponse:
+      title: CanvasTriggerResponse
+      type: object
+      properties:
+        dispatch_id:
+          type: string
+        message:
+          type: string
+    TrackUserResponse:
+      title: TrackUserResponse
+      type: object
+      properties:
+        message:
+          type: string
+        errors:
+          type: array
+          items:
+            $ref: "#/components/schemas/ErrorResponse"
+        attributes_processed:
+          type: number
+        events_processed:
+          type: number
+        purchases_processed:
+          type: number
+    UserAttribute:
+      title: UserAttribute
+      type: object
+      properties:
+        external_id:
+          type: string
+          nullable: true
+        braze_id:
+          type: string
+        _update_existing_only:
+          type: boolean
+        first_name:
+          type: string
+        email:
+          type: string
+        phone_number:
+          type: string
+          nullable: true
+        language_code:
+          type: string
+        brand_name:
+          type: string
+        country_code:
+          type: string
+        time_zone:
+          type: string
+        email_subscribe:
+          type: string
+        account_type:
+          type: string
+        profile_creation_date:
+          type: string
+        last_name:
+          type: string
+          nullable: true
+        dob:
+          type: string
+          nullable: true
+        gender:
+          type: string
+          nullable: true
+        billing_address_company_name:
+          type: string
+          nullable: true
+        billing_address_address_line1:
+          type: string
+          nullable: true
+        billing_address_address_line2:
+          type: string
+          nullable: true
+        billing_address_county:
+          type: string
+          nullable: true
+        billing_address_city:
+          type: string
+          nullable: true
+        billing_address_postcode:
+          type: string
+          nullable: true
+        billing_address_country:
+          type: string
+          nullable: true
+        account_status:
+          type: string
+          nullable: true
+    UserAlias:
+      title: UserAlias
+      type: object
+      properties:
+        alias_name:
+          type: string
+        alias_label:
+          type: string
+    UserPurchase:
+      title: UserPurchase
+      type: object
+      properties:
+        external_id:
+          type: string
+          nullable: true
+        app_id:
+          type: string
+        product_id:
+          type: string
+        currency:
+          type: string
+        price:
+          type: number
+        quantity:
+          type: number
+        time:
+          type: string
+    OrderConfirmationEvent:
+      title: OrderConfirmationEvent
+      type: object
+      properties:
+        external_id:
+          type: string
+          nullable: true
+        name:
+          type: string
+        time:
+          type: string
+        properties:
+          type: object
+          properties:
+            products:
+              type: array
+              items:
+                $ref: "#/components/schemas/OrderConfirmationProduct"
+            order:
+              $ref: "#/components/schemas/OrderConfirmationOrderInfo"
+            billing:
+              $ref: "#/components/schemas/OrderConfirmationBilling"
+            shipping:
+              $ref: "#/components/schemas/OrderConfirmationShipping"
+    OrderConfirmationProduct:
+      title: OrderConfirmationProduct
+      type: object
+      properties:
+        image:
+          type: string
+        sku:
+          type: string
+        name:
+          type: string
+        quantity:
+          type: number
+        product_attributes:
+          type: array
+          items:
+            type: object
+            properties:
+              label:
+                type: string
+              value:
+                type: string
+        purchase_price:
+          type: string
+        total_purchase_price:
+          type: string
+        page_url:
+          type: string
+    OrderConfirmationOrderInfo:
+      title: OrderConfirmationOrderInfo
+      type: object
+      properties:
+        order_number:
+          type: string
+        order_date:
+          type: string
+        order_url:
+          type: string
+        order_total_products:
+          type: number
+        gift_message:
+          type: string
+          nullable: true
+    OrderConfirmationShipping:
+      title: OrderConfirmationShipping
+      type: object
+      properties:
+        delivery_method:
+          type: string
+          nullable: true
+        delivery_date:
+          type: string
+          nullable: true
+        title:
+          type: string
+        company_name:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+        address_line1:
+          type: string
+        address_line2:
+          type: string
+        county:
+          type: string
+        city:
+          type: string
+        postcode:
+          type: string
+        country:
+          type: string
+    OrderConfirmationBilling:
+      title: OrderConfirmationBilling
+      type: object
+      properties:
+        tax_total_amount:
+          type: string
+        total_discount_amount:
+          type: string
+          nullable: true
+        total_price:
+          type: string
+        basket_total:
+          type: string
+        shipping_price:
+          type: string
+        currency:
+          type: string
+        payment_method:
+          type: string
+          nullable: true
+        payment_method_detail:
+          type: string
+          nullable: true
+        address_same_as_shipping:
+          type: boolean
+        title:
+          type: string
+        company_name:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+        address_line1:
+          type: string
+        address_line2:
+          type: string
+        county:
+          type: string
+        city:
+          type: string
+        postcode:
+          type: string
+        country:
+          type: string
+    ErrorResponse:
+      title: ErrorResponse
+      x-stoplight:
+        id: 9c4cfhq1zy8ot
+      type: object
+      properties:
+        type:
+          type: string
+        input_array:
+          type: string
+        index:
+          type: number
+    Recipients:
+      type: object
+      properties:
+        external_user_id:
+          type: string
+        canvas_entry_properties:
+          $ref: "#/components/schemas/CanvasEntryProperties"
+
+  requestBodies:
+    TrackUserRequestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              attributes:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UserAttribute"
+              purchases:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UserPurchase"
+              events:
+                type: array
+                items:
+                  anyOf:
+                    - $ref: "#/components/schemas/OrderConfirmationEvent"
+    CanvasTriggerRequestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              canvas_id:
+                type: string
+              recipients:
+                type: array
+                items:
+                  anyOf:
+                    - $ref: "#/components/schemas/Recipients"
+  responses:
+    TrackUserResponse:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/TrackUserResponse"
+          examples:
+            failed:
+              value:
+                $ref: ./examples/track-user/failed.yml
+            success:
+              value:
+                $ref: ./examples/track-user/success.yml
+    CanvasTriggerResponse:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/CanvasTriggerResponse"
+          examples:
+            failed:
+              value:
+                $ref: ./examples/canvas-trigger-send/failed.yml
+            success:
+              value:
+                $ref: ./examples/canvas-trigger-send/success.yml
+  securitySchemes: {}

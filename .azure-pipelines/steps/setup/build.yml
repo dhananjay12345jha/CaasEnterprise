@@ -1,0 +1,49 @@
+parameters:
+  - name: overrideAffectedBase
+    type: string
+    default: "default"
+  - name: buildSourceBranch
+    type: string
+    default: "default"
+  - name: buildMetaFile
+    type: string
+    default: "NA"
+  - name: buildMetaJSON
+    type: string
+    default: "NA"
+
+steps:
+  - template: ./_meta.yml
+    parameters:
+      buildMetaFile: ${{ parameters.buildMetaFile }}
+      buildMetaJSON: ${{ parameters.buildMetaJSON }}
+  - template: ./_affected.yml
+    parameters:
+      buildSourceBranch: ${{ parameters.buildSourceBranch }}
+      overrideAffectedBase: ${{ parameters.overrideAffectedBase }}
+  - script: |
+      echo "Git Info"
+      echo "  status: $(git status -bs)"
+
+      echo "  describe repo: $(git describe --always --tag --dirty --all --long)"
+
+      echo "set variable CI_REPO_VERSION to $(git describe --always --tag)"
+      echo "##vso[task.setvariable variable=CI_REPO_VERSION;isOutput=true]$(git describe --always --tag)"
+
+      if [ -n "${SYSTEM_PULLREQUEST_SOURCEBRANCH+set}" ]
+      then
+        echo "set variable CI_REPO_BRANCH for PR to ${SYSTEM_PULLREQUEST_SOURCEBRANCH#refs/heads/}"
+        echo "##vso[task.setvariable variable=CI_REPO_BRANCH;isOutput=true]${SYSTEM_PULLREQUEST_SOURCEBRANCH#refs/heads/}"
+      else
+        echo "set variable CI_REPO_BRANCH to $(affected.buildSourceBranchName)"
+        echo "##vso[task.setvariable variable=CI_REPO_BRANCH;isOutput=true]$(affected.buildSourceBranchName)"
+      fi
+
+      echo
+      echo "set variable CICD_SYSTEM to AzureDevOps"
+      echo "##vso[task.setvariable variable=CICD_SYSTEM;isOutput=true]AzureDevOps"
+    displayName: "[setup] build vars"
+    name: build_vars
+  - template: ./_platform_config.yml
+  - template: ./_deploy_target_config.yml #call getBuildMeta() from a config service from the info provided in platform config, if one exists
+  - template: ./_serverless_config.yml

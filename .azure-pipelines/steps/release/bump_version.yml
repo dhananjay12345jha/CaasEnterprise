@@ -1,0 +1,37 @@
+parameters:
+  - name: prerelease
+    type: string
+    default: ""
+  - name: releaseas
+    type: string
+    default: ""
+steps:
+  - bash: |
+      # set +x ## debug all the commands
+      PRERELEASE="${{ parameters.prerelease }}"
+      RELEASEAS="${{ parameters.releaseas }}"
+      STANDVER_PARAM=""
+      if [[ -n "${PRERELEASE}" ]]; then
+        STANDVER_PARAM+="--prerelease ${PRERELEASE}"
+      fi
+      if [[ -n "${PRERELEASE}" && -n "${RELEASEAS}" ]]; then
+        STANDVER_PARAM+=" "
+      fi
+      if [[ -n "${RELEASEAS}" ]]; then
+        STANDVER_PARAM+="--release-as ${RELEASEAS}"
+      fi
+
+      echo STANDVER_PARAM=${STANDVER_PARAM}
+      echo "##vso[task.setvariable variable=STANDVER_PARAM]${STANDVER_PARAM}"
+    displayName: "[release] setup"
+
+  - bash: |
+      set -e
+      git config --global user.email "ado.wppcaas@everymile.tech"
+      git config --global user.name "ado.wppcaas"
+      yarn release $(STANDVER_PARAM) $(affected.affectedNxParams)
+    displayName: "[release] bump release"
+
+  - bash: |
+      HUSKY=0 git push --follow-tags origin HEAD:$(Build.SourceBranchName)
+    displayName: "[release] push release"

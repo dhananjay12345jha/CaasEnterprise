@@ -1,0 +1,72 @@
+
+parameters:
+  - name: target
+    type: string
+steps:
+  - script: |
+      az devops configure \
+        --defaults organization=$(System.TeamFoundationCollectionUri) project=$(System.TeamProject) \
+        --use-git-aliases true
+      az repos pr create \
+        --auto-complete true \
+        --detect \
+        --repository '$(Build.Repository.Name)' \
+        --source-branch '$(Build.SourceBranch)' \
+        --target-branch "refs/heads/${{ parameters.target }}" \
+        --title "Automated PR from $(Build.SourceBranch) - commit $(Build.SourceVersion)" \
+        --output json
+    displayName: '[release] create PR to ${{ parameters.target }}'
+    env:
+      AZURE_DEVOPS_EXT_PAT: $(System.AccessToken)
+
+
+# az devops configure \
+#   --defaults organization=$(System.TeamFoundationCollectionUri) project=$(System.TeamProject) \
+#   --use-git-aliases true
+
+# LAST_SUCCESSFUL_BUILD_JSON=$(az pipelines build list \
+#   --branch "$(System.PullRequest.TargetBranch)" \
+#   --result succeeded \
+#   --status completed \
+#   --query "[?repository.name=='$(Build.Repository.Name)' \
+#             && buildNumber==Build.BuildNumber] \
+#             | sort_by(@, &id) \
+#             | [-1:].{id: id, pipeline: buildNumber, branch: sourceBranch, ref: sourceVersion}[0]" \
+#   |jq .)
+# if [[ "${LAST_SUCCESSFUL_BUILD_JSON:=none}" != "none" ]]
+# then
+#   echo "Last Successful Build = ${LAST_SUCCESSFUL_BUILD_JSON}"
+#   echo "Setting PullRequest affected base ref from last successful build data to $(echo $LAST_SUCCESSFUL_BUILD_JSON|jq '.ref')"
+#   AFFECTED_BASE_REF=$(echo $LAST_SUCCESSFUL_BUILD_JSON|jq -r '.ref')
+# else
+#   echo "##[warning]Affected base ref could not be determined for PR - no successful previous build for $(System.PullRequest.TargetBranch)"
+#   # Below lines only needed while a build is not triggered post merge on target branch
+#   TARGET_REMOTE="remotes/origin/${SYSTEM_PULLREQUEST_TARGETBRANCH#refs/heads/}"
+#   echo "Setting PullRequest affected base ref to merge base of ${TARGET_REMOTE} as $(git merge-base ${TARGET_REMOTE} ${AFFECTED_HEAD_REF})"
+#   AFFECTED_BASE_REF=$(git merge-base ${TARGET_REMOTE} ${AFFECTED_HEAD_REF})
+# fi
+
+# #!/bin/bash
+# set -e
+# set -o pipefail
+
+# status=$(curl -w "%{http_code}" -o 'response' -XPOST \
+#         -H "Accept: application/json" \
+#         -H "Content-Type: application/json" \
+#         -H "Authorization: Bearer ${SYSTEM_ACCESSTOKEN}" \
+#         "${SYSTEM_TEAMFOUNDATIONCOLLECTIONURI}${SYSTEM_TEAMPROJECT}/_apis/git/repositories/${BUILD_REPOSITORY_NAME}/pullrequests?api-version=6.0" \
+#         --data '{"sourceRefName": "'"$BUILD_SOURCEBRANCH"'", "targetRefName": "refs/heads/main", "title": "Automated PR - commit ['"$BUILD_SOURCEVERSION"']" }' | jq -r)
+
+# if  (( $status >= 400 )); then echo "HTTP [$status] ERROR: $(cat response | jq -r)"; exit $status; fi
+# if  (( $status >= 300 )); then echo "HTTP [$status] ERROR: $(cat response)"; exit $status; fi
+
+# identityRef=$(cat response | jq -r .createdBy.id)
+# pullRequestId=$(cat response | jq -r .pullRequestId)
+
+# status=$(curl -w "%{http_code}" -o 'response' -XPATCH \
+# -H "Content-Type: application/json" \
+# -H "Authorization: Bearer ${SYSTEM_ACCESSTOKEN}" \
+# "${SYSTEM_TEAMFOUNDATIONCOLLECTIONURI}${SYSTEM_TEAMPROJECT}/_apis/git/repositories/${BUILD_REPOSITORY_NAME}/pullrequests/${pullRequestId}?api-version=6.0" \
+# --data '{"autoCompleteSetBy": {"id": "'"$identityRef"'"}}')
+
+# if  (( $status >= 400 )); then echo "HTTP [$status] ERROR: $(cat response | jq -r)"; exit $status; fi

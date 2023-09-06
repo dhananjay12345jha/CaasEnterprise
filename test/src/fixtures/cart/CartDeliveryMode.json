@@ -1,0 +1,294 @@
+{
+  "type": "Cart",
+  "id": "f4e7d12d-2564-4d7c-86b8-2ca901f69e5b",
+  "version": 6,
+  "lastMessageSequenceNumber": 1,
+  "createdAt": "2022-02-04T09:58:54.275Z",
+  "lastModifiedAt": "2022-02-04T17:13:09.637Z",
+  "lastModifiedBy": {
+    "isPlatformClient": true
+  },
+  "createdBy": {
+    "isPlatformClient": true
+  },
+  "lineItems": [
+    {
+      "id": "52b3d7f7-f5c8-4257-84b2-920f34232d99",
+      "productId": "ac718ddc-a926-42b7-a0c5-4cbd30bd7bbb",
+      "productKey": "coolshoe_red_s2",
+      "name": {
+        "en-GB": "coolshoe_red_s2"
+      },
+      "productType": {
+        "typeId": "product-type",
+        "id": "71fc159f-a9fd-46ba-9ed3-16bc76aae466",
+        "version": 8
+      },
+      "productSlug": {
+        "en-GB": "coolshoe_red_s2"
+      },
+      "variant": {
+        "id": 1,
+        "sku": "002",
+        "key": "coolshoe_red_s2",
+        "prices": [
+          {
+            "id": "cba32fc2-5c04-488e-b4cf-a7ee32540fcd",
+            "value": {
+              "type": "centPrecision",
+              "currencyCode": "GBP",
+              "centAmount": 1499,
+              "fractionDigits": 2
+            }
+          }
+        ],
+        "images": [],
+        "attributes": [
+          {
+            "name": "colour",
+            "value": "red"
+          },
+          {
+            "name": "size",
+            "value": "2"
+          },
+          {
+            "name": "productId",
+            "value": "coolshoe"
+          }
+        ],
+        "assets": [],
+        "availability": {
+          "isOnStock": true,
+          "availableQuantity": 20,
+          "version": 1,
+          "id": "651a1106-e330-4fde-9a8a-6274b6627373"
+        }
+      },
+      "price": {
+        "id": "cba32fc2-5c04-488e-b4cf-a7ee32540fcd",
+        "value": {
+          "type": "centPrecision",
+          "currencyCode": "GBP",
+          "centAmount": 1499,
+          "fractionDigits": 2
+        }
+      },
+      "quantity": 2,
+      "discountedPricePerQuantity": [],
+      "addedAt": "2022-02-04T17:13:09.626Z",
+      "lastModifiedAt": "2022-02-04T17:13:09.626Z",
+      "state": [
+        {
+          "quantity": 2,
+          "state": {
+            "typeId": "state",
+            "id": "c06be527-b390-450f-afef-033d07566b0f"
+          }
+        }
+      ],
+      "priceMode": "Platform",
+      "totalPrice": {
+        "type": "centPrecision",
+        "currencyCode": "GBP",
+        "centAmount": 2998,
+        "fractionDigits": 2
+      },
+      "lineItemMode": "Standard"
+    },
+    {
+      "id": "cbd3e5e6-b160-4c53-80e0-77ea795f8f57",
+      "productId": "d558b5e9-1100-4684-afc7-1a07537113c5",
+      "productKey": "coolshoe_blue_s1",
+      "name": {
+        "en-GB": "coolshoe_blue_s1"
+      },
+      "productType": {
+        "typeId": "product-type",
+        "id": "71fc159f-a9fd-46ba-9ed3-16bc76aae466",
+        "version": 8
+      },
+      "productSlug": {
+        "en-GB": "coolshoe_blue_s1"
+      },
+      "variant": {
+        "id": 1,
+        "sku": "004",
+        "key": "coolshoe_blue_s1",
+        "prices": [
+          {
+            "id": "1b8db811-371c-41fd-85a1-d6dbd64dbff2",
+            "value": {
+              "type": "centPrecision",
+              "currencyCode": "GBP",
+              "centAmount": 999,
+              "fractionDigits": 2
+            }
+          }
+        ],
+        "images": [],
+        "attributes": [
+          {
+            "name": "colour",
+            "value": "blue"
+          },
+          {
+            "name": "size",
+            "value": "1"
+          },
+          {
+            "name": "productId",
+            "value": "coolshoe"
+          }
+        ],
+        "assets": [],
+        "availability": {
+          "isOnStock": true,
+          "availableQuantity": 10,
+          "version": 1,
+          "id": "ea9647f1-2680-4ba3-ab23-b50b8b22a0ab"
+        }
+      },
+      "price": {
+        "id": "1b8db811-371c-41fd-85a1-d6dbd64dbff2",
+        "value": {
+          "type": "centPrecision",
+          "currencyCode": "GBP",
+          "centAmount": 999,
+          "fractionDigits": 2
+        }
+      },
+      "quantity": 1,
+      "discountedPricePerQuantity": [],
+      "addedAt": "2022-02-04T17:13:09.631Z",
+      "lastModifiedAt": "2022-02-04T17:13:09.631Z",
+      "state": [
+        {
+          "quantity": 1,
+          "state": {
+            "typeId": "state",
+            "id": "c06be527-b390-450f-afef-033d07566b0f"
+          }
+        }
+      ],
+      "priceMode": "Platform",
+      "totalPrice": {
+        "type": "centPrecision",
+        "currencyCode": "GBP",
+        "centAmount": 999,
+        "fractionDigits": 2
+      },
+      "lineItemMode": "Standard"
+    }
+  ],
+  "cartState": "Active",
+  "totalPrice": {
+    "type": "centPrecision",
+    "currencyCode": "GBP",
+    "centAmount": 3997,
+    "fractionDigits": 2
+  },
+  "customLineItems": [],
+  "discountCodes": [],
+  "inventoryMode": "None",
+  "taxMode": "Platform",
+  "taxRoundingMode": "HalfEven",
+  "taxCalculationMode": "LineItemLevel",
+  "deleteDaysAfterLastModification": 90,
+  "refusedGifts": [],
+  "origin": "Customer",
+  "itemShippingAddresses": [],
+  "totalLineItemQuantity": 3,
+  "customerEmail": "test@everymile.com",
+  "customerId\"": "ae6698d2-e5e0-4a9f-ad9e-fabeda05d99e",
+  "shippingAddress": {
+    "title": "MR",
+    "firstName": "JAMES",
+    "lastName": "BOND",
+    "state": "HERTS",
+    "email": "test@test.com",
+    "city": "London",
+    "country": "GB",
+    "streetNumber": "13",
+    "postalCode": "BR6 6JF",
+    "streetName": "Warren Road"
+  },
+  "billingAddress": {
+    "title": "MR",
+    "firstName": "JAMES",
+    "lastName": "BOND",
+    "state": "HERTS",
+    "email": "test@test.com",
+    "city": "London",
+    "country": "GB",
+    "streetNumber": "10",
+    "postalCode": "BR6 6JF",
+    "streetName": "Warren Road"
+  },
+  "custom": {
+    "type": {
+      "typeId": "type",
+      "id": "6febc33c-e7a8-4d54-9004-fc594b83dab3"
+    },
+    "fields": {
+      "emcOrderId": "7098638243"
+    }
+  },
+  "shippingInfo": {
+    "shippingMethodName": "DHL-Standard-UK",
+    "price": {
+      "type": "centPrecision",
+      "currencyCode": "EUR",
+      "centAmount": 2000,
+      "fractionDigits": 2
+    },
+    "shippingRate": {
+      "price": {
+        "type": "centPrecision",
+        "currencyCode": "EUR",
+        "centAmount": 2000,
+        "fractionDigits": 2
+      },
+      "tiers": []
+    },
+    "taxRate": {
+      "name": "flat-tax-gb",
+      "amount": 0.2,
+      "includedInPrice": true,
+      "country": "GB",
+      "state": "HERTS",
+      "id": "qE5Hatmy",
+      "subRates": []
+    },
+    "taxCategory": {
+      "typeId": "tax-category",
+      "id": "c01af6dc-7be6-4abf-8a6b-c9b8ae807166"
+    },
+    "deliveries": [],
+    "shippingMethod": {
+      "typeId": "shipping-method",
+      "id": "4220c2dc-6f65-4d71-b876-b0eb365f31ba"
+    },
+    "taxedPrice": {
+      "totalNet": {
+        "type": "centPrecision",
+        "currencyCode": "EUR",
+        "centAmount": 1667,
+        "fractionDigits": 2
+      },
+      "totalGross": {
+        "type": "centPrecision",
+        "currencyCode": "EUR",
+        "centAmount": 2000,
+        "fractionDigits": 2
+      },
+      "totalTax": {
+        "type": "centPrecision",
+        "currencyCode": "EUR",
+        "centAmount": 333,
+        "fractionDigits": 2
+      }
+    },
+    "shippingMethodState": "MatchesCart"
+  }
+}

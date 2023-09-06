@@ -1,0 +1,84 @@
+{
+  "key": "handwash",
+  "defaultSku": "handwash-regular",
+  "variationHierarchy": {
+    "variationData": {
+      "attribute": "fragrance",
+      "type": "TBD"
+    },
+    "variants": [
+      {
+        "variationData": {
+          "attribute": "size",
+          "type": "TBD"
+        },
+        "variantData": {
+          "label": "lavender",
+          "value": "TBD"
+        },
+        "variants": [
+          {
+            "variantData": {
+              "label": "regular",
+              "value": "TBD"
+            },
+            "product": {
+              "sku": "handwash-regular",
+              "price": 1000,
+              "currency": "EUR",
+              "inventory": 43
+            }
+          },
+          {
+            "variantData": {
+              "label": "large",
+              "value": "TBD"
+            },
+            "product": {
+              "sku": "handwash-large",
+              "price": 1200,
+              "currency": "EUR",
+              "inventory": 54
+            }
+          }
+        ]
+      },
+      {
+        "variationData": {
+          "attribute": "size",
+          "type": "TBD"
+        },
+        "variantData": {
+          "label": "peach",
+          "value": "TBD"
+        },
+        "variants": [
+          {
+            "variantData": {
+              "label": "regular",
+              "value": "TBD"
+            },
+            "product": {
+              "sku": "handwash-regular",
+              "price": 1000,
+              "currency": "EUR",
+              "inventory": 43
+            }
+          },
+          {
+            "variantData": {
+              "label": "large",
+              "value": "TBD"
+            },
+            "product": {
+              "sku": "handwash-large",
+              "price": 1200,
+              "currency": "EUR",
+              "inventory": 54
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

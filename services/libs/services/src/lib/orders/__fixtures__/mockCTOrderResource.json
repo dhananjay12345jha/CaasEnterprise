@@ -1,0 +1,230 @@
+{
+  "type": "Order",
+  "id": "d2e79a16-9e60-4cb1-aca8-65efafaeea6d",
+  "version": 1,
+  "createdAt": "2022-06-24T15:33:15.629Z",
+  "customerEmail": "testmailid1@gmail.com",
+  "customerId": "538ad873-8d62-4364-bc75-a89931e98244",
+  "lastModifiedAt": "2022-06-24T15:33:15.629Z",
+  "orderNumber": "1234567",
+  "orderState": "Open",
+  "taxedPrice": {
+    "taxPortions": [
+      {
+        "rate": 0.2,
+        "name": "flat-tax-gb2",
+        "amount": {
+          "centAmount": 3136,
+          "currencyCode": "GBP",
+          "fractionDigits": 2,
+          "type": "centPrecision"
+        }
+      }
+    ],
+    "totalNet": {
+      "centAmount": 15680,
+      "currencyCode": "GBP",
+      "fractionDigits": 2,
+      "type": "centPrecision"
+    },
+    "totalGross": {
+      "centAmount": 18816,
+      "currencyCode": "GBP",
+      "fractionDigits": 2,
+      "type": "centPrecision"
+    }
+  },
+  "shippingInfo": {
+    "shippingMethodName": "NEXT DAY",
+    "taxRate": {
+      "name": "flat-tax-gb2",
+      "amount": 0.2,
+      "includedInPrice": false,
+      "id": "bfdc7xEs"
+    },
+    "taxedPrice": {
+      "totalNet": {
+        "centAmount": 2000,
+        "currencyCode": "GBP",
+        "fractionDigits": 2,
+        "type": "centPrecision"
+      },
+      "totalGross": {
+        "centAmount": 2400,
+        "currencyCode": "GBP",
+        "fractionDigits": 2,
+        "type": "centPrecision"
+      }
+    },
+    "price": {
+      "centAmount": 2000,
+      "currencyCode": "GBP",
+      "fractionDigits": 2,
+      "type": "centPrecision"
+    },
+    "deliveries": []
+  },
+  "totalPrice": {
+    "centAmount": 15680,
+    "currencyCode": "GBP",
+    "fractionDigits": 2,
+    "type": "centPrecision"
+  },
+  "syncInfo": [],
+  "returnInfo": [],
+  "billingAddress": {
+    "id": "kH9iBSw8",
+    "additionalStreetInfo": "",
+    "additionalAddressInfo": "",
+    "apartment": "1",
+    "building": "A",
+    "city": "Berlin",
+    "company": "Taxi Co",
+    "country": "GB",
+    "firstName": "Travis",
+    "lastName": "Bickle",
+    "postalCode": "1234567",
+    "region": "Best Region",
+    "state": "Best State",
+    "streetName": "1 Haupt Strasse",
+    "phone": "",
+    "email": "testmailid1@gmail.com"
+  },
+  "shippingAddress": {
+    "id": "kH9iBSw8",
+    "additionalStreetInfo": "",
+    "additionalAddressInfo": "",
+    "apartment": "1",
+    "building": "A",
+    "city": "Berlin",
+    "company": "Taxi Co",
+    "country": "GB",
+    "firstName": "Travis",
+    "lastName": "Bickle",
+    "postalCode": "1234567",
+    "region": "Best Region",
+    "state": "Best State",
+    "streetNumber": "1 Haupt Strasse",
+    "phone": "",
+    "email": "testmailid1@gmail.com"
+  },
+  "discountCodes": [],
+  "customLineItems": [],
+  "inventoryMode": "None",
+  "lineItems": [
+    {
+      "id": "661f24ea-751c-4362-aefa-8db5826ce0de",
+      "productId": "718246ed-6350-4cb6-bd25-e78b9a6cf84c",
+      "productSlug": {
+        "en-GB": "red-shoe-size-1"
+      },
+      "quantity": 12,
+      "name": {
+        "en-GB": "Red Shoe Size 1"
+      },
+      "discountedPricePerQuantity": [
+        {
+          "quantity": 12,
+          "discountedPrice": {
+            "value": {
+              "type": "centPrecision",
+              "fractionDigits": 2,
+              "currencyCode": "GBP",
+              "centAmount": 1140
+            },
+            "includedDiscounts": [
+              {
+                "discountRef": {
+                  "id": "4c4bd366-7e99-4ff7-b68a-e4891f38ad86"
+                },
+                "discount": {
+                  "id": "4c4bd366-7e99-4ff7-b68a-e4891f38ad86",
+                  "nameAllLocales": [
+                    {
+                      "locale": "en-GB",
+                      "value": "test1"
+                    }
+                  ],
+                  "value": {
+                    "type": "relative",
+                    "permyriad": 500
+                  }
+                },
+                "discountedAmount": {
+                  "type": "centPrecision",
+                  "currencyCode": "GBP",
+                  "fractionDigits": 2,
+                  "centAmount": 60
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "totalPrice": {
+        "centAmount": 13680,
+        "currencyCode": "GBP",
+        "fractionDigits": 2,
+        "type": "centPrecision"
+      },
+      "state": [
+        {
+          "quantity": 12,
+          "state": {
+            "id": "1b60e857-0f2c-4ad1-81aa-890c04e8fcaa",
+            "key": "Initial",
+            "nameAllLocales": [
+              {
+                "locale": "en",
+                "value": "Initial"
+              }
+            ],
+            "roles": []
+          }
+        }
+      ],
+      "variant": {
+        "id": 1234567,
+        "sku": "red-shoe-size-1",
+        "key": "red-shoe-size-1",
+        "images": [
+          {
+            "url": "https://7ca9b28a058d8b8da0f3-92dc8b19bd85d1346e668553efdffde6.ssl.cf3.rackcdn.com/Capture-hbt7A-f7.JPG",
+            "dimensions": {
+              "width": 547,
+              "height": 512
+            }
+          }
+        ]
+      },
+      "taxRate": {
+        "name": "flat-tax-gb2",
+        "amount": 0.2,
+        "includedInPrice": false,
+        "id": "bfdc7xEs"
+      },
+      "taxedPrice": {
+        "totalNet": {
+          "centAmount": 13680,
+          "currencyCode": "GBP",
+          "fractionDigits": 2,
+          "type": "centPrecision"
+        },
+        "totalGross": {
+          "centAmount": 16416,
+          "currencyCode": "GBP",
+          "fractionDigits": 2,
+          "type": "centPrecision"
+        }
+      },
+      "price": {
+        "value": {
+          "type": "centPrecision",
+          "fractionDigits": 2,
+          "currencyCode": "GBP",
+          "centAmount": 1200
+        }
+      }
+    }
+  ]
+}

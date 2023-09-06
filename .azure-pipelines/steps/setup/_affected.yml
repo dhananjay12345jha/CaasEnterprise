@@ -1,0 +1,246 @@
+parameters:
+  - name: overrideAffectedBase
+    type: string
+    default: "default"
+  - name: buildSourceBranch
+    type: string
+    default: "default"
+
+steps:
+  ## Get Base Branch Name
+  - script: |
+      # set +x ## debug all the commands
+      echo "base param:    ${{ parameters.overrideAffectedBase }}"
+      echo "source branch: ${{ parameters.buildSourceBranch }}"
+      echo "build reason:  ${BUILD_REASON}"
+      echo "build context: ${BUILD_CONTEXT}"
+      AFFECTED_HEAD_REF=$(git rev-parse --verify HEAD)
+      echo "Set Base for Affected"
+      OVERRIDE_AFFECTED_BASE="${{ parameters.overrideAffectedBase }}"
+      AFFECTED_BASE_REF=${OVERRIDE_AFFECTED_BASE}
+      _BUILD_SOURCE_BRANCH="${{ parameters.buildSourceBranch }}"
+      _BUILD_SOURCEBRANCHNAME="${{ parameters.buildSourceBranch }}"
+      if [[ "${_BUILD_SOURCE_BRANCH}" == "default" ]]
+      then
+         _BUILD_SOURCE_BRANCH="${BUILD_SOURCEBRANCH}"
+         _BUILD_SOURCEBRANCHNAME=${BUILD_SOURCEBRANCHNAME}
+      fi
+
+      echo "##vso[task.setvariable variable=buildSourceBranchName;isOutput=true]${_BUILD_SOURCEBRANCHNAME}"
+
+
+      if [[ "${OVERRIDE_AFFECTED_BASE:=default}" != "default" ]]
+      then
+        if [[ "${OVERRIDE_AFFECTED_BASE^^}" == "EVERYTHING" ]]
+        then
+          echo "Overriding affected base ref to be ${OVERRIDE_AFFECTED_BASE^^}!!!!.  Effective value: all)"
+          AFFECTED_BASE_REF='all'
+          echo "Note:  The 'all' affected base ref should not be used in nx execution as a base ref, use --all instead."
+        else
+          echo "Overriding affected base ref to ${{ parameters.overrideAffectedBase }}"
+          AFFECTED_BASE_REF=${{ parameters.overrideAffectedBase }}
+        fi
+      elif [[ "$BUILD_REASON" == "IndividualCI" && "$BUILD_CONTEXT" == "ci" ]]
+      then
+        TARGET_REMOTE="remotes/origin/develop"
+        echo "Setting Individual CI affected base ref to $(git merge-base ${TARGET_REMOTE} ${AFFECTED_HEAD_REF})"
+        AFFECTED_BASE_REF=$(git merge-base ${TARGET_REMOTE} ${AFFECTED_HEAD_REF})
+      elif [[ "$BUILD_REASON" == "PullRequest" && "$BUILD_CONTEXT" == "ci" ]]
+      then
+        az devops configure \
+          --defaults organization=$(System.TeamFoundationCollectionUri) project=$(System.TeamProject) \
+          --use-git-aliases true
+
+        LAST_SUCCESSFUL_BUILD_JSON=$(az pipelines build list \
+          --branch "$(System.PullRequest.TargetBranch)" \
+          --result succeeded \
+          --status completed \
+          --query "[?repository.name=='$(Build.Repository.Name)' \
+                    && buildNumber=='[DEV GA] Build Deploy Verify'] \
+                    | sort_by(@, &id) \
+                    | [-1:].{id: id, pipeline: buildNumber, branch: sourceBranch, ref: sourceVersion}[0]" \
+          |jq .)
+        if [[ "${LAST_SUCCESSFUL_BUILD_JSON:=none}" != "none" ]]
+        then
+          echo "Last Successful Build = ${LAST_SUCCESSFUL_BUILD_JSON}"
+          echo "Setting PullRequest affected base ref from last successful build data to $(echo $LAST_SUCCESSFUL_BUILD_JSON|jq '.ref')"
+          AFFECTED_BASE_REF=$(echo $LAST_SUCCESSFUL_BUILD_JSON|jq -r '.ref')
+        else
+          echo "##[warning]Affected base ref could not be determined for PR - no successful previous build for $(System.PullRequest.TargetBranch)"
+          # Below lines only needed while a build is not triggered post merge on target branch
+          TARGET_REMOTE="remotes/origin/${SYSTEM_PULLREQUEST_TARGETBRANCH#refs/heads/}"
+          echo "Setting PullRequest affected base ref to merge base of ${TARGET_REMOTE} as $(git merge-base ${TARGET_REMOTE} ${AFFECTED_HEAD_REF})"
+          AFFECTED_BASE_REF=$(git merge-base ${TARGET_REMOTE} ${AFFECTED_HEAD_REF})
+        fi
+      else
+        az devops configure \
+          --defaults organization=$(System.TeamFoundationCollectionUri) project=$(System.TeamProject) \
+          --use-git-aliases true
+
+        LAST_SUCCESSFUL_BUILD_JSON=$(az pipelines build list \
+          --branch "${_BUILD_SOURCE_BRANCH}" \
+          --result succeeded \
+          --status completed \
+          --query "[?repository.name=='$(Build.Repository.Name)' \
+                    && buildNumber=='$(Build.BuildNumber)'] \
+                    | sort_by(@, &id) \
+                    | [-1:].{id: id, pipeline: buildNumber, branch: sourceBranch, ref: sourceVersion}[0]" \
+          |jq .)
+        if [[ "${LAST_SUCCESSFUL_BUILD_JSON:=none}" != "none" ]]
+        then
+          echo "Last Successful Build = ${LAST_SUCCESSFUL_BUILD_JSON}"
+          echo "Setting affected base ref from last successful build data to $(echo $LAST_SUCCESSFUL_BUILD_JSON|jq '.ref')"
+          AFFECTED_BASE_REF=$(echo $LAST_SUCCESSFUL_BUILD_JSON|jq -r '.ref')
+        else
+          echo "##[warning]Affected base ref could not be determined"
+        fi
+      fi
+
+      if [[ "${AFFECTED_BASE_REF:=default}" == "default" ]]
+      then
+        echo "Setting last resort default affected base ref name to remotes/origin/${_BUILD_SOURCEBRANCHNAME#refs/heads/}~1"
+        AFFECTED_BASE_REF="remotes/origin/${_BUILD_SOURCE_BRANCH#refs/heads/}~1"
+        echo "##vso[task.logissue type=warning] The default affected base value is set to the last commit.  i.e ${AFFECTED_BASE_REF}"
+        echo "This is probably not what you want"
+        echo "What this means is, this build could not be identified with the following (in order) criteria:"
+        echo "  - The build parameter 'overrideAffectedBase' was not set, or set as the value 'default'"
+        echo "  - This build could not be identified as a feature branch CI build"
+        echo "  - This build could not be identified as a Pull Request"
+        echo "  - The last successful build for branch: $(Build.SourceBranch) against $(Build.BuildNumber) could not be identified"
+        echo "If this is not what you expected, try manually re-running this build setting the 'overrideAffectedBase' parameter to a value of a valid git ref or 'EVERYTHING' (string literal, no quotes)"
+      fi
+
+      echo
+
+      if [[ "${AFFECTED_BASE_REF}" == "all" ]]
+      then
+         AFFECTED_NX_PARAMS='--all'
+         AFFECTED_YW_PARAMS='--all'
+         AFFECTED_YW_LIST_PARAMS=''
+      else
+        echo "Check the affected refs are ok with git:"
+        AFFECTED_HEAD_REF_IN_BRANCH=$(if git rev-parse --is-inside-work-tree --verify ${AFFECTED_HEAD_REF} &> /dev/null; then echo true; else echo false; fi)
+        AFFECTED_BASE_REF_IN_BRANCH=$(if git branch --quiet --contains ${AFFECTED_BASE_REF} &> /dev/null; then echo true; else echo false; fi)
+        echo " - head ref (${AFFECTED_HEAD_REF}) : Verify In work tree: ${AFFECTED_HEAD_REF_IN_BRANCH}"
+        echo " - base ref (${AFFECTED_BASE_REF}) : Available in current branch: ${AFFECTED_BASE_REF_IN_BRANCH}"
+
+        if [[ "${AFFECTED_HEAD_REF_IN_BRANCH}" != "true" || "${AFFECTED_BASE_REF_IN_BRANCH}" != "true" ]]
+        then
+          echo "Cannot use git refs.  Will attempt to set defaults for those that could not be validated."
+          AFFECTED_HEAD_REF=$([[ "${AFFECTED_HEAD_REF_IN_BRANCH}" == "true" ]] && echo "${AFFECTED_HEAD_REF}" || echo "HEAD")
+          AFFECTED_BASE_REF=$([[ "${AFFECTED_BASE_REF_IN_BRANCH}" == "true" ]] && echo "${AFFECTED_HEAD_REF}" || git merge-base remotes/origin/develop ${AFFECTED_HEAD_REF})
+        fi
+        AFFECTED_NX_PARAMS="--base=${AFFECTED_BASE_REF} --head=${AFFECTED_HEAD_REF}"
+        AFFECTED_YW_PARAMS="--since=${AFFECTED_BASE_REF}"
+        AFFECTED_YW_LIST_PARAMS=${AFFECTED_YW_PARAMS}
+      fi
+
+      echo "Affected head ref: ${AFFECTED_HEAD_REF}"
+      echo "##vso[task.setvariable variable=affectedHeadRef;isOutput=true]${AFFECTED_HEAD_REF}"
+      echo "Evaluated affected base ref: ${AFFECTED_BASE_REF}"
+      echo "##vso[task.setvariable variable=affectedBase;isOutput=true]${AFFECTED_BASE_REF}"
+
+      # echo "DEBUG"
+      # echo "yarn workspaces list --json ${AFFECTED_YW_LIST_PARAMS}"
+      # yarn workspaces list --json ${AFFECTED_YW_LIST_PARAMS}
+      # echo "yarn workspaces list --json ${AFFECTED_YW_LIST_PARAMS} | jq -r '.name | select(. | startswith(\"@$(Build.Repository.Name)/\"))'"
+      # yarn workspaces list --json ${AFFECTED_YW_LIST_PARAMS} | jq -r '.name | select(. | startswith("@$(Build.Repository.Name)/"))'
+      # echo "END_DEBUG"
+      echo
+
+      AFFECTED_WORKSPACE_DEFS=$(yarn workspaces list --json ${AFFECTED_YW_LIST_PARAMS})
+      if [[ "${AFFECTED_WORKSPACE_DEFS}" != "" ]]
+      then
+        AFFECTED_ALL_WORKSPACES=$(jq -r '.name' <(cat <<< "$AFFECTED_WORKSPACE_DEFS") | tr '\n' ' ')
+        AFFECTED_NX_WORKSPACES=$(jq -r '.name|select(. | startswith("@$(Build.Repository.Name)/"))' <(cat <<< "$AFFECTED_WORKSPACE_DEFS") | tr '\n' ' ')
+        AFFECTED_YARN_WORKSPACES=$(jq -r '.name|select(. | startswith("@$(Build.Repository.Name)/") | not )' <(cat <<< "$AFFECTED_WORKSPACE_DEFS") | tr '\n' ' ')
+      else
+        AFFECTED_ALL_WORKSPACES="[none]"
+        AFFECTED_NX_WORKSPACES="[none]"
+        AFFECTED_YARN_WORKSPACES="[none]"
+      fi
+
+      echo "##vso[task.setvariable variable=affectedWorkspaces;isOutput=true]${AFFECTED_ALL_WORKSPACES}"
+      echo "##vso[task.setvariable variable=affectedNxWorkspaces;isOutput=true]${AFFECTED_NX_WORKSPACES}"
+      echo "##vso[task.setvariable variable=affectedYarnWorkspaces;isOutput=true]${AFFECTED_YARN_WORKSPACES}"
+      echo "Set the Affected Yarn Workspace params"
+      echo "${AFFECTED_YW_PARAMS:=[none]}"
+      echo "##vso[task.setvariable variable=affectedYwParams;isOutput=true]${AFFECTED_YW_PARAMS}"
+      echo
+      echo "Set the Affected NX params"
+      echo "${AFFECTED_NX_PARAMS}"
+      echo "##vso[task.setvariable variable=affectedNxParams;isOutput=true]${AFFECTED_NX_PARAMS}"
+      if [[ "${FORCE_EXCLUDE_AFFECTED_APPS}" != "" ]]
+      then
+        AFFECTED_NX_EXCLUDE_PARAMS="--exclude=${FORCE_EXCLUDE_AFFECTED_APPS}"
+        echo "Set the Affected NX EXCLUDE params"
+        echo "${AFFECTED_NX_EXCLUDE_PARAMS}"
+      else
+        AFFECTED_NX_EXCLUDE_PARAMS=""
+      fi
+      echo "##vso[task.setvariable variable=affectedNxExcludeParams;isOutput=true]${AFFECTED_NX_EXCLUDE_PARAMS}"
+
+      echo
+      echo "Affected commits":
+      if [[ "${AFFECTED_BASE_REF}" == "all" ]]
+      then
+        echo "all - forced by paramater overrideAffectedBase: ${OVERRIDE_AFFECTED_BASE^^}"
+      else
+        # echo "$(git log --oneline --decorate  --pretty=format:'%h -%d %s (%cr) [%an]' ${AFFECTED_BASE_REF}..${AFFECTED_HEAD_REF})"
+        AFFECTED_COMMIT_LIST=$(git log --oneline --decorate  --pretty=format:'%h -%d %s (%cr) [%an]' ${AFFECTED_BASE_REF}..${AFFECTED_HEAD_REF})
+        if [[ "${AFFECTED_COMMIT_LIST}" == "" ]]
+        then
+          echo "[none]"
+        else
+          echo "${AFFECTED_COMMIT_LIST}"
+        fi
+      fi
+      echo
+      echo "Affected files:"
+      if [[ "${AFFECTED_BASE_REF}" == "all" ]]
+      then
+        echo "all - forced by parameter overrideAffectedBase: ${OVERRIDE_AFFECTED_BASE^^}"
+      else
+        # echo "$(git diff --name-status ${AFFECTED_BASE_REF}..${AFFECTED_HEAD_REF})"
+        AFFECTED_FILES_LIST=$(git diff --name-status ${AFFECTED_BASE_REF}..${AFFECTED_HEAD_REF})
+        if [[ "${AFFECTED_FILES_LIST}" == "" ]]
+        then
+          echo "[none]"
+        else
+          echo "${AFFECTED_FILES_LIST}"
+        fi
+      fi
+
+      echo
+      echo "Affected NX workspace projects:"
+      if [[ "${AFFECTED_NX_WORKSPACES:=[none]}" != "[none]" ]]
+      then
+        for workspace in ${AFFECTED_NX_WORKSPACES}; do
+        echo "- ${workspace}"
+        echo "    - apps:"
+        for app in $(yarn workspace ${workspace} run affected:apps --plain ${AFFECTED_NX_PARAMS}|tr ',' ' '); do printf "%9s%s\n" "" "${app}"; done
+        echo "    - libs:"
+        for lib in $(yarn workspace ${workspace} run affected:libs --plain ${AFFECTED_NX_PARAMS}|tr ',' ' '); do printf "%9s%s\n" "" "${lib}"; done
+        echo
+        done;
+      else
+        echo "- ${AFFECTED_NX_WORKSPACES}"
+      fi
+
+      echo
+      echo "Affected Yarn workspaces:"
+      if [[ "${AFFECTED_YARN_WORKSPACES:=[none]}" != "[none]" ]]
+      then
+        for workspace in ${AFFECTED_YARN_WORKSPACES}; do
+        echo "- ${workspace}"
+        done;
+      else
+        echo "- ${AFFECTED_YARN_WORKSPACES}"
+      fi
+      echo
+      echo
+    displayName: "[setup] nx affected"
+    env:
+      # for the az command
+      AZURE_DEVOPS_EXT_PAT: $(System.AccessToken)
+    name: affected

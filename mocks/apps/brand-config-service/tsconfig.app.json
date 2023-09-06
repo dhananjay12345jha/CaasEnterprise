@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "./dist/out-tsc",
+    "module": "commonjs",
+    "types": ["node", "express"],
+    "paths": {
+      "@ei-mocks/contracts": ["../../libs/helpers/contracts/src/index.ts"]
+    }
+  },
+  "exclude": ["**/*.spec.ts", "**/*.test.ts"],
+  "include": ["**/*.ts"]
+}

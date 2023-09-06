@@ -1,0 +1,157 @@
+{
+  "root": "apps/stock/update-quantity-ct/",
+  "sourceRoot": "apps/stock/update-quantity-ct/src",
+  "projectType": "application",
+  "targets": {
+    "serve-all": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "envFile": "apps/stock/update-quantity-ct/.env",
+        "commands": [
+          {
+            "command": "yarn kill-port ${SLS_OFFLINE_EVENTBRIDGE_PORT}"
+          },
+          {
+            "command": "yarn kill-port 9000 && cd ../mocks && nx run commerce-tools:serve",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "yarn kill-port 9111 && cd ../mocks && nx run brand-config-service:serve",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "nx run stock-update-quantity-ct:serve --stage={args.stage}"
+          }
+        ],
+        "parallel": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["apps/stock/update-quantity-ct/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/stock/update-quantity-ct"],
+      "options": {
+        "jestConfig": "apps/stock/update-quantity-ct/jest.config.js",
+        "color": true,
+        "passWithNoTests": true,
+        "testPathPattern": ["./src"],
+        "testPathIgnorePatterns": ["./test/e2e"],
+        "silent": true
+      }
+    },
+    "terminate": {
+      "builder": "@nrwl/workspace:run-commands",
+      "options": {
+        "envFile": "apps/stock/update-quantity-ct/.env",
+        "commands": [
+          "yarn kill-port --port ${HTTP_SERVER_PORT}",
+          "yarn kill-port --port ${LAMBDA_SERVER_PORT}",
+          "yarn kill-port --port ${SLS_OFFLINE_EVENTBRIDGE_PORT}",
+          "yarn kill-port --port ${SLS_OFFLINE_EVENTBRIDGE_PUB_SUB_PORT}"
+        ],
+        "cwd": "apps/stock/update-quantity-ct",
+        "parallel": true
+      }
+    },
+    "e2e:feature:env": {
+      "builder": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "echo \"Get the Base URLs for localhost and write them somewhere jest can find\"",
+        "cwd": "apps/stock/update-quantity-ct",
+        "parallel": false
+      }
+    },
+    "info": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn sls print --verbose",
+        "color": true,
+        "cwd": "apps/stock/update-quantity-ct"
+      }
+    },
+    "build": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn sls package --verbose",
+        "color": true,
+        "cwd": "apps/stock/update-quantity-ct"
+      }
+    },
+    "deploy": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn sls deploy --verbose ",
+        "color": true,
+        "cwd": "apps/stock/update-quantity-ct"
+      }
+    },
+    "destroy": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn sls remove --verbose",
+        "color": true,
+        "cwd": "apps/stock/update-quantity-ct"
+      }
+    },
+    "e2e:env": {
+      "builder": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "echo \"Get the Base URLs from SERVERLESS_CONFIG_JSON and write them somewhere jest can find\"",
+        "cwd": "apps/stock/update-quantity-ct",
+        "parallel": false
+      }
+    },
+    "_e2e": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "echo \"Add a test when there is an app to test against.\"",
+        "color": true,
+        "cwd": "apps/stock/update-quantity-ct"
+      },
+      "dependsOn": [
+        {
+          "target": "e2e:env",
+          "projects": "self"
+        }
+      ]
+    },
+    "e2e-run-tests": {
+      "executor": "@nrwl/jest:jest",
+      "options": {
+        "jestConfig": "apps/stock/update-quantity-ct/jest.config.js",
+        "testPathPattern": ["./test/e2e"],
+        "runInBand": true,
+        "passWithNoTests": true
+      }
+    },
+    "e2e-feature": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn start-test \"yarn nx run stock-update-quantity-ct:serve\" tcp:localhost:${SLS_OFFLINE_EVENTBRIDGE_PORT} \"yarn nx run stock-update-quantity-ct:e2e-run-tests\"",
+        "color": true,
+        "cwd": "apps/stock/update-quantity-ct"
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn sls offline start --noPrependStageInUrl --httpPort=${HTTP_SERVER_PORT} --lambdaPort=${LAMBDA_SERVER_PORT}",
+        "color": true,
+        "cwd": "apps/stock/update-quantity-ct"
+      },
+      "dependsOn": [
+        {
+          "target": "terminate",
+          "projects": "self"
+        }
+      ]
+    }
+  },
+  "tags": ["scope:stock", "type:app"],
+  "implicitDependencies": []
+}

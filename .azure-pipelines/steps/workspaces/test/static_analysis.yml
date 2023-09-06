@@ -1,0 +1,37 @@
+steps:
+  - task: AWSShellScript@1
+    inputs:
+      scriptType: "inline"
+      inlineScript: |
+        # equivalent to what commitlint does locally, except it uses an env var
+        SINCE_VAL=$(affected.affectedBase)
+        if [[ "$(affected.affectedBase)" == "all" ]];
+        then
+          SINCE_VAL="HEAD~1"
+          echo "EVERYTHING DETECTED, only check last commit"
+        fi;
+        echo "Validating Commit Messages since ${SINCE_VAL}"
+        yarn commitlint --verbose --from ${SINCE_VAL};
+
+        if [ "$?" -ne 0 ]
+        then
+            echo "##vso[task.logissue type=error] commit messages do not match project standards.";
+            exit 1;
+        else
+            echo "OK!"
+        fi
+    displayName: "[test] validate commit messages"
+  - task: AWSShellScript@1
+    inputs:
+      scriptType: "inline"
+      inlineScript: |
+        set -e
+        echo "Running yarn workspaces:format"
+        yarn workspaces:format $(affected.affectedNxParams)
+        echo
+        echo "Running yarn workspaces:lint"
+        yarn workspaces:lint $(affected.affectedNxParams)
+        echo
+        echo "Running yarn affected:lint"
+        yarn affected:lint $(affected.affectedNxParams)
+    displayName: "[test] static analysis"

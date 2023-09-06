@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`password reset handler should not proceed if brand id is missing 1`] = `
+Array [
+  Object {
+    "code": "invalid_type",
+    "expected": "string",
+    "message": "Expected string, received null",
+    "path": Array [
+      "detail",
+      "metadata",
+      "x-emc-ubid",
+    ],
+    "received": "null",
+  },
+]
+`;

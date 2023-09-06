@@ -1,0 +1,7 @@
+steps:
+  - task: AWSShellScript@1
+    inputs:
+      scriptType: "inline"
+      inlineScript: |
+        yarn affected:test:feature $(affected.affectedNxParams)
+    displayName: "[test] affected features"

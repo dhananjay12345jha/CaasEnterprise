@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "projects": {
+    "brand-config-service": "apps/brand-config-service",
+    "braze": "apps/braze",
+    "commerce-tools": "apps/commerce-tools",
+    "contracts": "libs/helpers/contracts",
+    "invocation-recorder": "libs/invocation-recorder"
+  }
+}

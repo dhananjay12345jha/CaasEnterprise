@@ -1,0 +1,74 @@
+trigger:
+  branches:
+    include:
+      - develop
+      - main
+  paths:
+    exclude: # exclude files changed by standard-version
+      - "CHANGELOG.md"
+      - "package.json"
+  tags:
+    exclude:
+      - "*"
+
+pool:
+  vmImage: ubuntu-latest
+
+parameters:
+  - name: overrideAffectedBase
+    displayName: Override the gitref to set for affected resolution base value
+    type: string
+    default: "default"
+
+variables:
+  - name: BUILD_CONTEXT
+    value: platform
+  - name: DELIVERY_CONTEXT
+    value: test
+  - name: DELIVERY_STAGE
+    value: ga #general availability
+  - name: DEPLOY_REGION
+    value: 'eu-w1'
+  - name: DEPLOY_TARGET
+    ${{ if eq(variables['Build.SourceBranchName'], 'main') }}:
+      value: integ
+    ${{ elseif eq(variables['Build.SourceBranchName'], 'develop') }}:
+      value: dev
+    ${{ else }}:
+      value: infraci
+  - name: DEPLOY_CONTEXT
+    value: "${{ variables['Build.Repository.Name'] }}"
+  - name: BUILD_META_FILE
+    value: ".azure-pipelines/.config-root/deploy-target/${{ variables.BUILD_CONTEXT }}/${{ variables.DELIVERY_CONTEXT }}/${{ variables.DEPLOY_REGION }}/${{ variables.DEPLOY_TARGET }}/request.json"
+  - group: "aws-${{ variables.DELIVERY_CONTEXT }}-${{ variables['Build.Repository.Name'] }}"
+  - template: ./vars/global.yml
+  - template: ./vars/${{ variables.DELIVERY_CONTEXT }}.yml
+
+name: "[${{ upper(variables.DEPLOY_TARGET) }} ${{ upper(variables.DELIVERY_STAGE) }}] Build Deploy Verify"
+steps:
+  - template: ./steps/pipeline/init.yml
+  - template: ./steps/setup/build.yml
+    parameters:
+      overrideAffectedBase: ${{ parameters.overrideAffectedBase }}
+      buildMetaFile: ${{ variables.BUILD_META_FILE }}
+      buildMetaJSON: "NA"
+  # the next 3 steps could be parallelised?
+  - template: ./steps/workspaces/test/static_analysis.yml
+  - template: ./steps/workspaces/test/unit.yml
+  - template: ./steps/workspaces/build.yml
+  - template: ./steps/workspaces/deploy.yml
+  - template: ./steps/release/version.yml
+  - template: ./steps/workspaces/test/component.yml
+  - ${{ if eq(variables['Build.SourceBranchName'], 'develop') }}:
+      - template: ./steps/workspaces/test/sanity.yml
+      - template: ./steps/release/bump_version.yml
+        parameters:
+          prerelease: "rc"
+      - template: ./steps/release/promote.yml
+        parameters:
+          target: main
+        # notify a dev slack channel of failure
+  - ${{ if eq(variables['Build.SourceBranchName'], 'main') }}:
+      - template: ./steps/workspaces/test/regression.yml
+      # notify a QA slack channel of the success result
+      # notify a dev slack channel of failure

@@ -1,0 +1,9 @@
+[
+  {
+    "DetailType": "newsletter.signup.request",
+    "Detail": "{\"referenced\":true,\"correlationId\":\"54b818e8-52f1-410c-b046-22f58334ea23\",\"payload\": {\"email\":\"optIn@test.com\",\"timezone\":\"Europe/London\",\"marketingPreference\":\"opt_in\"} }",
+    "Source": "com.mycompany.myapp",
+    "EventBusName": "arn:aws:events:eu-west-1:100207810817:event-bus/emc-transact-bus",
+    "Time": "2022-06-21T01:02:03.456Z"
+  }
+]

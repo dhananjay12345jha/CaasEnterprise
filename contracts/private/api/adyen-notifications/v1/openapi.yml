@@ -1,0 +1,472 @@
+openapi: "3.0.3"
+info:
+  description: |-
+    Services defines our asychronous interaction with Adyen. Based on [webhook strategy documentation](https://wiki.salmon.com/pages/viewpage.action?spaceKey=CAAS&title=Webhook+Strategy)
+  version: "1.0.0"
+  title: "Adyen Integration"
+tags:
+  - name: payment
+    description: Everything involving payments, examples of Adyen webhooks can be seen here [Adyen Documetnation](https://docs.adyen.com/api-explorer/#/Webhooks/v1/post/CAPTURE)
+paths:
+  /adyen-notifications/v1/payments:
+    post:
+      tags:
+        - payments
+      summary: Receive an Adyen update
+      description: This is sent by Adyen when there is an update on any of our sessions / payments
+      operationId: paymentWebhook
+      responses:
+        "200":
+          $ref: "#/components/responses/200SuccessResponse"
+        "400":
+          $ref: "#/components/responses/400ValidationError"
+        "401":
+          $ref: "#/components/responses/401AuthorisationError"
+        "500":
+          $ref: "#/components/responses/500InternalServiceError"
+      security:
+        - basicAuth: []
+      requestBody:
+        description: |-
+          Schema provided by: [Adyen Webhook Documentation](https://docs.adyen.com/api-explorer/#/Webhooks/v1/post/AUTHORISATION)
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdyenWebhookEvent"
+
+externalDocs:
+  description: Adyen Webhook Documentation
+  url: "https://docs.adyen.com/api-explorer/#/Webhooks/v1/post/AUTHORISATION"
+components:
+  schemas:
+    AdyenWebhookEvent:
+      type: "object"
+      required:
+        - "live"
+        - "notificationItems"
+      properties:
+        live:
+          type: string
+          format: boolean
+          example: "false"
+        notificationItems:
+          type: array
+          items:
+            $ref: "#/components/schemas/NotificationRequestItem"
+
+    NotificationRequestItem:
+      required:
+        - "amount"
+        - "eventCode"
+        - "eventDate"
+        - "merchantAccountCode"
+        - "merchantReference"
+        - "paymentMethod"
+        - "pspReference"
+        - "success"
+      type: "object"
+      properties:
+        amount:
+          $ref: "#/components/schemas/Amount"
+        eventCode:
+          type: string
+          example: CAPTURE
+        eventDate:
+          type: string
+          format: dateTime
+          example: 2021-01-01T01:00:00+01:00
+        merchantAccountCode:
+          type: string
+          example: YOUR_MERCHANT_CODE
+        merchantReference:
+          type: string
+          example: YOUR_MERCHANT_REFERENCE
+        originalReference:
+          type: string
+          example: 9913140798220028,
+          description: Only included on events which are adjustments to resources. Ie a cancellation
+        paymentMethod:
+          type: string
+          example: ach
+        pspReference:
+          type: string
+          example: YOUR_PSP_REFERENCE
+        reason:
+          type: string
+          example: "Reason why a thing happened"
+        success:
+          example: "true"
+          type: string
+          format: boolean
+        additionalData:
+          allOf:
+            - type: object
+              properties:
+                hmacSignature:
+                  type: string
+                  format: base64
+                  example: +JWKfq4ynALK+FFzGgHnp1jSMQJMBJeb87dlph24sXw=
+                recurring.recurringDetailReference:
+                  type: string
+                  example: 9915692881181044
+                recurring.shopperReference:
+                  type: string
+                  example: YOUR_SHOPPER_REFERENCE
+            - $ref: "#/components/schemas/AdditionalDataProperties"
+
+    Amount:
+      type: "object"
+      required:
+        - "currency"
+        - "value"
+      properties:
+        currency:
+          description: 3 Letter ISO currency code
+          example: EUR
+          type: string
+          maxLength: 3
+          minLength: 3
+        value:
+          example: 1000
+          description: Cent value (currency lowest) of amount
+          type: number
+          format: integer
+
+    AdditionalDataProperties:
+      description: Map of values from [Adyen Documentation](https://docs.adyen.com/api-explorer/#/Webhooks/v1/post/AUTHORISATION__reqParam_notificationItems-additionalData)
+      type: "object"
+      properties:
+        PaymentAccountReference:
+          type: string
+        acquirerCode:
+          type: string
+        acquirerReference:
+          type: string
+        acsRenderingType.acsInterface:
+          type: string
+        acsRenderingType.acsUiTemplate:
+          type: string
+        alis:
+          type: string
+        aliasType:
+          type: string
+        arn:
+          type: string
+        authCode:
+          type: string
+        authenticationType:
+          type: string
+        authorisationMid:
+          type: string
+        authorisedAmountCurrency:
+          type: string
+        authorisedAmountValue:
+          type: string
+        avsResult:
+          type: string
+        avsResultRaw:
+          type: string
+        bankAccountNumber:
+          type: string
+        bankLocation:
+          type: string
+        bankLocationId:
+          type: string
+        bankName:
+          type: string
+        bankVerificationResult:
+          type: string
+        bankVerificationResultRaw:
+          type: string
+        bic:
+          type: string
+        billingAddress.city:
+          type: string
+        billingAddress.houseNumberOrName:
+          type: string
+        billingAddress.postalCode:
+          type: string
+        billingAddress.stateOrProvince:
+          type: string
+        billingAddress.street:
+          type: string
+        browserCode:
+          type: string
+        captureDelayHours:
+          type: string
+        captureMerchantRference:
+          type: string
+        capturePspReference:
+          type: string
+        cardBin:
+          type: string
+        cardIssuingBank:
+          type: string
+        cardIssuingCurrency:
+          type: string
+        cardIssuingCountry:
+          type: string
+        cardPaymentMethod:
+          type: string
+        cardSchemeEnhancedDataLevel:
+          type: string
+        cardSummary:
+          type: string
+        cavv:
+          type: string
+        cavvAlgorithm:
+          type: string
+        challengeCancel:
+          type: string
+        checkoutSessionId:
+          type: string
+        cvcResult:
+          type: string
+        cvcResultRaw:
+          type: string
+        deliveryAddress.city:
+          type: string
+        deliveryAddress.country:
+          type: string
+        deliveryAddress.houseNumberOrName:
+          type: string
+        deliveryAddress.postalCode:
+          type: string
+        deliveryAddress.stateOrProvince:
+          type: string
+        deliveryAddress.street:
+          type: string
+        deviceType:
+          type: string
+        directdebit_GB.dateOfSignature:
+          type: string
+        directdebit_GB.mandateId:
+          type: string
+        directdebit_GB.sequenceType:
+          type: string
+        directdebit_GB.serviceUserName:
+          type: string
+        directdebit_GB.serviceUserNumber:
+          type: string
+        eci:
+          type: string
+        expiryDate:
+          type: string
+        extraCostsCurrency:
+          type: string
+        extraCostsValue:
+          type: string
+        fraudCheck--:
+          type: string
+        fraudManualReview:
+          type: string
+        fraudOffset:
+          type: string
+        fraudResultType:
+          type: string
+        fundingSource:
+          type: string
+        grossCurrency:
+          type: string
+        grossValue:
+          type: string
+        iDealConsumerAccountNumber:
+          type: string
+        iDealConsumerBIC:
+          type: string
+        iDealConsumerCity:
+          type: string
+        iDealConsumerIBAN:
+          type: string
+        iDealConsumerIban:
+          type: string
+        iDealConsumerName:
+          type: string
+        iDealTransactionId:
+          type: string
+        iban:
+          type: string
+        installments.value:
+          type: string
+        interactionCounter:
+          type: string
+        issuerComments.cardholderName:
+          type: string
+        issuerCountry:
+          type: string
+        latestCard.bin:
+          type: string
+        latestCard.expiryDate:
+          type: string
+        latestCard.summary:
+          type: string
+        liabilityShift:
+          type: string
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+        networkToken.available:
+          type: string
+        networkToken.bin:
+          type: string
+        networkToken.tokenSummary:
+          type: string
+        nfc.expire:
+          type: string
+        nfc.issue:
+          type: string
+        nfc.pin.provided:
+          type: string
+        nvc.uid:
+          type: string
+        opi.transToken:
+          type: string
+        ownerCity:
+          type: string
+        ownerName:
+          type: string
+        payULatamTrazabilityCode:
+          type: string
+        paymentLinkId:
+          type: string
+        paypalAddressStatus:
+          type: string
+        paypalBillingName:
+          type: string
+        paypalEmail:
+          type: string
+        paypalErrorCode:
+          type: string
+        paypalErrorDescription:
+          type: string
+        paypalPairingId:
+          type: string
+        paypalPayerId:
+          type: string
+        paypalPayerResidenceCountry:
+          type: string
+        payapPayerStatus:
+          type: string
+        paypalPhone:
+          type: string
+        paypalProtectionEligibility:
+          type: string
+        paypalRisk:
+          type: string
+        realtimeAccountUpdaterStatus:
+          type: string
+        recurring.contractTypes:
+          type: string
+        recurring.firstPspReference:
+          type: string
+        recurring.recurringDetailReference:
+          type: string
+        referred:
+          type: string
+        refusalReasonRaw:
+          type: string
+        riskProfile:
+          type: string
+        riskProfileReference:
+          type: string
+        sepadirectdebit.dateOfSignature:
+          type: string
+        sepadirectdebit.mandateId:
+          type: string
+        sepadirectdebit.sequenceType:
+          type: string
+          enum:
+            - OOFF
+            - FIRST
+            - RCUR
+            - FNAL
+        shopperCountry:
+          type: string
+        shopperIP:
+          type: string
+        shopperInteraction:
+          type: string
+        shopperLocale:
+          type: string
+        shopperSocialSecurityNumber:
+          type: string
+        shopperStatement:
+          type: string
+        shopperTelephone:
+          type: string
+        store:
+          type: string
+        tenderReference:
+          type: string
+        terminalId:
+          type: string
+        threeDAuthenticated:
+          type: string
+        threeDAuthenticatedResponse:
+          type: string
+        threeDOffered:
+          type: string
+        threeDOfferedResponse:
+          type: string
+        threeDVersion:
+          type: string
+        tokenTxVariant:
+          type: string
+        totalFraudScore:
+          type: string
+        untokenisedCardSummary:
+          type: string
+        xid:
+          type: string
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Missing property: value"
+
+  requestBodies:
+    AdyenWebhookEvent:
+      description: "Adyens format:"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/AdyenWebhookEvent"
+    # API responses -------------
+  responses:
+    200SuccessResponse:
+      description: Successfully processed response
+      content:
+        text/plain:
+          schema:
+            type: string
+            example: "[accepted]"
+
+    400ValidationError:
+      description: Unexpected schema, didn't supply format we expected
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+
+    401AuthorisationError:
+      description: Invalid signature provided, HMAC signature does not match our hash
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+
+    500InternalServiceError:
+      description: Interal service error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic

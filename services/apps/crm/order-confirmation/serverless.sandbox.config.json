@@ -1,0 +1,51 @@
+{
+  "build": {
+    "context": "${env:BUILD_CONTEXT, \"manual\"}"
+  },
+  "delivery": {
+    "stage": "${env:SANDBOX_STAGE, env:DELIVERY_STAGE, \"dev\"}",
+    "context": "${env:DELIVERY_CONTEXT, \"sandbox\"}",
+    "tags": {
+      "Delivery Context": "${env:DELIVERY_CONTEXT_RESOURCE_TAG, \"Sandbox\"}",
+      "Project": "${env:DEPLOY_CONTEXT_RESOURCE_TAG, \"Enterprise Integration\"}"
+    }
+  },
+  "deploy": {
+    "context": {
+      "name": "${env:DEPLOY_CONTEXT, env:GIT_REPOSITORY_NAME, \"enterprise-integration\"}",
+      "key": "${env:DEPLOY_CONTEXT_KEY, \"ei\"}"
+    },
+    "target": {
+      "accountId": "100207810817",
+      "region": "eu-west-1",
+      "bucket": "${ssm:/platform/build/sls/deploy/bucket, \"SSM_RESOURCE_NOT_FOUND\"}",
+      "role": "${ssm:/platform/build/sls/deploy/role, env:AWS_ROLE_ARN, \"SSM_RESOURCE_NOT_FOUND\"}"
+    }
+  },
+  "provider": {
+    "newrelic": {
+      "nrRegion": "${ssm:/platform/provider/newrelic/region, \"SSM_RESOURCE_NOT_FOUND\"}",
+      "accountId": "${ssm:/platform/provider/newrelic/accountId, \"SSM_RESOURCE_NOT_FOUND\"}",
+      "apiKey": "${ssm:/platform/provider/newrelic/apiKey, \"SSM_RESOURCE_NOT_FOUND\"}"
+    }
+  },
+  "service": {
+    "brandconfig": {
+      "endpoint": "${ssm:/platform/service/${self:custom.stage}/shard-config/endpoint, ssm:/platform/service/shard-config/endpoint, \"SSM_RESOURCE_NOT_FOUND\"}",
+      "policy": {
+        "read": {
+          "arn": "${ssm:/platform/service/${self:custom.stage}/shard-config/policy/read/arn, ssm:/platform/service/shard-config/policy/read/arn, \"SSM_RESOURCE_NOT_FOUND\"}"
+        }
+      }
+    },
+    "transactbus": {
+      "arn": "${ssm:/platform/service/${self:custom.stage}/bus/transact/arn, ssm:/platform/service/bus/transact/arn, \"SSM_RESOURCE_NOT_FOUND\"}",
+      "name": "${ssm:/platform/service/${self:custom.stage}/bus/transact/name, ssm:/platform/service/bus/transact/name, \"SSM_RESOURCE_NOT_FOUND\"}",
+      "dlq": {
+        "name": "${ssm:/platform/service/${self:custom.stage}/bus/transact/dlq/name, ssm:/platform/service/bus/transact/dlq/name, \"SSM_RESOURCE_NOT_FOUND\"}",
+        "arn": "${ssm:/platform/service/${self:custom.stage}/bus/transact/dlq/arn, ssm:/platform/service/bus/transact/dlq/arn, \"SSM_RESOURCE_NOT_FOUND\"}",
+        "url": "${ssm:/platform/service/${self:custom.stage}/bus/transact/dlq/url, ssm:/platform/service/bus/transact/dlq/url, \"SSM_RESOURCE_NOT_FOUND\"}"
+      }
+    }
+  }
+}

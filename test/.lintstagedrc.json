@@ -1,0 +1,4 @@
+{
+  "*.{js,jsx,ts,tsx}": ["yarm prettier --write"],
+  "*.{md,json,yml,yaml,html}": ["yarn prettier --write"]
+}

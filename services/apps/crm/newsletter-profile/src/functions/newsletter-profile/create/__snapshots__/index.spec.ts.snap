@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`trigger set marketing preference of newsletter profile handler should throw an error if brand id is missing 1`] = `
+Array [
+  Object {
+    "code": "invalid_type",
+    "expected": "string",
+    "message": "Expected string, received null",
+    "path": Array [
+      "detail",
+      "metadata",
+      "x-emc-ubid",
+    ],
+    "received": "null",
+  },
+  Object {
+    "code": "custom",
+    "message": "Invalid input",
+    "path": Array [
+      "detail",
+      "payload",
+      "timezone",
+    ],
+  },
+]
+`;

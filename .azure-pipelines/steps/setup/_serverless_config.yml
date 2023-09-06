@@ -1,0 +1,14 @@
+steps:
+  - bash: |
+      # This sets SERVERLESS_CONFIG_JSON globally for any subsequent task in the pipeline, if not a no-op
+      if [ -f $(deployTarget.DeployTargetDataFileName) ]; then
+        if jq -e '.noop == true' $(deployTarget.DeployTargetDataFileName); then
+          echo "Response is noop.  SERVERLESS_CONFIG_JSON not set"
+        else
+          echo "##vso[task.setvariable variable=SERVERLESS_CONFIG_JSON]$(deployTarget.DeployTargetDataFileName)"
+        fi
+      else
+          echo "Deploy target File not found.  This can cause unexpected errors."
+          exit 1;
+      fi
+    displayName: '[setup] set serverless config'

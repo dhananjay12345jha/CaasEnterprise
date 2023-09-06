@@ -1,0 +1,6 @@
+message: 400 Bad Request
+errors:
+  items:
+    - type: 400 Bad Request
+      input_array: 400 Bad Request
+      index: 0

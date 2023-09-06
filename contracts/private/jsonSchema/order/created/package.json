@@ -1,0 +1,52 @@
+{
+  "name": "@everymile-schemas/order-created",
+  "version": "0.1.0",
+  "description": "The schema and the interface of the Order Created event",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "engines": {
+    "node": ">=16 <17"
+  },
+  "scripts": {
+    "lint": "yarn eslint",
+    "test": "yarn jest",
+    "clean": "yarn rimraf ./dist",
+    "compile:src": "yarn run tsc -p tsconfig.pkg.json",
+    "compile:type": "yarn run json2ts -i ./src/index.json -o ./dist/index.d.ts",
+    "compile": "yarn clean && yarn compile:src && yarn compile:type;"
+  },
+  "devDependencies": {
+    "@nrwl/cli": "13.10.1",
+    "@nrwl/cypress": "13.10.1",
+    "@nrwl/eslint-plugin-nx": "13.10.1",
+    "@nrwl/jest": "13.10.1",
+    "@nrwl/js": "13.10.1",
+    "@nrwl/linter": "13.10.1",
+    "@nrwl/node": "13.10.1",
+    "@nrwl/tao": "13.10.1",
+    "@nrwl/web": "13.10.1",
+    "@nrwl/workspace": "13.10.1",
+    "@types/jest": "^27.5.1",
+    "@types/node": "^14.14.25",
+    "@types/rimraf": "^3",
+    "@typescript-eslint/eslint-plugin": "~5.20.0",
+    "@typescript-eslint/parser": "~5.18.0",
+    "@yarnpkg/esbuild-plugin-pnp": "^3.0.0-rc.2",
+    "esbuild": "^0.14.11",
+    "eslint": "^8.0.0",
+    "eslint-config-prettier": "^8.5.0",
+    "jest": "27.2.3",
+    "jest-junit": "^13.2.0",
+    "json-schema-to-typescript": "^10.1.5",
+    "nx": "13.10.1",
+    "prettier": "^2.6.2",
+    "rimraf": "^3.0.2",
+    "ts-jest": "27.0.5",
+    "ts-loader": "^9.3.0",
+    "ts-node": "^10.8.0",
+    "tsconfig-paths": "^3.9.0",
+    "tsconfig-paths-webpack-plugin": "^3.5.2",
+    "tslib": "^2.4.0",
+    "typescript": "~4.3.5"
+  }
+}

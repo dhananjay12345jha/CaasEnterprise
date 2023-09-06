@@ -1,0 +1,7 @@
+variables:
+  CICD_SYSTEM: "AzureDevOps"
+  GIT_REPOSITORY_NAME: "$(Build.Repository.Name)"
+  BUILD_META_DATA: "dist/build-meta/config.json"
+  PLATFORM_CONFIG_DATA: "dist/platform/config.json"
+  DEPLOY_TARGET_CONFIG_FILE: "dist/deploy-target/config.json"
+  XA_WRAPPER: "$(Build.SourcesDirectory)/.azure-pipelines/.tools/xa_wrapper.sh"

@@ -1,0 +1,36 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "ES2021",
+    "lib": ["ES2021"],
+    "module": "CommonJS",
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "paths": {
+      "@ei-services/brand-config": ["libs/brand-config/src/index.ts"],
+      "@ei-services/braze-service": ["libs/braze-service/src/index.ts"],
+      "@ei-services/commerce-tools": ["libs/commerce-tools/src/index.ts"],
+      "@ei-services/common/http": ["libs/common/http/src/index.ts"],
+      "@ei-services/common/lambda": ["libs/common/lambda/src/index.ts"],
+      "@ei-services/common/middleware": ["libs/common/middleware/src/index.ts"],
+      "@ei-services/order-management-service": [
+        "libs/order-management-service/src/index.ts"
+      ],
+      "@ei-services/services": ["libs/services/src/index.ts"],
+      "@ei-services/shared/dlq/client": ["libs/shared/dlq/client/src/index.ts"],
+      "@ei-services/shared/eventbridge/client": [
+        "libs/shared/eventbridge/client/src/index.ts"
+      ]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}

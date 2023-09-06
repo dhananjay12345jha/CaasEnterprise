@@ -1,0 +1,11 @@
+{
+  "root": "apps/orders-e2e/",
+  "sourceRoot": "apps/orders-e2e/src",
+  "projectType": "library",
+  "tags": ["scope:orders", "type:e2e"],
+  "implicitDependencies": [
+    "orders-async-events",
+    "orders-status-changes",
+    "orders-update-order-ct"
+  ]
+}

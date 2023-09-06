@@ -1,0 +1,1 @@
+{"version":3,"file":"http-response.js","sourceRoot":"./","sources":["apps/shard-config/clients/brand-config/src/interfaces/http-response.ts"],"names":[],"mappings":"","sourcesContent":["export interface HttpResponse<T = unknown> {\n  data: T;\n  status: number;\n}\n"]}

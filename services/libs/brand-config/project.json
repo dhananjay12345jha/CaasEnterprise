@@ -1,0 +1,22 @@
+{
+  "root": "libs/brand-config",
+  "sourceRoot": "libs/brand-config/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/brand-config/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/brand-config"],
+      "options": {
+        "jestConfig": "libs/brand-config/jest.config.js"
+      }
+    }
+  },
+  "tags": ["type:lib"]
+}

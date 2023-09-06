@@ -1,0 +1,43 @@
+{
+  "extends": "@nrwl/workspace/presets/core.json",
+  "npmScope": "ei-services",
+  "affected": {
+    "defaultBase": "origin/develop"
+  },
+  "workspaceLayout": {
+    "appsDir": "apps",
+    "libsDir": "libs"
+  },
+  "cli": {
+    "defaultCollection": "@nrwl/js",
+    "packageManager": "yarn"
+  },
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "@nrwl/workspace/tasks-runners/default",
+      "options": {
+        "cacheableOperations": ["build", "lint", "test", "e2e"],
+        "runtimeCacheInputs": [
+          "echo BUILD_CONTEXT=${BUILD_CONTEXT:=local}",
+          "echo DELIVERY_CONTEXT=${DELIVERY_CONTEXT:=sandbox}",
+          "echo DELIVERY_STAGE=${DELIVERY_STAGE:=dev}"
+        ]
+      }
+    }
+  },
+  "targetDefaults": {
+    "build": {
+      "dependsOn": ["^build"]
+    }
+  },
+  "implicitDependencies": {
+    "workspace.json": "*",
+    "package.json": {
+      "dependencies": "*",
+      "devDependencies": "*"
+    },
+    "tsconfig.base.json": "*",
+    ".eslintrc.json": "*",
+    "nx.json": "*"
+  }
+}

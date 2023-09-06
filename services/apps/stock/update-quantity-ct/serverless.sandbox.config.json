@@ -1,0 +1,67 @@
+{
+  "build": {
+    "context": "${env:BUILD_CONTEXT, \"manual\"}"
+  },
+  "delivery": {
+    "stage": "${env:SANDBOX_STAGE, env:DELIVERY_STAGE, \"dev\"}",
+    "context": "${env:DELIVERY_CONTEXT, \"sandbox\"}",
+    "tags": {
+      "Delivery Context": "${env:DELIVERY_CONTEXT_RESOURCE_TAG, \"Sandbox\"}",
+      "Project": "${env:DEPLOY_CONTEXT_RESOURCE_TAG, \"Enterprise Integration\"}"
+    },
+    "resourceTags": [
+      {
+        "Key": "Delivery Context",
+        "Value": "${env:DELIVERY_CONTEXT_RESOURCE_TAG, \"Sandbox\"}"
+      },
+      {
+        "Key": "Project",
+        "Value": "${env:DEPLOY_CONTEXT_RESOURCE_TAG, \"Enterprise Integration\"}"
+      }
+    ]
+  },
+  "deploy": {
+    "context": {
+      "name": "${env:DEPLOY_CONTEXT, env:GIT_REPOSITORY_NAME, \"enterprise-integration\"}",
+      "key": "${env:DEPLOY_CONTEXT_KEY, \"ei\"}"
+    },
+    "target": {
+      "accountId": "100207810817",
+      "region": "eu-west-1",
+      "bucket": "${ssm:/platform/build/sls/deploy/bucket, \"SSM_RESOURCE_NOT_FOUND\"}",
+      "role": "${ssm:/platform/build/sls/deploy/role, env:AWS_ROLE_ARN, \"SSM_RESOURCE_NOT_FOUND\"}"
+    }
+  },
+  "provider": {
+    "newrelic": {
+      "nrRegion": "${ssm:/platform/provider/newrelic/region, \"SSM_RESOURCE_NOT_FOUND\"}",
+      "accountId": "${ssm:/platform/provider/newrelic/accountId, \"SSM_RESOURCE_NOT_FOUND\"}",
+      "apiKey": "${ssm:/platform/provider/newrelic/apiKey, \"SSM_RESOURCE_NOT_FOUND\"}"
+    },
+    "commercetools": {
+      "endpoint": "${ssm:/platform/provider/${self:custom.stage}/commercetools/endpoint, ssm:/platform/provider/commercetools/endpoint, \"SSM_RESOURCE_NOT_FOUND\"}",
+      "bus": {
+        "arn": "${ssm:/platform/provider/${self:custom.stage}/commercetools/bus/arn, ssm:/platform/provider/commercetools/bus/arn, \"SSM_RESOURCE_NOT_FOUND\"}"
+      }
+    }
+  },
+  "service": {
+    "brandconfig": {
+      "endpoint": "${ssm:/platform/service/${self:custom.stage}/brandconfig/endpoint, \"SSM_RESOURCE_NOT_FOUND\"}",
+      "policy": {
+        "read": {
+          "arn": "${ssm:/platform/service/${self:custom.stage}/shard-config/policy/read/arn, ssm:/platform/service/shard-config/policy/read/arn, \"SSM_RESOURCE_NOT_FOUND\"}"
+        }
+      }
+    },
+    "syncbus": {
+      "arn": "${ssm:/platform/service/${self:custom.stage}/bus/sync/arn, ssm:/platform/service/bus/sync/arn, \"SSM_RESOURCE_NOT_FOUND\"}",
+      "name": "${ssm:/platform/service/${self:custom.stage}/bus/sync/name, ssm:/platform/service/bus/sync/name, \"SSM_RESOURCE_NOT_FOUND\"}",
+      "dlq": {
+        "name": "${ssm:/platform/service/${self:custom.stage}/bus/sync/dlq/name, ssm:/platform/service/bus/sync/dlq/name, \"SSM_RESOURCE_NOT_FOUND\"}",
+        "arn": "${ssm:/platform/service/${self:custom.stage}/bus/sync/dlq/arn, ssm:/platform/service/bus/sync/dlq/arn, \"SSM_RESOURCE_NOT_FOUND\"}",
+        "url": "${ssm:/platform/service/${self:custom.stage}/bus/sync/dlq/url, ssm:/platform/service/bus/sync/dlq/url, \"SSM_RESOURCE_NOT_FOUND\"}"
+      }
+    }
+  }
+}

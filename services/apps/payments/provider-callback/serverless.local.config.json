@@ -1,0 +1,51 @@
+{
+  "build": {
+    "context": "local"
+  },
+  "delivery": {
+    "stage": "local",
+    "context": "localdev",
+    "tags": {}
+  },
+  "deploy": {
+    "context": {
+      "name": "${env:DEPLOY_CONTEXT, env:GIT_REPOSITORY_NAME, \"enterprise-integration\"}",
+      "key": "${env:DEPLOY_CONTEXT_KEY, \"ei\"}"
+    },
+    "target": {
+      "accountId": "000",
+      "region": "eu-west-2",
+      "bucket": "local",
+      "role": ""
+    }
+  },
+  "provider": {
+    "newrelic": {
+      "nrRegion": "eu",
+      "accountId": "",
+      "apiKey": ""
+    }
+  },
+  "service": {
+    "brandconfig": {
+      "endpoint": "http://localhost:8100/graphql",
+      "policy": {
+        "read": {
+          "arn": "arn:aws:iam::00000000:policy/shard_config_server_live_graphql_read_policy"
+        }
+      }
+    },
+    "webhooks": {
+      "apiId": "",
+      "hostname": "http://dummyhost.com"
+    },
+    "transactbus": {
+      "arn": "fakearn",
+      "name": "emc-transact-bus"
+    }
+  },
+  "serverless-offline-aws-eventbridge": {
+    "port": 4000,
+    "endpoint": "http://localhost:4000"
+  }
+}

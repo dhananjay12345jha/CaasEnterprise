@@ -1,0 +1,44 @@
+steps:
+  - task: AWSShellScript@1
+    inputs:
+      scriptType: "inline"
+      inlineScript: |
+        # We ideally want to pull the deploy config with a query to the root config server, but we don't have one at this point
+
+        # CONFIG_SERVER="https://$(variables['_platform_config_self_config-server']).$(variables['_platform_config_self_etld'])/graphql"
+        # CONFIG_QUERY="{ \"query\":\"query { ... }\" }"
+        # CONFIG_HEADERS="" # -H "x-api-key:**YOUR_API_KEY**" - We should be using IAM for build to access config server, as we only auth ADO via IAM
+        # CONFIG_DATA=$(curl -XPOST -H "Content-Type:application/graphql" ${CONFIG_HEADERS} -d \'${CONFIG_QUERY}\' ${CONFIG_SERVER})
+
+        # So instead, we will pretend, and use a static file
+        CONFIG_DATA="{}"
+
+        # DEPLOY_TARGET_LOCAL_REPO_PATH=".azure-pipelines/.config-root/deploy-target/${BUILD_CONTEXT}/${DELIVERY_CONTEXT}/${DELIVERY_STAGE}/response.json"
+
+        DEPLOY_TARGET_LOCAL_REPO_PATH=$(dirname ${BUILD_META_FILE})/response.json
+        TMP_TARGET_DATA_FILE_NAME="$(Build.SourcesDirectory)/${DEPLOY_TARGET_LOCAL_REPO_PATH}"
+
+        if [[ -f "${TMP_TARGET_DATA_FILE_NAME}" ]]
+        then
+          CONFIG_DATA=$(cat "${TMP_TARGET_DATA_FILE_NAME}")
+
+
+          FULL_DEPLOY_TARGET_DATA_FILE_NAME=$(Build.SourcesDirectory)/${DEPLOY_TARGET_CONFIG_FILE}
+          mkdir -p $(dirname $FULL_DEPLOY_TARGET_DATA_FILE_NAME)
+
+          echo "${CONFIG_DATA}" > "${FULL_DEPLOY_TARGET_DATA_FILE_NAME}"
+
+          echo "##vso[task.setvariable variable=DeployTargetDataFileName;isOutput=true]${FULL_DEPLOY_TARGET_DATA_FILE_NAME}"
+
+          echo "Deploy Target file name = ${FULL_DEPLOY_TARGET_DATA_FILE_NAME}"
+          echo "Deploy Target Data:"
+          jq . ${FULL_DEPLOY_TARGET_DATA_FILE_NAME}
+        else
+          echo "##[warning] No deploy target found at ${TMP_TARGET_DATA_FILE_NAME}"
+          echo "##vso[task.setvariable variable=DeployTargetDataFileName;isOutput=true]"
+          exit 1
+        fi
+        echo
+        echo
+    displayName: "[setup] deploy target config"
+    name: deployTarget

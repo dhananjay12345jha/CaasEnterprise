@@ -1,0 +1,65 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`updateQuantityCT handler when update type is increment should not make requests if brand id is missing 1`] = `
+Array [
+  Object {
+    "code": "invalid_type",
+    "expected": "string",
+    "message": "Expected string, received null",
+    "path": Array [
+      "detail",
+      "metadata",
+      "x-emc-ubid",
+    ],
+    "received": "null",
+  },
+]
+`;
+
+exports[`updateQuantityCT handler when update type is increment should not make requests if quantity is missing 1`] = `
+Array [
+  Object {
+    "code": "invalid_type",
+    "expected": "number",
+    "message": "Expected number, received null",
+    "path": Array [
+      "detail",
+      "payload",
+      "quantity",
+    ],
+    "received": "null",
+  },
+]
+`;
+
+exports[`updateQuantityCT handler when update type is increment should not make requests if sku is missing 1`] = `
+Array [
+  Object {
+    "code": "invalid_type",
+    "expected": "string",
+    "message": "Expected string, received null",
+    "path": Array [
+      "detail",
+      "payload",
+      "sku",
+    ],
+    "received": "null",
+  },
+]
+`;
+
+exports[`updateQuantityCT handler when update type is increment should not make requests if updateType is missing 1`] = `
+Array [
+  Object {
+    "code": "invalid_type",
+    "expected": "'increment' | 'decrement'",
+    "message": "Expected 'increment' | 'decrement', received null",
+    "path": Array [
+      "detail",
+      "payload",
+      "updateType",
+    ],
+    "received": "null",
+  },
+]
+`;

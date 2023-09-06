@@ -1,0 +1,53 @@
+{
+  "globals": {
+    "shardConfig": {
+      "baseURL": "https://hyvil6ql7c.execute-api.eu-west-1.amazonaws.com/sandbox",
+      "auth_baseURL": "https://hyvil6ql7c.execute-api.eu-west-1.amazonaws.com/sandbox/auth/",
+      "bcs_baseURL": "https://nnfebro3wvd47pekunhjkqo7um.appsync-api.eu-west-1.amazonaws.com",
+      "xApiKey": "da2-uiuhvxhpd5dspngzv5nyk6dfzi",
+      "webhook_baseURL": "https://ozqwtc3yr7.execute-api.eu-west-1.amazonaws.com",
+      "emc_transact_bus": "arn:aws:events:eu-west-1:100207810817:event-bus/emc-transact-bus"
+    },
+    "commercetools": {
+      "ctAPIURL": "https://api.europe-west1.gcp.commercetools.com",
+      "ctAuthAPIURL": "https://auth.europe-west1.gcp.commercetools.com",
+      "ctAPIVersion": "v1"
+    },
+    "oms": {
+      "baseURL": "https://staging.api.cloudcommercepro.com",
+      "clientId": "iz19HVEpX3vjnH17JbdCurugK1khx6RBiehgLyICTAw=",
+      "clientSecret": "J9iiyzsGTqGMJDFzyIwIrXFGhpCsq7C4Z0PqL4L1RsE=",
+      "grantType": "client_credentials"
+    },
+    "testConfig": {
+      "logLevel": "debug",
+      "authAPIVersion": "v1",
+      "resultsLocation": "../../../target/",
+      "openAPISchemaLocation": "../contracts/private/api/",
+      "isMock": false
+    }
+  },
+  "brandA": {
+    "brandId": "8f8e12168-f03b-4f21-8893-60c0d7df9100",
+    "projectKey": "caas-eu1-unilever-dove",
+    "country": "GB",
+    "currency": "GBP",
+    "LineItem_1": "handwash-regular",
+    "LineItem_2": "AT1234-90679101",
+    "LineItem_1_ProductKey": "AT-TEST-1",
+    "LineItem_2_ProductKey": "AT-TEST-2",
+    "FamilyKey_1": "AUTOTEST-NO-VARIANT",
+    "FamilyKey_2": "AUTOTEST-SINGLE-VARIANT",
+    "password": "Pa$sword1",
+    "CTclient_id": "9N_0k5oClGH8duZSs1mT6SFB",
+    "CTclient_secret": "Ob6TQpK5rJRzzeSFBtwb28y268k-sqQB",
+    "paymentSessionReturnUrl": "http://checkout.wppcaas.com",
+    "refOrderNumber": "4601534165",
+    "oms_brandId": 3402,
+    "refCartId": "97c451ec-5fda-4988-804b-e1474b19728d"
+  },
+  "brandB": {
+    "brandId": "b2fb1c54-8e9f-407e-9533-6064a6a0d44b",
+    "password": "Pa$sword1"
+  }
+}

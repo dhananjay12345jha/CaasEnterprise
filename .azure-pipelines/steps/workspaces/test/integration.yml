@@ -1,0 +1,21 @@
+steps:
+  - task: AWSShellScript@1
+    inputs:
+      scriptType: "inline"
+      inlineScript: |
+        $XA_WRAPPER --target-role=testing yarn affected:test:integration $(affected.affectedNxParams) --profile=${DEPLOY_TARGET}
+    displayName: "[test] integration"
+
+  - task: PublishCucumberReport@1
+    condition: succeededOrFailed()
+    inputs:
+      jsonDir: $(System.DefaultWorkingDirectory)/test/target
+      outputPath: $(System.DefaultWorkingDirectory)/test/target
+      metadata: |
+        {
+          "Test": "integration",
+          "Profile": "$(DEPLOY_TARGET)"
+        }
+      name: 'Integration Tests'
+      title: "[$(DEPLOY_TARGET) $(DELIVERY_STAGE)] $(TEST_TYPE)"
+    displayName: '[test] publish cucumber report'

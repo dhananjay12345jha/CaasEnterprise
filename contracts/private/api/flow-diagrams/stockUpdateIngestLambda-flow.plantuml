@@ -1,0 +1,20 @@
+@startuml
+    boundary OMS
+    boundary Orders
+    control stockUpdateIngestLambda
+    queue EventBridge
+    control stockUpdaterLambda
+    boundary CommerceTools
+
+    OMS -> Orders : PUT /ccp/v1/stockquantityupdate
+    Orders -> stockUpdateIngestLambda
+    stockUpdateIngestLambda -> EventBridge: putEvents([message: stock.updated.decrement | stock.updated.increment])
+    stockUpdateIngestLambda --> Orders: 200 success response
+    Orders --> OMS: 200 success response
+    EventBridge -> stockUpdaterLambda: message
+    stockUpdaterLambda -> CommerceTools: getInventory()
+    alt#Gold #LightBlue if(stock.updated.decrement && newValueFromCCP < currentValueInCT)
+        stockUpdaterLambda -> CommerceTools: updateInventory()
+        CommerceTools --> stockUpdaterLambda: 200 success response
+    end
+@enduml

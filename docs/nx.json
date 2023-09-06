@@ -1,0 +1,32 @@
+{
+  "extends": "@nrwl/workspace/presets/core.json",
+  "npmScope": "ei-docs",
+  "affected": {
+    "defaultBase": "develop"
+  },
+  "cli": {
+    "defaultCollection": "@nrwl/js"
+  },
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "@nrwl/workspace/tasks-runners/default",
+      "options": {
+        "cacheableOperations": ["build", "lint", "test", "e2e"],
+        "runtimeCacheInputs": [
+          "echo BUILD_CONTEXT=${BUILD_CONTEXT:=local}",
+          "echo DELIVERY_CONTEXT=${DELIVERY_CONTEXT:=sandbox}",
+          "echo DELIVERY_STAGE=${DELIVERY_STAGE:=dev}"
+        ]
+      }
+    }
+  },
+  "implicitDependencies": {
+    "workspace.json": "*",
+    "package.json": {
+      "dependencies": "*",
+      "devDependencies": "*"
+    },
+    "tsconfig.base.json": "*",
+    "nx.json": "*"
+  }
+}

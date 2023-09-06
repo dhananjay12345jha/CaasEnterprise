@@ -1,0 +1,153 @@
+{
+  "root": "apps/crm/newsletter-profile/",
+  "sourceRoot": "apps/crm/newsletter-profile/src",
+  "projectType": "application",
+  "targets": {
+    "serve-all": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "yarn kill-port 9005 && cd ../mocks && nx run braze:serve",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "yarn kill-port 9111 && cd ../mocks && nx run brand-config-service:serve",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "nx run crm-newsletter-profile:serve --stage={args.stage}"
+          }
+        ],
+        "parallel": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["apps/crm/newsletter-profile/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/crm/newsletter-profile"],
+      "options": {
+        "jestConfig": "apps/crm/newsletter-profile/jest.config.js",
+        "testPathIgnorePatterns": ["./test/e2e"],
+        "color": true,
+        "testPathPattern": ["./src"]
+      }
+    },
+    "terminate": {
+      "builder": "@nrwl/workspace:run-commands",
+      "options": {
+        "envFile": "apps/crm/newsletter-profile/.env",
+        "commands": [
+          "yarn kill-port --port ${HTTP_SERVER_PORT}",
+          "yarn kill-port --port ${LAMBDA_SERVER_PORT}",
+          "yarn kill-port --port ${SLS_OFFLINE_EVENTBRIDGE_PORT}",
+          "yarn kill-port --port ${SLS_OFFLINE_EVENTBRIDGE_PUB_SUB_PORT}"
+        ],
+        "cwd": "apps/crm/newsletter-profile",
+        "parallel": true
+      }
+    },
+    "e2e:feature:env": {
+      "builder": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "echo \"Get the Base URLs for localhost and write them somewhere jest can find\"",
+        "cwd": "apps/crm/newsletter-profile",
+        "parallel": false
+      }
+    },
+    "e2e-run-tests": {
+      "executor": "@nrwl/jest:jest",
+      "options": {
+        "jestConfig": "apps/crm/newsletter-profile/jest.config.js",
+        "testPathPattern": ["./test/e2e"],
+        "runInBand": true,
+        "passWithNoTests": true
+      }
+    },
+    "e2e-feature": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn start-test \"yarn nx run crm-newsletter-profile:serve\" tcp:localhost:${SLS_OFFLINE_EVENTBRIDGE_PORT} \"yarn nx run crm-newsletter-profile:e2e-run-tests\"",
+        "color": true,
+        "cwd": "apps/crm/newsletter-profile"
+      }
+    },
+    "info": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "cwd": "apps/crm/newsletter-profile",
+        "color": true,
+        "command": "yarn sls print --verbose"
+      }
+    },
+    "build": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "cwd": "apps/crm/newsletter-profile",
+        "color": true,
+        "command": "yarn sls package --verbose"
+      }
+    },
+    "deploy": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn sls deploy --verbose",
+        "color": true,
+        "cwd": "apps/crm/newsletter-profile"
+      }
+    },
+    "e2e:env": {
+      "builder": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "echo \"Get the Base URLs from SERVERLESS_CONFIG_JSON and write them somewhere jest can find\"",
+        "cwd": "apps/crm/newsletter-profile",
+        "parallel": false
+      }
+    },
+    "_e2e": {
+      "executor": "@nrwl/jest:jest",
+      "options": {
+        "jestConfig": "apps/crm/newsletter-profile/jest.config.js",
+        "testPathPattern": ["./test/e2e"],
+        "runInBand": true,
+        "passWithNoTests": true
+      },
+      "dependsOn": [
+        {
+          "target": "e2e:env",
+          "projects": "self"
+        }
+      ]
+    },
+    "destroy": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn sls remove --verbose",
+        "color": true,
+        "cwd": "apps/crm/newsletter-profile"
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "envFile": "apps/crm/newsletter-profile/.test.env",
+        "cwd": "apps/crm/newsletter-profile",
+        "color": true,
+        "command": "yarn sls offline start --noPrependStageInUrl --httpPort=${HTTP_SERVER_PORT} --lambdaPort=${LAMBDA_SERVER_PORT}"
+      },
+      "dependsOn": [
+        {
+          "target": "terminate",
+          "projects": "self"
+        }
+      ]
+    }
+  },
+  "tags": ["scope:crm", "type:app"],
+  "implicitDependencies": []
+}

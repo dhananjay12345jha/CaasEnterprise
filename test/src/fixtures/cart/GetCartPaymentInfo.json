@@ -1,0 +1,144 @@
+{
+  "type": "Cart",
+  "id": "e83219cb-1c13-4bb1-8d47-a63556a992e6",
+  "version": 4,
+  "lastMessageSequenceNumber": 1,
+  "createdAt": "2022-04-07T21:52:10.036Z",
+  "lastModifiedAt": "2022-04-07T21:52:22.673Z",
+  "lastModifiedBy": {
+    "clientId": "vW3cdYFWmKozBxI-zU_bPnJJ",
+    "isPlatformClient": false,
+    "anonymousId": "10dbf91c-f103-4255-a0ad-fec9515d4de4"
+  },
+  "createdBy": {
+    "clientId": "vW3cdYFWmKozBxI-zU_bPnJJ",
+    "isPlatformClient": false,
+    "anonymousId": "10dbf91c-f103-4255-a0ad-fec9515d4de4"
+  },
+  "anonymousId": "10dbf91c-f103-4255-a0ad-fec9515d4de4",
+  "lineItems": [
+    {
+      "id": "e6b6e4d5-5b6a-4813-978f-b6da142ff271",
+      "productId": "0a6371e4-7970-4505-aeb5-644decf4e6e5",
+      "productKey": "diapers",
+      "name": {
+        "en-US": "diapers"
+      },
+      "productType": {
+        "typeId": "product-type",
+        "id": "b3b0f015-ba45-4705-bd4e-7fb0721ee080",
+        "version": 1
+      },
+      "productSlug": {
+        "en-US": "diapers"
+      },
+      "variant": {
+        "id": 1,
+        "sku": "diapers-large",
+        "key": "diapers-large",
+        "prices": [
+          {
+            "id": "ee2a14a1-0594-4988-9cc1-b393dd7ebccf",
+            "value": {
+              "type": "centPrecision",
+              "currencyCode": "EUR",
+              "centAmount": 200,
+              "fractionDigits": 2
+            }
+          }
+        ],
+        "images": [],
+        "attributes": [],
+        "assets": [],
+        "availability": {
+          "isOnStock": true,
+          "availableQuantity": 10,
+          "version": 1,
+          "id": "eceb4545-5f8f-4a19-9a85-328bea5aa175"
+        }
+      },
+      "price": {
+        "id": "ee2a14a1-0594-4988-9cc1-b393dd7ebccf",
+        "value": {
+          "type": "centPrecision",
+          "currencyCode": "EUR",
+          "centAmount": 200,
+          "fractionDigits": 2
+        }
+      },
+      "quantity": 1,
+      "discountedPricePerQuantity": [],
+      "addedAt": "2022-04-07T21:52:22.626Z",
+      "lastModifiedAt": "2022-04-07T21:52:22.626Z",
+      "state": [
+        {
+          "quantity": 1,
+          "state": {
+            "typeId": "state",
+            "id": "b088f631-f6eb-4f84-8c89-d2fea0256c45"
+          }
+        }
+      ],
+      "priceMode": "Platform",
+      "totalPrice": {
+        "type": "centPrecision",
+        "currencyCode": "EUR",
+        "centAmount": 200,
+        "fractionDigits": 2
+      },
+      "lineItemMode": "Standard"
+    }
+  ],
+  "cartState": "Active",
+  "locale": "en",
+  "totalPrice": {
+    "type": "centPrecision",
+    "currencyCode": "EUR",
+    "centAmount": 200,
+    "fractionDigits": 2
+  },
+  "customLineItems": [],
+  "discountCodes": [],
+  "directDiscounts": [],
+  "inventoryMode": "None",
+  "taxMode": "Platform",
+  "taxRoundingMode": "HalfEven",
+  "taxCalculationMode": "LineItemLevel",
+  "deleteDaysAfterLastModification": 90,
+  "refusedGifts": [],
+  "origin": "Customer",
+  "itemShippingAddresses": [],
+  "totalLineItemQuantity": 1,
+  "shippingAddress": {
+    "city": "London",
+    "country": "GB",
+    "streetNumber": "13",
+    "postalCode": "BR6 6JF",
+    "streetName": "Warren Road"
+  },
+  "billingAddress": {
+    "city": "London",
+    "country": "GB",
+    "streetNumber": "10",
+    "postalCode": "BR6 6JF",
+    "streetName": "Warren Road",
+    "email": "john.smith@example.com"
+  },
+  "custom": {
+    "type": {
+      "typeId": "type",
+      "id": "6febc33c-e7a8-4d54-9004-fc594b83dab3"
+    },
+    "fields": {
+      "emcOrderId": "7098638243"
+    }
+  },
+  "paymentInfo": {
+    "payments": [
+      {
+        "id": "c5b3535a-abf5-4b8f-a384-a9ebd0297cb1",
+        "typeId": "payment"
+      }
+    ]
+  }
+}

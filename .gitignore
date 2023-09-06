@@ -1,0 +1,107 @@
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# compiled output
+**/dist
+!.idp-shim/dist
+
+# this should go as soon as we can deploy to AWS CodeArtifact
+!contracts/private/jsonSchema/**/dist
+
+/tmp
+**/.cache/nx
+
+# dependencies
+**/node_modules
+package-lock.json
+tmp/
+**/.yarn/install-state.gz
+**/.yarn/unplugged
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+# .vscode
+# !.vscode/settings.json
+# !.vscode/tasks.json
+# !.vscode/launch.json
+# !.vscode/extensions.json
+
+# misc
+/.sass-cache
+/connect.lock
+coverage/
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/typing
+/pa11y-reports
+pa11y-ci-results.json
+debug.log
+test-report.xml
+junit/
+/coverage
+/jscpd
+migrations.json
+/pa11y-ci-report
+**/tsconfig.tsbuildinfo
+**/.env.*
+!**/.localdev/.env.*
+newrelic_agent.log
+.yarn/install-state.gz
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# PlantUML
+/out
+
+# intellij recommendations for ignored files
+**/.idea/workspace.xml
+**/.idea/usage.statistics.xml
+**/.idea/tasks.xml
+**/.idea/shelf/
+
+# terraform / terragrunt
+.*.sw?
+.idea
+terragrunt.iml
+vendor
+.terraform
+*.tfstate
+*.tfstate.backup
+*.out
+.terragrunt-cache
+.bundle
+.ruby-version
+# .terraform.lock.hcl
+# terragrunt
+terragrunt_rendered.json
+
+# yarn
+/.yarn/*
+!/.yarn/patches
+!/.yarn/plugins
+!/.yarn/releases
+!/.yarn/sdks
+!/.yarn/versions
+!/.yarn/cache
+/.yarn/install-state.gz
+
+# Swap the comments on the following lines if you don't wish to use zero-installs
+# Documentation here: https://yarnpkg.com/features/zero-installs
+#/.pnp.*
+
+# Ignore serverless builds in any project
+**/.serverless/**/*
+
+# Ignore webpack builds in any project
+**/.webpack/**/*

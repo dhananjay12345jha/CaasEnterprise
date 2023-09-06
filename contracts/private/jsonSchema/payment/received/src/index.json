@@ -1,0 +1,549 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "required": ["version", "id", "detail-type", "time", "detail"],
+  "properties": {
+    "version": {
+      "type": "string"
+    },
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "detail-type": {
+      "enum": ["payment.order.auth.accepted"]
+    },
+    "referenced": {
+      "type": "boolean"
+    },
+    "source": {
+      "type": "string"
+    },
+    "account": {
+      "type": "string"
+    },
+    "time": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "region": {
+      "type": "string"
+    },
+    "correlationId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "detail": {
+      "type": "object",
+      "required": ["payload", "metadata"],
+      "properties": {
+        "payload": {
+          "type": "object",
+          "required": ["notificationItems", "live"],
+          "additionalProperties": false,
+          "properties": {
+            "live": {
+              "type": "string",
+              "description": "Informs about the origin of the notification. The value is true when originating from the live environment, false for the test environment."
+            },
+            "notificationItems": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "NotificationRequestItem": {
+                    "type": "object",
+                    "required": [
+                      "merchantReference",
+                      "pspReference",
+                      "success",
+                      "additionalData"
+                    ],
+                    "properties": {
+                      "additionalData": {
+                        "type": "object",
+                        "required": ["checkoutSessionId"],
+                        "properties": {
+                          "PaymentAccountReference": {
+                            "type": "string"
+                          },
+                          "acquirerCode": {
+                            "type": "string"
+                          },
+                          "acquirerReference": {
+                            "type": "string"
+                          },
+                          "acsRenderingType.acsInterface": {
+                            "type": "string"
+                          },
+                          "acsRenderingType.acsUiTemplate": {
+                            "type": "string"
+                          },
+                          "alias": {
+                            "type": "string"
+                          },
+                          "aliasType": {
+                            "type": "string"
+                          },
+                          "arn": {
+                            "type": "string"
+                          },
+                          "authCode": {
+                            "type": "string"
+                          },
+                          "authenticationType": {
+                            "type": "string"
+                          },
+                          "authorisationMid": {
+                            "type": "string"
+                          },
+                          "authorisedAmountCurrency": {
+                            "type": "string"
+                          },
+                          "authorisedAmountValue": {
+                            "type": "string"
+                          },
+                          "avsResult": {
+                            "type": "string"
+                          },
+                          "avsResultRaw": {
+                            "type": "string"
+                          },
+                          "bankAccountNumber": {
+                            "type": "string"
+                          },
+                          "bankLocation": {
+                            "type": "string"
+                          },
+                          "bankLocationId": {
+                            "type": "string"
+                          },
+                          "bankName": {
+                            "type": "string"
+                          },
+                          "bankVerificationResult": {
+                            "type": "string"
+                          },
+                          "bankVerificationResultRaw": {
+                            "type": "string"
+                          },
+                          "bic": {
+                            "type": "string"
+                          },
+                          "billingAddress.city": {
+                            "type": "string"
+                          },
+                          "billingAddress.houseNumberOrName": {
+                            "type": "string"
+                          },
+                          "billingAddress.postalCode": {
+                            "type": "string"
+                          },
+                          "billingAddress.stateOrProvince": {
+                            "type": "string"
+                          },
+                          "billingAddress.street": {
+                            "type": "string"
+                          },
+                          "browserCode": {
+                            "type": "string"
+                          },
+                          "captureDelayHours": {
+                            "type": "string"
+                          },
+                          "captureMerchantRference": {
+                            "type": "string"
+                          },
+                          "capturePspReference": {
+                            "type": "string"
+                          },
+                          "cardBin": {
+                            "type": "string"
+                          },
+                          "cardIssuingBank": {
+                            "type": "string"
+                          },
+                          "cardIssuingCurrency": {
+                            "type": "string"
+                          },
+                          "cardIssuingCountry": {
+                            "type": "string"
+                          },
+                          "cardPaymentMethod": {
+                            "type": "string"
+                          },
+                          "cardSchemeEnhancedDataLevel": {
+                            "type": "string"
+                          },
+                          "cardSummary": {
+                            "type": "string"
+                          },
+                          "cavv": {
+                            "type": "string"
+                          },
+                          "cavvAlgorithm": {
+                            "type": "string"
+                          },
+                          "challengeCancel": {
+                            "type": "string"
+                          },
+                          "checkoutSessionId": {
+                            "type": "string",
+                            "description": "Identifier of the payment session."
+                          },
+                          "cvcResult": {
+                            "type": "string"
+                          },
+                          "cvcResultRaw": {
+                            "type": "string"
+                          },
+                          "deliveryAddress.city": {
+                            "type": "string"
+                          },
+                          "deliveryAddress.country": {
+                            "type": "string"
+                          },
+                          "deliveryAddress.houseNumberOrName": {
+                            "type": "string"
+                          },
+                          "deliveryAddress.postalCode": {
+                            "type": "string"
+                          },
+                          "deliveryAddress.stateOrProvince": {
+                            "type": "string"
+                          },
+                          "deliveryAddress.street": {
+                            "type": "string"
+                          },
+                          "deviceType": {
+                            "type": "string"
+                          },
+                          "directdebit_GB.dateOfSignature": {
+                            "type": "string"
+                          },
+                          "directdebit_GB.mandateId": {
+                            "type": "string"
+                          },
+                          "directdebit_GB.sequenceType": {
+                            "type": "string"
+                          },
+                          "directdebit_GB.serviceUserName": {
+                            "type": "string"
+                          },
+                          "directdebit_GB.serviceUserNumber": {
+                            "type": "string"
+                          },
+                          "eci": {
+                            "type": "string"
+                          },
+                          "expiryDate": {
+                            "type": "string"
+                          },
+                          "extraCostsCurrency": {
+                            "type": "string"
+                          },
+                          "extraCostsValue": {
+                            "type": "string"
+                          },
+                          "fraudCheck--": {
+                            "type": "string"
+                          },
+                          "fraudManualReview": {
+                            "type": "string"
+                          },
+                          "fraudOffset": {
+                            "type": "string"
+                          },
+                          "fraudResultType": {
+                            "type": "string"
+                          },
+                          "fundingSource": {
+                            "type": "string"
+                          },
+                          "grossCurrency": {
+                            "type": "string"
+                          },
+                          "grossValue": {
+                            "type": "string"
+                          },
+                          "iDealConsumerAccountNumber": {
+                            "type": "string"
+                          },
+                          "iDealConsumerBIC": {
+                            "type": "string"
+                          },
+                          "iDealConsumerCity": {
+                            "type": "string"
+                          },
+                          "iDealConsumerIBAN": {
+                            "type": "string"
+                          },
+                          "iDealConsumerIban": {
+                            "type": "string"
+                          },
+                          "iDealConsumerName": {
+                            "type": "string"
+                          },
+                          "iDealTransactionId": {
+                            "type": "string"
+                          },
+                          "iban": {
+                            "type": "string"
+                          },
+                          "installments.value": {
+                            "type": "string"
+                          },
+                          "interactionCounter": {
+                            "type": "string"
+                          },
+                          "issuerComments.cardholderName": {
+                            "type": "string"
+                          },
+                          "issuerCountry": {
+                            "type": "string"
+                          },
+                          "latestCard.bin": {
+                            "type": "string"
+                          },
+                          "latestCard.expiryDate": {
+                            "type": "string"
+                          },
+                          "latestCard.summary": {
+                            "type": "string"
+                          },
+                          "liabilityShift": {
+                            "type": "string"
+                          },
+                          "metadata": {
+                            "type": "object"
+                          },
+                          "additionalProperties": {
+                            "type": "string"
+                          },
+                          "networkToken.available": {
+                            "type": "string"
+                          },
+                          "networkToken.bin": {
+                            "type": "string"
+                          },
+                          "networkToken.tokenSummary": {
+                            "type": "string"
+                          },
+                          "nfc.expire": {
+                            "type": "string"
+                          },
+                          "nfc.issue": {
+                            "type": "string"
+                          },
+                          "nfc.pin.provided": {
+                            "type": "string"
+                          },
+                          "nvc.uid": {
+                            "type": "string"
+                          },
+                          "opi.transToken": {
+                            "type": "string"
+                          },
+                          "ownerCity": {
+                            "type": "string"
+                          },
+                          "ownerName": {
+                            "type": "string"
+                          },
+                          "payULatamTrazabilityCode": {
+                            "type": "string"
+                          },
+                          "paymentLinkId": {
+                            "type": "string"
+                          },
+                          "paypalAddressStatus": {
+                            "type": "string"
+                          },
+                          "paypalBillingName": {
+                            "type": "string"
+                          },
+                          "paypalEmail": {
+                            "type": "string"
+                          },
+                          "paypalErrorCode": {
+                            "type": "string"
+                          },
+                          "paypalErrorDescription": {
+                            "type": "string"
+                          },
+                          "paypalPairingId": {
+                            "type": "string"
+                          },
+                          "paypalPayerId": {
+                            "type": "string"
+                          },
+                          "paypalPayerResidenceCountry": {
+                            "type": "string"
+                          },
+                          "payapPayerStatus": {
+                            "type": "string"
+                          },
+                          "paypalPhone": {
+                            "type": "string"
+                          },
+                          "paypalProtectionEligibility": {
+                            "type": "string"
+                          },
+                          "paypalRisk": {
+                            "type": "string"
+                          },
+                          "realtimeAccountUpdaterStatus": {
+                            "type": "string"
+                          },
+                          "recurring.contractTypes": {
+                            "type": "string"
+                          },
+                          "recurring.firstPspReference": {
+                            "type": "string"
+                          },
+                          "recurring.recurringDetailReference": {
+                            "type": "string"
+                          },
+                          "referred": {
+                            "type": "string"
+                          },
+                          "refusalReasonRaw": {
+                            "type": "string"
+                          },
+                          "riskProfile": {
+                            "type": "string"
+                          },
+                          "riskProfileReference": {
+                            "type": "string"
+                          },
+                          "sepadirectdebit.dateOfSignature": {
+                            "type": "string"
+                          },
+                          "sepadirectdebit.mandateId": {
+                            "type": "string"
+                          },
+                          "sepadirectdebit.sequenceType": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "enum": ["OOFF", "FIRST", "RCUR", "FNAL"]
+                            }
+                          },
+                          "shopperCountry": {
+                            "type": "string"
+                          },
+                          "shopperIP": {
+                            "type": "string"
+                          },
+                          "shopperInteraction": {
+                            "type": "string"
+                          },
+                          "shopperLocale": {
+                            "type": "string"
+                          },
+                          "shopperSocialSecurityNumber": {
+                            "type": "string"
+                          },
+                          "shopperStatement": {
+                            "type": "string"
+                          },
+                          "shopperTelephone": {
+                            "type": "string"
+                          },
+                          "store": {
+                            "type": "string"
+                          },
+                          "tenderReference": {
+                            "type": "string"
+                          },
+                          "terminalId": {
+                            "type": "string"
+                          },
+                          "threeDAuthenticated": {
+                            "type": "string"
+                          },
+                          "threeDAuthenticatedResponse": {
+                            "type": "string"
+                          },
+                          "threeDOffered": {
+                            "type": "string"
+                          },
+                          "threeDOfferedResponse": {
+                            "type": "string"
+                          },
+                          "threeDVersion": {
+                            "type": "string"
+                          },
+                          "tokenTxVariant": {
+                            "type": "string"
+                          },
+                          "totalFraudScore": {
+                            "type": "string"
+                          },
+                          "untokenisedCardSummary": {
+                            "type": "string"
+                          },
+                          "xid": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "amount": {
+                        "type": "object",
+                        "properties": {
+                          "currency": {
+                            "type": "string"
+                          },
+                          "value": {
+                            "type": "number"
+                          }
+                        }
+                      },
+                      "eventCode": {
+                        "type": "string"
+                      },
+                      "eventDate": {
+                        "type": "string"
+                      },
+                      "merchantAccountCode": {
+                        "type": "string"
+                      },
+                      "merchantReference": {
+                        "type": "string",
+                        "description": "A reference to uniquely identify the payment. This maps to the emcOrderId stored in CommerceTools."
+                      },
+                      "paymentMethod": {
+                        "type": "string"
+                      },
+                      "pspReference": {
+                        "type": "string",
+                        "description": "Adyen's 16-character unique reference associated with the transaction/the request. This value is globally unique; quote it when communicating with us about this request."
+                      },
+                      "reason": {
+                        "type": "string"
+                      },
+                      "success": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "metadata": {
+          "type": "object",
+          "required": ["x-emc-ubid"],
+          "additionalProperties": false,
+          "properties": {
+            "x-emc-ubid": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        }
+      }
+    }
+  }
+}

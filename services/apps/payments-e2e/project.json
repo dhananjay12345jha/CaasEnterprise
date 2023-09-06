@@ -1,0 +1,7 @@
+{
+  "root": "apps/payments-e2e/",
+  "sourceRoot": "apps/payments-e2e/src",
+  "projectType": "library",
+  "tags": ["scope:payments", "type:e2e"],
+  "implicitDependencies": ["payments-provider-callback"]
+}

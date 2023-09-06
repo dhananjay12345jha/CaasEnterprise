@@ -1,0 +1,6 @@
+variables:
+  ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+    PR_ID: "pr-$(System.PullRequest.PullRequestId)"
+    IS_PR: true
+  ${{ else }}:
+    IS_PR: false

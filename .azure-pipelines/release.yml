@@ -1,0 +1,110 @@
+trigger: none
+
+pool:
+  vmImage: ubuntu-latest
+
+parameters:
+  - name: testType
+    type: string
+    default: 'regression'
+    values:
+    - sanity
+    - smoke
+    - integration
+    - regression
+  - name: deliveryContext
+    type: string
+    default: 'test'
+    values:
+    - test
+    - live
+  - name: deliveryRegion
+    type: string
+    default: 'eu-w1'
+    values:
+    - eu-w1
+  - name: shard
+    type: string
+    default: 'qa1'
+    displayName: The name of the target shard, in the regional control plane context.
+  - name: overrideAffectedBase
+    displayName: Override the gitref to set for affected resolution base value
+    type: string
+    default: "default"
+  - name: includeSourceValidation
+    displayName: 'Run code level tests like lint and unit tests'
+    type: boolean
+    default: false
+  - name: includeBuildDeploy
+    displayName: 'Build and Deploy affected shard targeted apps in the services workspace.'
+    type: boolean
+    default: true
+
+variables:
+  - name: BUILD_CONTEXT
+    value: platform
+  - name: DELIVERY_CONTEXT
+    value: ${{ parameters.deliveryContext }}
+  - name: DELIVERY_STAGE
+    value: ga #general availability
+  - name: DEPLOY_REGION
+    value: ${{ parameters.deliveryRegion }}
+  - name: DEPLOY_TARGET
+    value: ${{ parameters.shard }}
+  - name: DEPLOY_CONTEXT
+    value: "${{ variables['Build.Repository.Name'] }}"
+  - name: TEST_TYPE
+    value: ${{ parameters.testType }}
+  - name: BUILD_META_FILE
+    value: ".azure-pipelines/.config-root/deploy-target/${{ variables.BUILD_CONTEXT }}/${{ variables.DELIVERY_CONTEXT }}/${{ variables.DEPLOY_REGION }}/${{ variables.DEPLOY_TARGET }}/request.json"
+  - group: "aws-${{ variables.DELIVERY_CONTEXT }}-${{ variables['Build.Repository.Name'] }}"
+  - template: ./vars/global.yml
+  - template: ./vars/${{ variables.DELIVERY_CONTEXT }}.yml
+
+name: "[${{ upper(variables.DEPLOY_TARGET) }} ${{ upper(variables.DELIVERY_STAGE) }}] ${{ upper( variables.TEST_TYPE ) }} Test"
+jobs:
+  - job: Validate
+    displayName: '[source validation] ${{ variables.DELIVERY_CONTEXT }} ${{ variables.DEPLOY_TARGET }}'
+    condition: eq('${{ parameters.includeSourceValidation }}', 'true')
+    steps:
+      - template: ./steps/pipeline/init.yml
+      - template: ./steps/setup/build.yml
+        parameters:
+          overrideAffectedBase: ${{ parameters.overrideAffectedBase }}
+          buildMetaFile: ${{ variables.BUILD_META_FILE }}
+          buildMetaJSON: "NA"
+      # the next 3 steps could be parallelised?
+      - template: ./steps/workspaces/test/static_analysis.yml
+      - template: ./steps/workspaces/test/unit.yml
+
+  - job: Build_Deploy
+    displayName: '[build deploy] ${{ variables.DELIVERY_CONTEXT }} ${{ variables.DEPLOY_TARGET }}'
+    dependsOn:
+      - Validate
+    condition: and(eq('${{ parameters.includeBuildDeploy }}', 'true'), in(dependencies.Validate.result, 'Succeeded', 'Skipped'))
+    steps:
+      - template: ./steps/pipeline/init.yml
+      - template: ./steps/setup/build.yml
+        parameters:
+          overrideAffectedBase: ${{ parameters.overrideAffectedBase }}
+          buildMetaFile: ${{ variables.BUILD_META_FILE }}
+          buildMetaJSON: "NA"
+      - template: ./steps/workspaces/build.yml
+      - template: ./steps/workspaces/deploy.yml
+      - template: ./steps/release/version.yml
+
+  - job: Test
+    displayName: '[${{ lower( variables.TEST_TYPE ) }}] ${{ variables.DELIVERY_CONTEXT }} ${{ variables.DEPLOY_TARGET }}'
+    dependsOn:
+      - Build_Deploy
+    condition: and(in(dependencies.Build_Deploy.result, 'Succeeded', 'Skipped'), ne('${{ variables.DELIVERY_CONTEXT }}', 'live'))
+    steps:
+      - template: ./steps/pipeline/init.yml
+      - template: ./steps/setup/build.yml
+        parameters:
+          overrideAffectedBase: ${{ parameters.overrideAffectedBase }}
+          buildMetaFile: ${{ variables.BUILD_META_FILE }}
+          buildMetaJSON: "NA"
+      - template: ./steps/workspaces/test/${{ variables.TEST_TYPE }}.yml
+
+  # notify a QA slack channel of any result

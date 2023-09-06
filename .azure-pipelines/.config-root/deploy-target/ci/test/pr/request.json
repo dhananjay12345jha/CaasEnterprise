@@ -1,0 +1,23 @@
+{
+  "platform": {
+    "build": {
+      "source": "enterprise-integration",
+      "context": "${BUILD_CONTEXT}"
+    },
+    "delivery": {
+      "context": "${DELIVERY_CONTEXT}",
+      "stage": "${PR_ID}"
+    },
+    "emc": {
+      "context": {
+        "name": "eu-west"
+      },
+      "region": {
+        "partition": "1"
+      },
+      "shard": {
+        "partition": "dev"
+      }
+    }
+  }
+}

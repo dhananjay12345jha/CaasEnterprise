@@ -1,0 +1,67 @@
+type BrandMeta {
+  brandId: ID!
+  etld: String!
+  tenantId: ID!
+}
+
+type FeatureFlags {
+  brandId: ID!
+  enable: Boolean!
+  name: String!
+  description: String!
+}
+
+type BrandAlias {
+  brandId: ID!
+  aliasId: ID!
+}
+
+type ExternalProvider {
+  brandId: ID!
+  type: String!
+  providerConfigs: [ExternalProviderConfig]
+}
+
+type ExternalProviderConfig {
+  key: String!
+  value: String
+}
+
+type ConfigMap {
+  brandId: ID!
+  type: String!
+  items: ExternalProviderConfig
+}
+
+type IdentityProvider {
+  brandId: ID!
+  clientId: String!
+  clientSecret: String!
+  endpoint: String!
+  provider: String!
+  region: String!
+  userPoolId: String!
+}
+
+type PrivateConfig {
+  brand: BrandMeta
+  identityProvider: IdentityProvider
+  externalProviders: [ExternalProvider]
+}
+
+type PublicConfig {
+  brand: BrandMeta
+  featureFlags: FeatureFlags
+  configMap: ConfigMap
+}
+
+type Query {
+  getPrivateConfig(brandId: ID!): PrivateConfig!
+  getPublicConfig(brandId: ID!): PublicConfig!
+  brandMeta(brandId: ID!): BrandMeta!
+  getBrandAlias(aliasId: ID!): BrandAlias!
+}
+
+schema {
+  query: Query
+}

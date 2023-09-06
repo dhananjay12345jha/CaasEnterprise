@@ -1,0 +1,21 @@
+{
+  "root": "qa/smoke",
+  "sourceRoot": "qa/smoke",
+  "projectType": "library",
+  "targets": {
+    "deploy": {
+      "builder": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "cucumber-js --profile smoke --profile {args.profile}",
+            "forwardAllArgs": true
+          }
+        ],
+        "parallel": false
+      }
+    }
+  },
+  "tags": ["scope:test", "type:smoke"],
+  "implicitDependencies": []
+}

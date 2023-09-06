@@ -1,0 +1,98 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`orderUpdate status.changed handler should return a 400 if brandId (ubid) is missing 1`] = `
+Array [
+  Object {
+    "code": "invalid_type",
+    "expected": "string",
+    "message": "Required",
+    "path": Array [
+      "detail",
+      "payload",
+      "orderId",
+    ],
+    "received": "undefined",
+  },
+  Object {
+    "code": "invalid_type",
+    "expected": "object",
+    "message": "Required",
+    "path": Array [
+      "detail",
+      "payload",
+      "status",
+    ],
+    "received": "undefined",
+  },
+  Object {
+    "code": "invalid_type",
+    "expected": "string",
+    "message": "Required",
+    "path": Array [
+      "detail",
+      "payload",
+      "time",
+    ],
+    "received": "undefined",
+  },
+  Object {
+    "code": "invalid_type",
+    "expected": "string",
+    "message": "Expected string, received null",
+    "path": Array [
+      "detail",
+      "metadata",
+      "x-emc-ubid",
+    ],
+    "received": "null",
+  },
+]
+`;
+
+exports[`orderUpdate status.changed handler should return an error if payload is is missing orderId 1`] = `
+Array [
+  Object {
+    "code": "invalid_type",
+    "expected": "string",
+    "message": "Required",
+    "path": Array [
+      "detail",
+      "payload",
+      "orderId",
+    ],
+    "received": "undefined",
+  },
+]
+`;
+
+exports[`orderUpdate status.changed handler should return an error if payload is is missing status 1`] = `
+Array [
+  Object {
+    "code": "invalid_type",
+    "expected": "object",
+    "message": "Required",
+    "path": Array [
+      "detail",
+      "payload",
+      "status",
+    ],
+    "received": "undefined",
+  },
+]
+`;
+
+exports[`orderUpdate status.changed handler should return an error if payload is is missing time 1`] = `
+Array [
+  Object {
+    "code": "invalid_type",
+    "expected": "string",
+    "message": "Required",
+    "path": Array [
+      "detail",
+      "payload",
+      "time",
+    ],
+    "received": "undefined",
+  },
+]
+`;

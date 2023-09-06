@@ -1,0 +1,9 @@
+{
+  "version": 2,
+  "projects": {
+    "perf": "perf",
+    "regression": "qa/regression",
+    "sanity": "qa/sanity",
+    "smoke": "qa/smoke"
+  }
+}

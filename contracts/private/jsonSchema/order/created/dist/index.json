@@ -1,0 +1,2834 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "$defs": {
+    "ReferenceTypeId": {
+      "type": "string",
+      "enum": [
+        "cart",
+        "cart-discount",
+        "category",
+        "channel",
+        "customer",
+        "customer-group",
+        "discount-code",
+        "extension",
+        "inventory-entry",
+        "key-value-document",
+        "order",
+        "order-edit",
+        "payment",
+        "product",
+        "product-discount",
+        "product-price",
+        "product-selection",
+        "product-type",
+        "review",
+        "shipping-method",
+        "shopping-list",
+        "state",
+        "store",
+        "subscription",
+        "tax-category",
+        "type",
+        "zone"
+      ]
+    },
+    "Reference": {
+      "type": "object",
+      "properties": {
+        "typeId": {
+          "$ref": "#/$defs/ReferenceTypeId"
+        },
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "CreatedBy": {
+      "type": "object",
+      "properties": {
+        "clientId": {
+          "type": "string"
+        },
+        "externalUserId": {
+          "type": "string"
+        },
+        "customer": {
+          "$ref": "#/$defs/CustomerReference"
+        },
+        "anonymousId": {
+          "type": "string"
+        }
+      }
+    },
+    "CountryCode": {
+      "type": "string"
+    },
+    "LocalizedString": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "ResourceTypeId": {
+      "type": "string",
+      "enum": [
+        "address",
+        "asset",
+        "cart-discount",
+        "category",
+        "channel",
+        "customer",
+        "customer-group",
+        "custom-line-item",
+        "discount-code",
+        "inventory-entry",
+        "line-item",
+        "order",
+        "order-edit",
+        "order-delivery",
+        "order-parcel",
+        "order-return-item",
+        "payment",
+        "payment-interface-interaction",
+        "product-price",
+        "product-selection",
+        "review",
+        "shipping-method",
+        "shopping-list",
+        "shopping-list-text-line-item",
+        "store",
+        "transaction"
+      ]
+    },
+    "FieldType": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "TypeTextInputHint": {
+      "type": "string",
+      "enum": ["SingleLine", "MultiLine"]
+    },
+    "FieldDefinition": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "$ref": "#/$defs/FieldType"
+        },
+        "name": {
+          "type": "string"
+        },
+        "label": {
+          "$ref": "#/$defs/LocalizedString"
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "inputHint": {
+          "$ref": "#/$defs/TypeTextInputHint"
+        }
+      }
+    },
+    "Type": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "version": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastModifiedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastModifiedBy": {
+          "$ref": "#/$defs/LastModifiedBy"
+        },
+        "createdBy": {
+          "$ref": "#/$defs/CreatedBy"
+        },
+        "key": {
+          "type": "string"
+        },
+        "name": {
+          "$ref": "#/$defs/LocalizedString"
+        },
+        "description": {
+          "$ref": "#/$defs/LocalizedString"
+        },
+        "resourceTypeIds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ResourceTypeId"
+          }
+        },
+        "fieldDefinitions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FieldDefinition"
+          }
+        }
+      }
+    },
+    "TypeReference": {
+      "type": "object",
+      "properties": {
+        "typeId": {
+          "$ref": "#/$defs/ReferenceTypeId"
+        },
+        "id": {
+          "type": "string"
+        },
+        "obj": {
+          "$ref": "#/$defs/Type"
+        }
+      }
+    },
+    "FieldContainer": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "CustomFields": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "$ref": "#/$defs/TypeReference"
+        },
+        "fields": {
+          "$ref": "#/$defs/FieldContainer"
+        }
+      }
+    },
+    "Address": {
+      "type": "object",
+      "required": [
+        "firstName",
+        "lastName",
+        "city",
+        "postalCode",
+        "country",
+        "email"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "key": {
+          "type": "string"
+        },
+        "country": {
+          "$ref": "#/$defs/CountryCode"
+        },
+        "title": {
+          "type": "string"
+        },
+        "salutation": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "streetName": {
+          "type": "string"
+        },
+        "streetNumber": {
+          "type": "string"
+        },
+        "additionalStreetInfo": {
+          "type": "string"
+        },
+        "postalCode": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "region": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "company": {
+          "type": "string"
+        },
+        "department": {
+          "type": "string"
+        },
+        "building": {
+          "type": "string"
+        },
+        "apartment": {
+          "type": "string"
+        },
+        "pOBox": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "mobile": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "fax": {
+          "type": "string"
+        },
+        "additionalAddressInfo": {
+          "type": "string"
+        },
+        "externalId": {
+          "type": "string"
+        },
+        "custom": {
+          "$ref": "#/$defs/CustomFields"
+        }
+      }
+    },
+    "CustomerGroup": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "version": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastModifiedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastModifiedBy": {
+          "$ref": "#/$defs/LastModifiedBy"
+        },
+        "createdBy": {
+          "$ref": "#/$defs/CreatedBy"
+        },
+        "key": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "custom": {
+          "$ref": "#/$defs/CustomFields"
+        }
+      }
+    },
+    "CustomerGroupReference": {
+      "type": "object",
+      "properties": {
+        "typeId": {
+          "$ref": "#/$defs/ReferenceTypeId"
+        },
+        "id": {
+          "type": "string"
+        },
+        "obj": {
+          "$ref": "#/$defs/CustomerGroup"
+        }
+      }
+    },
+    "KeyReference": {
+      "type": "object",
+      "properties": {
+        "typeId": {
+          "$ref": "#/$defs/ReferenceTypeId"
+        },
+        "key": {
+          "type": "string"
+        }
+      }
+    },
+    "StoreKeyReference": {
+      "type": "object",
+      "properties": {
+        "typeId": {
+          "$ref": "#/$defs/ReferenceTypeId"
+        },
+        "key": {
+          "type": "string"
+        }
+      }
+    },
+    "AuthenticationMode": {
+      "type": "string",
+      "enum": ["Password", "ExternalAuth"]
+    },
+    "Customer": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "version": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastModifiedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastModifiedBy": {
+          "$ref": "#/$defs/LastModifiedBy"
+        },
+        "createdBy": {
+          "$ref": "#/$defs/CreatedBy"
+        },
+        "customerNumber": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "middleName": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "dateOfBirth": {
+          "type": "string",
+          "format": "date"
+        },
+        "companyName": {
+          "type": "string"
+        },
+        "vatId": {
+          "type": "string"
+        },
+        "addresses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Address"
+          }
+        },
+        "defaultShippingAddressId": {
+          "type": "string"
+        },
+        "shippingAddressIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "defaultBillingAddressId": {
+          "type": "string"
+        },
+        "billingAddressIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "isEmailVerified": {
+          "type": "boolean"
+        },
+        "externalId": {
+          "type": "string"
+        },
+        "customerGroup": {
+          "$ref": "#/$defs/CustomerGroupReference"
+        },
+        "custom": {
+          "$ref": "#/$defs/CustomFields"
+        },
+        "locale": {
+          "type": "string"
+        },
+        "salutation": {
+          "type": "string"
+        },
+        "key": {
+          "type": "string"
+        },
+        "stores": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/StoreKeyReference"
+          }
+        },
+        "authenticationMode": {
+          "$ref": "#/$defs/AuthenticationMode"
+        }
+      }
+    },
+    "CustomerReference": {
+      "type": "object",
+      "properties": {
+        "typeId": {
+          "$ref": "#/$defs/ReferenceTypeId"
+        },
+        "id": {
+          "type": "string"
+        },
+        "obj": {
+          "$ref": "#/$defs/Customer"
+        }
+      }
+    },
+    "LastModifiedBy": {
+      "type": "object",
+      "properties": {
+        "clientId": {
+          "type": "string"
+        },
+        "externalUserId": {
+          "type": "string"
+        },
+        "customer": {
+          "$ref": "#/$defs/CustomerReference"
+        },
+        "anonymousId": {
+          "type": "string"
+        }
+      }
+    },
+    "AttributeType": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "AttributeConstraintEnum": {
+      "type": "string",
+      "enum": ["None", "Unique", "CombinationUnique", "SameForAll"]
+    },
+    "TextInputHint": {
+      "type": "string",
+      "enum": ["SingleLine", "MultiLine"]
+    },
+    "AttributeDefinition": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "$ref": "#/$defs/AttributeType"
+        },
+        "name": {
+          "type": "string"
+        },
+        "label": {
+          "$ref": "#/$defs/LocalizedString"
+        },
+        "isRequired": {
+          "type": "boolean"
+        },
+        "attributeConstraint": {
+          "$ref": "#/$defs/AttributeConstraintEnum"
+        },
+        "inputTip": {
+          "$ref": "#/$defs/LocalizedString"
+        },
+        "inputHint": {
+          "$ref": "#/$defs/TextInputHint"
+        },
+        "isSearchable": {
+          "type": "boolean"
+        }
+      }
+    },
+    "ProductType": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "version": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastModifiedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastModifiedBy": {
+          "$ref": "#/$defs/LastModifiedBy"
+        },
+        "createdBy": {
+          "$ref": "#/$defs/CreatedBy"
+        },
+        "key": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "attributes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/AttributeDefinition"
+          }
+        }
+      }
+    },
+    "ProductTypeReference": {
+      "type": "object",
+      "properties": {
+        "typeId": {
+          "$ref": "#/$defs/ReferenceTypeId"
+        },
+        "id": {
+          "type": "string"
+        },
+        "obj": {
+          "$ref": "#/$defs/ProductType"
+        }
+      }
+    },
+    "CurrencyCode": {
+      "type": "string"
+    },
+    "Money": {
+      "type": "object",
+      "properties": {
+        "centAmount": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "currencyCode": {
+          "$ref": "#/$defs/CurrencyCode"
+        }
+      }
+    },
+    "MoneyType": {
+      "type": "string",
+      "enum": ["centPrecision", "highPrecision"]
+    },
+    "TypedMoney": {
+      "type": "object",
+      "required": ["centAmount", "currencyCode", "type", "fractionDigits"],
+      "properties": {
+        "centAmount": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "currencyCode": {
+          "$ref": "#/$defs/CurrencyCode"
+        },
+        "type": {
+          "$ref": "#/$defs/MoneyType"
+        },
+        "fractionDigits": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "ChannelRoleEnum": {
+      "type": "string",
+      "enum": [
+        "InventorySupply",
+        "ProductDistribution",
+        "OrderExport",
+        "OrderImport",
+        "Primary"
+      ]
+    },
+    "ReviewRatingStatistics": {
+      "type": "object",
+      "properties": {
+        "averageRating": {
+          "type": "number",
+          "format": "double"
+        },
+        "highestRating": {
+          "type": "number",
+          "format": "double"
+        },
+        "lowestRating": {
+          "type": "number",
+          "format": "double"
+        },
+        "count": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "ratingsDistribution": {
+          "type": "object"
+        }
+      }
+    },
+    "GeoJson": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "Channel": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "version": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastModifiedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastModifiedBy": {
+          "$ref": "#/$defs/LastModifiedBy"
+        },
+        "createdBy": {
+          "$ref": "#/$defs/CreatedBy"
+        },
+        "key": {
+          "type": "string"
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ChannelRoleEnum"
+          }
+        },
+        "name": {
+          "$ref": "#/$defs/LocalizedString"
+        },
+        "description": {
+          "$ref": "#/$defs/LocalizedString"
+        },
+        "address": {
+          "$ref": "#/$defs/Address"
+        },
+        "reviewRatingStatistics": {
+          "$ref": "#/$defs/ReviewRatingStatistics"
+        },
+        "custom": {
+          "$ref": "#/$defs/CustomFields"
+        },
+        "geoLocation": {
+          "$ref": "#/$defs/GeoJson"
+        }
+      }
+    },
+    "ChannelReference": {
+      "type": "object",
+      "properties": {
+        "typeId": {
+          "$ref": "#/$defs/ReferenceTypeId"
+        },
+        "id": {
+          "type": "string"
+        },
+        "obj": {
+          "$ref": "#/$defs/Channel"
+        }
+      }
+    },
+    "ProductDiscountValue": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "ProductDiscount": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "version": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastModifiedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastModifiedBy": {
+          "$ref": "#/$defs/LastModifiedBy"
+        },
+        "createdBy": {
+          "$ref": "#/$defs/CreatedBy"
+        },
+        "name": {
+          "$ref": "#/$defs/LocalizedString"
+        },
+        "key": {
+          "type": "string"
+        },
+        "description": {
+          "$ref": "#/$defs/LocalizedString"
+        },
+        "value": {
+          "$ref": "#/$defs/ProductDiscountValue"
+        },
+        "predicate": {
+          "type": "string"
+        },
+        "sortOrder": {
+          "type": "string"
+        },
+        "isActive": {
+          "type": "boolean"
+        },
+        "references": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Reference"
+          }
+        },
+        "validFrom": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "validUntil": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "PriceTier": {
+      "type": "object",
+      "properties": {
+        "minimumQuantity": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "value": {
+          "$ref": "#/$defs/TypedMoney"
+        }
+      }
+    },
+    "ProductDiscountReference": {
+      "type": "object",
+      "properties": {
+        "typeId": {
+          "$ref": "#/$defs/ReferenceTypeId"
+        },
+        "id": {
+          "type": "string"
+        },
+        "obj": {
+          "$ref": "#/$defs/ProductDiscount"
+        }
+      }
+    },
+    "DiscountedPrice": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "$ref": "#/$defs/TypedMoney"
+        },
+        "discount": {
+          "$ref": "#/$defs/ProductDiscountReference"
+        }
+      }
+    },
+    "Price": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "value": {
+          "$ref": "#/$defs/TypedMoney"
+        },
+        "country": {
+          "$ref": "#/$defs/CountryCode"
+        },
+        "customerGroup": {
+          "$ref": "#/$defs/CustomerGroupReference"
+        },
+        "channel": {
+          "$ref": "#/$defs/ChannelReference"
+        },
+        "validFrom": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "validUntil": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "discounted": {
+          "$ref": "#/$defs/DiscountedPrice"
+        },
+        "tiers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PriceTier"
+          }
+        },
+        "custom": {
+          "$ref": "#/$defs/CustomFields"
+        }
+      }
+    },
+    "Attribute": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "object"
+            },
+            {
+              "type": "array"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "boolean"
+            }
+          ]
+        }
+      }
+    },
+    "ImageDimensions": {
+      "type": "object",
+      "properties": {
+        "w": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "h": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "Image": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string"
+        },
+        "dimensions": {
+          "$ref": "#/$defs/ImageDimensions"
+        },
+        "label": {
+          "type": "string"
+        }
+      }
+    },
+    "AssetDimensions": {
+      "type": "object",
+      "properties": {
+        "w": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "h": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "AssetSource": {
+      "type": "object",
+      "properties": {
+        "uri": {
+          "type": "string"
+        },
+        "key": {
+          "type": "string"
+        },
+        "dimensions": {
+          "$ref": "#/$defs/AssetDimensions"
+        },
+        "contentType": {
+          "type": "string"
+        }
+      }
+    },
+    "Asset": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/AssetSource"
+          }
+        },
+        "name": {
+          "$ref": "#/$defs/LocalizedString"
+        },
+        "description": {
+          "$ref": "#/$defs/LocalizedString"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "custom": {
+          "$ref": "#/$defs/CustomFields"
+        },
+        "key": {
+          "type": "string"
+        }
+      }
+    },
+    "ProductVariantChannelAvailabilityMap": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "ProductVariantAvailability": {
+      "type": "object",
+      "properties": {
+        "isOnStock": {
+          "type": "boolean"
+        },
+        "restockableInDays": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "availableQuantity": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "channels": {
+          "$ref": "#/$defs/ProductVariantChannelAvailabilityMap"
+        }
+      }
+    },
+    "ScopedPrice": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "value": {
+          "$ref": "#/$defs/TypedMoney"
+        },
+        "currentValue": {
+          "$ref": "#/$defs/TypedMoney"
+        },
+        "country": {
+          "$ref": "#/$defs/CountryCode"
+        },
+        "customerGroup": {
+          "$ref": "#/$defs/CustomerGroupReference"
+        },
+        "channel": {
+          "$ref": "#/$defs/ChannelReference"
+        },
+        "validFrom": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "validUntil": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "discounted": {
+          "$ref": "#/$defs/DiscountedPrice"
+        },
+        "custom": {
+          "$ref": "#/$defs/CustomFields"
+        }
+      }
+    },
+    "ProductVariant": {
+      "type": "object",
+      "required": ["sku"],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "sku": {
+          "type": "string"
+        },
+        "key": {
+          "type": "string"
+        },
+        "prices": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Price"
+          }
+        },
+        "attributes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Attribute"
+          }
+        },
+        "price": {
+          "$ref": "#/$defs/Price"
+        },
+        "images": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Image"
+          }
+        },
+        "assets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Asset"
+          }
+        },
+        "availability": {
+          "$ref": "#/$defs/ProductVariantAvailability"
+        },
+        "isMatchingVariant": {
+          "type": "boolean"
+        },
+        "scopedPrice": {
+          "$ref": "#/$defs/ScopedPrice"
+        },
+        "scopedPriceDiscounted": {
+          "type": "boolean"
+        }
+      }
+    },
+    "TaxedItemPrice": {
+      "type": "object",
+      "properties": {
+        "totalNet": {
+          "$ref": "#/$defs/TypedMoney"
+        },
+        "totalGross": {
+          "$ref": "#/$defs/TypedMoney"
+        },
+        "totalTax": {
+          "$ref": "#/$defs/TypedMoney"
+        }
+      }
+    },
+    "StateTypeEnum": {
+      "type": "string",
+      "enum": [
+        "OrderState",
+        "LineItemState",
+        "ProductState",
+        "ReviewState",
+        "PaymentState"
+      ]
+    },
+    "StateRoleEnum": {
+      "type": "string",
+      "enum": ["ReviewIncludedInStatistics", "Return"]
+    },
+    "State": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "version": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastModifiedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastModifiedBy": {
+          "$ref": "#/$defs/LastModifiedBy"
+        },
+        "createdBy": {
+          "$ref": "#/$defs/CreatedBy"
+        },
+        "key": {
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/$defs/StateTypeEnum"
+        },
+        "name": {
+          "$ref": "#/$defs/LocalizedString"
+        },
+        "description": {
+          "$ref": "#/$defs/LocalizedString"
+        },
+        "initial": {
+          "type": "boolean"
+        },
+        "builtIn": {
+          "type": "boolean"
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/StateRoleEnum"
+          }
+        },
+        "transitions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/StateReference"
+          }
+        }
+      }
+    },
+    "StateReference": {
+      "type": "object",
+      "properties": {
+        "typeId": {
+          "$ref": "#/$defs/ReferenceTypeId"
+        },
+        "id": {
+          "type": "string"
+        },
+        "obj": {
+          "$ref": "#/$defs/State"
+        }
+      }
+    },
+    "ItemState": {
+      "type": "object",
+      "properties": {
+        "quantity": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "state": {
+          "$ref": "#/$defs/StateReference"
+        }
+      }
+    },
+    "CartDiscountValue": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "CartDiscountTarget": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "StackingMode": {
+      "type": "string",
+      "enum": ["Stacking", "StopAfterThisDiscount"]
+    },
+    "CartDiscount": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "version": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastModifiedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastModifiedBy": {
+          "$ref": "#/$defs/LastModifiedBy"
+        },
+        "createdBy": {
+          "$ref": "#/$defs/CreatedBy"
+        },
+        "name": {
+          "$ref": "#/$defs/LocalizedString"
+        },
+        "key": {
+          "type": "string"
+        },
+        "description": {
+          "$ref": "#/$defs/LocalizedString"
+        },
+        "value": {
+          "$ref": "#/$defs/CartDiscountValue"
+        },
+        "cartPredicate": {
+          "type": "string"
+        },
+        "target": {
+          "$ref": "#/$defs/CartDiscountTarget"
+        },
+        "sortOrder": {
+          "type": "string"
+        },
+        "isActive": {
+          "type": "boolean"
+        },
+        "validFrom": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "validUntil": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "requiresDiscountCode": {
+          "type": "boolean"
+        },
+        "references": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Reference"
+          }
+        },
+        "stackingMode": {
+          "$ref": "#/$defs/StackingMode"
+        },
+        "custom": {
+          "$ref": "#/$defs/CustomFields"
+        }
+      }
+    },
+    "CartDiscountReference": {
+      "type": "object",
+      "properties": {
+        "typeId": {
+          "$ref": "#/$defs/ReferenceTypeId"
+        },
+        "id": {
+          "type": "string"
+        },
+        "obj": {
+          "$ref": "#/$defs/CartDiscount"
+        }
+      }
+    },
+    "DiscountedLineItemPortion": {
+      "type": "object",
+      "properties": {
+        "discount": {
+          "$ref": "#/$defs/CartDiscountReference"
+        },
+        "discountedAmount": {
+          "$ref": "#/$defs/TypedMoney"
+        }
+      }
+    },
+    "DiscountedLineItemPrice": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "$ref": "#/$defs/TypedMoney"
+        },
+        "includedDiscounts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/DiscountedLineItemPortion"
+          }
+        }
+      }
+    },
+    "DiscountedLineItemPriceForQuantity": {
+      "type": "object",
+      "properties": {
+        "quantity": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "discountedPrice": {
+          "$ref": "#/$defs/DiscountedLineItemPrice"
+        }
+      }
+    },
+    "SubRate": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
+    "TaxRate": {
+      "type": "object",
+      "required": ["amount"],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "number",
+          "format": "double"
+        },
+        "includedInPrice": {
+          "type": "boolean"
+        },
+        "country": {
+          "$ref": "#/$defs/CountryCode"
+        },
+        "state": {
+          "type": "string"
+        },
+        "subRates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SubRate"
+          }
+        }
+      }
+    },
+    "LineItemPriceMode": {
+      "type": "string",
+      "enum": ["Platform", "ExternalTotal", "ExternalPrice"]
+    },
+    "LineItemMode": {
+      "type": "string",
+      "enum": ["Standard", "GiftLineItem"]
+    },
+    "ItemShippingTarget": {
+      "type": "object",
+      "properties": {
+        "addressKey": {
+          "type": "string"
+        },
+        "quantity": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "ItemShippingDetails": {
+      "type": "object",
+      "properties": {
+        "targets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ItemShippingTarget"
+          }
+        },
+        "valid": {
+          "type": "boolean"
+        }
+      }
+    },
+    "LineItem": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "variant",
+        "totalPrice",
+        "quantity",
+        "taxRate"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "productId": {
+          "type": "string"
+        },
+        "productKey": {
+          "type": "string"
+        },
+        "name": {
+          "$ref": "#/$defs/LocalizedString"
+        },
+        "productSlug": {
+          "$ref": "#/$defs/LocalizedString"
+        },
+        "productType": {
+          "$ref": "#/$defs/ProductTypeReference"
+        },
+        "variant": {
+          "$ref": "#/$defs/ProductVariant"
+        },
+        "price": {
+          "$ref": "#/$defs/Price"
+        },
+        "taxedPrice": {
+          "$ref": "#/$defs/TaxedItemPrice"
+        },
+        "totalPrice": {
+          "$ref": "#/$defs/TypedMoney"
+        },
+        "quantity": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "addedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "state": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ItemState"
+          }
+        },
+        "taxRate": {
+          "$ref": "#/$defs/TaxRate"
+        },
+        "supplyChannel": {
+          "$ref": "#/$defs/ChannelReference"
+        },
+        "distributionChannel": {
+          "$ref": "#/$defs/ChannelReference"
+        },
+        "discountedPricePerQuantity": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/DiscountedLineItemPriceForQuantity"
+          }
+        },
+        "priceMode": {
+          "$ref": "#/$defs/LineItemPriceMode"
+        },
+        "lineItemMode": {
+          "$ref": "#/$defs/LineItemMode"
+        },
+        "custom": {
+          "$ref": "#/$defs/CustomFields"
+        },
+        "shippingDetails": {
+          "$ref": "#/$defs/ItemShippingDetails"
+        },
+        "lastModifiedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "TaxCategory": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "version": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastModifiedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastModifiedBy": {
+          "$ref": "#/$defs/LastModifiedBy"
+        },
+        "createdBy": {
+          "$ref": "#/$defs/CreatedBy"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "rates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TaxRate"
+          }
+        },
+        "key": {
+          "type": "string"
+        }
+      }
+    },
+    "TaxCategoryReference": {
+      "type": "object",
+      "properties": {
+        "typeId": {
+          "$ref": "#/$defs/ReferenceTypeId"
+        },
+        "id": {
+          "type": "string"
+        },
+        "obj": {
+          "$ref": "#/$defs/TaxCategory"
+        }
+      }
+    },
+    "CustomLineItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "$ref": "#/$defs/LocalizedString"
+        },
+        "money": {
+          "$ref": "#/$defs/TypedMoney"
+        },
+        "taxedPrice": {
+          "$ref": "#/$defs/TaxedItemPrice"
+        },
+        "totalPrice": {
+          "$ref": "#/$defs/TypedMoney"
+        },
+        "slug": {
+          "type": "string"
+        },
+        "quantity": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "state": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ItemState"
+          }
+        },
+        "taxCategory": {
+          "$ref": "#/$defs/TaxCategoryReference"
+        },
+        "taxRate": {
+          "$ref": "#/$defs/TaxRate"
+        },
+        "discountedPricePerQuantity": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/DiscountedLineItemPriceForQuantity"
+          }
+        },
+        "custom": {
+          "$ref": "#/$defs/CustomFields"
+        },
+        "shippingDetails": {
+          "$ref": "#/$defs/ItemShippingDetails"
+        }
+      }
+    },
+    "TaxMode": {
+      "type": "string",
+      "enum": ["Platform", "External", "ExternalAmount", "Disabled"]
+    },
+    "RoundingMode": {
+      "type": "string",
+      "enum": ["HalfEven", "HalfUp", "HalfDown"]
+    },
+    "TaxPortion": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "rate": {
+          "type": "number",
+          "format": "double"
+        },
+        "amount": {
+          "$ref": "#/$defs/TypedMoney"
+        }
+      }
+    },
+    "TaxedPrice": {
+      "type": "object",
+      "properties": {
+        "totalNet": {
+          "$ref": "#/$defs/TypedMoney"
+        },
+        "totalGross": {
+          "$ref": "#/$defs/TypedMoney"
+        },
+        "taxPortions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TaxPortion"
+          }
+        },
+        "totalTax": {
+          "$ref": "#/$defs/TypedMoney"
+        }
+      }
+    },
+    "OrderState": {
+      "type": "string",
+      "enum": ["Open", "Confirmed", "Complete", "Cancelled"]
+    },
+    "ShipmentState": {
+      "type": "string",
+      "enum": ["Shipped", "Ready", "Pending", "Delayed", "Partial", "Backorder"]
+    },
+    "PaymentState": {
+      "type": "string",
+      "enum": ["BalanceDue", "Failed", "Pending", "CreditOwed", "Paid"]
+    },
+    "ShippingRateTierType": {
+      "type": "string",
+      "enum": ["CartValue", "CartClassification", "CartScore"]
+    },
+    "ShippingRatePriceTier": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "$ref": "#/$defs/ShippingRateTierType"
+        }
+      }
+    },
+    "ShippingRate": {
+      "type": "object",
+      "properties": {
+        "price": {
+          "$ref": "#/$defs/TypedMoney"
+        },
+        "freeAbove": {
+          "$ref": "#/$defs/TypedMoney"
+        },
+        "isMatching": {
+          "type": "boolean"
+        },
+        "tiers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ShippingRatePriceTier"
+          }
+        }
+      }
+    },
+    "Location": {
+      "type": "object",
+      "properties": {
+        "country": {
+          "$ref": "#/$defs/CountryCode"
+        },
+        "state": {
+          "type": "string"
+        }
+      }
+    },
+    "Zone": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "version": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastModifiedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastModifiedBy": {
+          "$ref": "#/$defs/LastModifiedBy"
+        },
+        "createdBy": {
+          "$ref": "#/$defs/CreatedBy"
+        },
+        "key": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "locations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Location"
+          }
+        }
+      }
+    },
+    "ZoneReference": {
+      "type": "object",
+      "properties": {
+        "typeId": {
+          "$ref": "#/$defs/ReferenceTypeId"
+        },
+        "id": {
+          "type": "string"
+        },
+        "obj": {
+          "$ref": "#/$defs/Zone"
+        }
+      }
+    },
+    "ZoneRate": {
+      "type": "object",
+      "properties": {
+        "zone": {
+          "$ref": "#/$defs/ZoneReference"
+        },
+        "shippingRates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ShippingRate"
+          }
+        }
+      }
+    },
+    "ShippingMethod": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "version": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastModifiedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastModifiedBy": {
+          "$ref": "#/$defs/LastModifiedBy"
+        },
+        "createdBy": {
+          "$ref": "#/$defs/CreatedBy"
+        },
+        "key": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "localizedName": {
+          "$ref": "#/$defs/LocalizedString"
+        },
+        "description": {
+          "type": "string"
+        },
+        "localizedDescription": {
+          "$ref": "#/$defs/LocalizedString"
+        },
+        "taxCategory": {
+          "$ref": "#/$defs/TaxCategoryReference"
+        },
+        "zoneRates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ZoneRate"
+          }
+        },
+        "isDefault": {
+          "type": "boolean"
+        },
+        "predicate": {
+          "type": "string"
+        },
+        "custom": {
+          "$ref": "#/$defs/CustomFields"
+        }
+      }
+    },
+    "ShippingMethodReference": {
+      "type": "object",
+      "properties": {
+        "typeId": {
+          "$ref": "#/$defs/ReferenceTypeId"
+        },
+        "id": {
+          "type": "string"
+        },
+        "obj": {
+          "$ref": "#/$defs/ShippingMethod"
+        }
+      }
+    },
+    "DeliveryItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "quantity": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "ParcelMeasurements": {
+      "type": "object",
+      "properties": {
+        "heightInMillimeter": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "lengthInMillimeter": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "widthInMillimeter": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "weightInGram": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "TrackingData": {
+      "type": "object",
+      "properties": {
+        "trackingId": {
+          "type": "string"
+        },
+        "carrier": {
+          "type": "string"
+        },
+        "provider": {
+          "type": "string"
+        },
+        "providerTransaction": {
+          "type": "string"
+        },
+        "isReturn": {
+          "type": "boolean"
+        }
+      }
+    },
+    "Parcel": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "measurements": {
+          "$ref": "#/$defs/ParcelMeasurements"
+        },
+        "trackingData": {
+          "$ref": "#/$defs/TrackingData"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/DeliveryItem"
+          }
+        },
+        "custom": {
+          "$ref": "#/$defs/CustomFields"
+        }
+      }
+    },
+    "Delivery": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/DeliveryItem"
+          }
+        },
+        "parcels": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Parcel"
+          }
+        },
+        "address": {
+          "$ref": "#/$defs/Address"
+        },
+        "custom": {
+          "$ref": "#/$defs/CustomFields"
+        }
+      }
+    },
+    "ShippingMethodState": {
+      "type": "string",
+      "enum": ["DoesNotMatchCart", "MatchesCart"]
+    },
+    "ShippingInfo": {
+      "type": "object",
+      "required": ["shippingMethodName"],
+      "properties": {
+        "shippingMethodName": {
+          "type": "string"
+        },
+        "price": {
+          "$ref": "#/$defs/TypedMoney"
+        },
+        "shippingRate": {
+          "$ref": "#/$defs/ShippingRate"
+        },
+        "taxedPrice": {
+          "$ref": "#/$defs/TaxedItemPrice"
+        },
+        "taxRate": {
+          "$ref": "#/$defs/TaxRate"
+        },
+        "taxCategory": {
+          "$ref": "#/$defs/TaxCategoryReference"
+        },
+        "shippingMethod": {
+          "$ref": "#/$defs/ShippingMethodReference"
+        },
+        "deliveries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Delivery"
+          }
+        },
+        "discountedPrice": {
+          "$ref": "#/$defs/DiscountedLineItemPrice"
+        },
+        "shippingMethodState": {
+          "$ref": "#/$defs/ShippingMethodState"
+        }
+      }
+    },
+    "SyncInfo": {
+      "type": "object",
+      "properties": {
+        "channel": {
+          "$ref": "#/$defs/ChannelReference"
+        },
+        "externalId": {
+          "type": "string"
+        },
+        "syncedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "ReturnShipmentState": {
+      "type": "string",
+      "enum": ["Advised", "Returned", "BackInStock", "Unusable"]
+    },
+    "ReturnPaymentState": {
+      "type": "string",
+      "enum": ["NonRefundable", "Initial", "Refunded", "NotRefunded"]
+    },
+    "ReturnItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "quantity": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "type": {
+          "type": "string"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "shipmentState": {
+          "$ref": "#/$defs/ReturnShipmentState"
+        },
+        "paymentState": {
+          "$ref": "#/$defs/ReturnPaymentState"
+        },
+        "custom": {
+          "$ref": "#/$defs/CustomFields"
+        },
+        "lastModifiedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "ReturnInfo": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ReturnItem"
+          }
+        },
+        "returnTrackingId": {
+          "type": "string"
+        },
+        "returnDate": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "DiscountCodeState": {
+      "type": "string",
+      "enum": [
+        "NotActive",
+        "DoesNotMatchCart",
+        "MatchesCart",
+        "MaxApplicationReached",
+        "ApplicationStoppedByPreviousDiscount",
+        "NotValid"
+      ]
+    },
+    "DiscountCode": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "version": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastModifiedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastModifiedBy": {
+          "$ref": "#/$defs/LastModifiedBy"
+        },
+        "createdBy": {
+          "$ref": "#/$defs/CreatedBy"
+        },
+        "name": {
+          "$ref": "#/$defs/LocalizedString"
+        },
+        "description": {
+          "$ref": "#/$defs/LocalizedString"
+        },
+        "code": {
+          "type": "string"
+        },
+        "cartDiscounts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CartDiscountReference"
+          }
+        },
+        "cartPredicate": {
+          "type": "string"
+        },
+        "isActive": {
+          "type": "boolean"
+        },
+        "references": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Reference"
+          }
+        },
+        "maxApplications": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "maxApplicationsPerCustomer": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "custom": {
+          "$ref": "#/$defs/CustomFields"
+        },
+        "groups": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "validFrom": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "validUntil": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "applicationVersion": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "DiscountCodeReference": {
+      "type": "object",
+      "properties": {
+        "typeId": {
+          "$ref": "#/$defs/ReferenceTypeId"
+        },
+        "id": {
+          "type": "string"
+        },
+        "obj": {
+          "$ref": "#/$defs/DiscountCode"
+        }
+      }
+    },
+    "DiscountCodeInfo": {
+      "type": "object",
+      "properties": {
+        "discountCode": {
+          "$ref": "#/$defs/DiscountCodeReference"
+        },
+        "state": {
+          "$ref": "#/$defs/DiscountCodeState"
+        }
+      }
+    },
+    "CartState": {
+      "type": "string",
+      "enum": ["Active", "Merged", "Ordered"]
+    },
+    "InventoryMode": {
+      "type": "string",
+      "enum": ["TrackOnly", "ReserveOnOrder", "None"]
+    },
+    "TaxCalculationMode": {
+      "type": "string",
+      "enum": ["LineItemLevel", "UnitPriceLevel"]
+    },
+    "PaymentMethodInfo": {
+      "type": "object",
+      "properties": {
+        "paymentInterface": {
+          "type": "string"
+        },
+        "method": {
+          "type": "string"
+        },
+        "name": {
+          "$ref": "#/$defs/LocalizedString"
+        }
+      }
+    },
+    "PaymentStatus": {
+      "type": "object",
+      "properties": {
+        "interfaceCode": {
+          "type": "string"
+        },
+        "interfaceText": {
+          "type": "string"
+        },
+        "state": {
+          "$ref": "#/$defs/StateReference"
+        }
+      }
+    },
+    "TransactionType": {
+      "type": "string",
+      "enum": [
+        "Authorization",
+        "CancelAuthorization",
+        "Charge",
+        "Refund",
+        "Chargeback"
+      ]
+    },
+    "TransactionState": {
+      "type": "string",
+      "enum": ["Initial", "Pending", "Success", "Failure"]
+    },
+    "Transaction": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "type": {
+          "$ref": "#/$defs/TransactionType"
+        },
+        "amount": {
+          "$ref": "#/$defs/TypedMoney"
+        },
+        "interactionId": {
+          "type": "string"
+        },
+        "state": {
+          "$ref": "#/$defs/TransactionState"
+        },
+        "custom": {
+          "$ref": "#/$defs/CustomFields"
+        }
+      }
+    },
+    "Payment": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "version": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastModifiedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastModifiedBy": {
+          "$ref": "#/$defs/LastModifiedBy"
+        },
+        "createdBy": {
+          "$ref": "#/$defs/CreatedBy"
+        },
+        "customer": {
+          "$ref": "#/$defs/CustomerReference"
+        },
+        "anonymousId": {
+          "type": "string"
+        },
+        "externalId": {
+          "type": "string"
+        },
+        "interfaceId": {
+          "type": "string"
+        },
+        "amountPlanned": {
+          "$ref": "#/$defs/TypedMoney"
+        },
+        "amountAuthorized": {
+          "$ref": "#/$defs/TypedMoney"
+        },
+        "authorizedUntil": {
+          "type": "string"
+        },
+        "amountPaid": {
+          "$ref": "#/$defs/TypedMoney"
+        },
+        "amountRefunded": {
+          "$ref": "#/$defs/TypedMoney"
+        },
+        "paymentMethodInfo": {
+          "$ref": "#/$defs/PaymentMethodInfo"
+        },
+        "paymentStatus": {
+          "$ref": "#/$defs/PaymentStatus"
+        },
+        "transactions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Transaction"
+          }
+        },
+        "interfaceInteractions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CustomFields"
+          }
+        },
+        "custom": {
+          "$ref": "#/$defs/CustomFields"
+        },
+        "key": {
+          "type": "string"
+        }
+      }
+    },
+    "PaymentReference": {
+      "type": "object",
+      "properties": {
+        "typeId": {
+          "$ref": "#/$defs/ReferenceTypeId"
+        },
+        "id": {
+          "type": "string"
+        },
+        "obj": {
+          "$ref": "#/$defs/Payment"
+        }
+      }
+    },
+    "PaymentInfo": {
+      "type": "object",
+      "properties": {
+        "payments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PaymentReference"
+          }
+        }
+      }
+    },
+    "CartOrigin": {
+      "type": "string",
+      "enum": ["Customer", "Merchant"]
+    },
+    "ShippingRateInput": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "Cart": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "version": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastModifiedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "key": {
+          "type": "string"
+        },
+        "lastModifiedBy": {
+          "$ref": "#/$defs/LastModifiedBy"
+        },
+        "createdBy": {
+          "$ref": "#/$defs/CreatedBy"
+        },
+        "customerId": {
+          "type": "string"
+        },
+        "customerEmail": {
+          "type": "string"
+        },
+        "anonymousId": {
+          "type": "string"
+        },
+        "store": {
+          "$ref": "#/$defs/StoreKeyReference"
+        },
+        "lineItems": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/LineItem"
+          }
+        },
+        "customLineItems": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CustomLineItem"
+          }
+        },
+        "totalPrice": {
+          "$ref": "#/$defs/TypedMoney"
+        },
+        "taxedPrice": {
+          "$ref": "#/$defs/TaxedPrice"
+        },
+        "cartState": {
+          "$ref": "#/$defs/CartState"
+        },
+        "shippingAddress": {
+          "$ref": "#/$defs/Address"
+        },
+        "billingAddress": {
+          "$ref": "#/$defs/Address"
+        },
+        "inventoryMode": {
+          "$ref": "#/$defs/InventoryMode"
+        },
+        "taxMode": {
+          "$ref": "#/$defs/TaxMode"
+        },
+        "taxRoundingMode": {
+          "$ref": "#/$defs/RoundingMode"
+        },
+        "taxCalculationMode": {
+          "$ref": "#/$defs/TaxCalculationMode"
+        },
+        "customerGroup": {
+          "$ref": "#/$defs/CustomerGroupReference"
+        },
+        "country": {
+          "$ref": "#/$defs/CountryCode"
+        },
+        "shippingInfo": {
+          "$ref": "#/$defs/ShippingInfo"
+        },
+        "discountCodes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/DiscountCodeInfo"
+          }
+        },
+        "custom": {
+          "$ref": "#/$defs/CustomFields"
+        },
+        "paymentInfo": {
+          "$ref": "#/$defs/PaymentInfo"
+        },
+        "locale": {
+          "type": "string"
+        },
+        "deleteDaysAfterLastModification": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "refusedGifts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CartDiscountReference"
+          }
+        },
+        "origin": {
+          "$ref": "#/$defs/CartOrigin"
+        },
+        "shippingRateInput": {
+          "$ref": "#/$defs/ShippingRateInput"
+        },
+        "itemShippingAddresses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Address"
+          }
+        },
+        "totalLineItemQuantity": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "CartReference": {
+      "type": "object",
+      "properties": {
+        "typeId": {
+          "$ref": "#/$defs/ReferenceTypeId"
+        },
+        "id": {
+          "type": "string"
+        },
+        "obj": {
+          "$ref": "#/$defs/Cart"
+        }
+      }
+    },
+    "Payload": {
+      "type": "object",
+      "required": [
+        "totalPrice",
+        "orderNumber",
+        "shippingInfo",
+        "createdAt",
+        "orderState",
+        "customerEmail",
+        "billingAddress",
+        "shippingAddress",
+        "lineItems"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "version": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastModifiedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastModifiedBy": {
+          "$ref": "#/$defs/LastModifiedBy"
+        },
+        "createdBy": {
+          "$ref": "#/$defs/CreatedBy"
+        },
+        "completedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "orderNumber": {
+          "type": "string"
+        },
+        "customerId": {
+          "type": "string"
+        },
+        "customerEmail": {
+          "type": "string"
+        },
+        "anonymousId": {
+          "type": "string"
+        },
+        "store": {
+          "$ref": "#/$defs/StoreKeyReference"
+        },
+        "lineItems": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/LineItem"
+          }
+        },
+        "customLineItems": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CustomLineItem"
+          }
+        },
+        "totalPrice": {
+          "$ref": "#/$defs/TypedMoney"
+        },
+        "taxedPrice": {
+          "$ref": "#/$defs/TaxedPrice"
+        },
+        "shippingAddress": {
+          "$ref": "#/$defs/Address"
+        },
+        "billingAddress": {
+          "$ref": "#/$defs/Address"
+        },
+        "taxMode": {
+          "$ref": "#/$defs/TaxMode"
+        },
+        "taxRoundingMode": {
+          "$ref": "#/$defs/RoundingMode"
+        },
+        "customerGroup": {
+          "$ref": "#/$defs/CustomerGroupReference"
+        },
+        "country": {
+          "type": "string"
+        },
+        "orderState": {
+          "$ref": "#/$defs/OrderState"
+        },
+        "state": {
+          "$ref": "#/$defs/StateReference"
+        },
+        "shipmentState": {
+          "$ref": "#/$defs/ShipmentState"
+        },
+        "paymentState": {
+          "$ref": "#/$defs/PaymentState"
+        },
+        "shippingInfo": {
+          "$ref": "#/$defs/ShippingInfo"
+        },
+        "syncInfo": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SyncInfo"
+          }
+        },
+        "returnInfo": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ReturnInfo"
+          }
+        },
+        "discountCodes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/DiscountCodeInfo"
+          }
+        },
+        "lastMessageSequenceNumber": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "cart": {
+          "$ref": "#/$defs/CartReference"
+        },
+        "custom": {
+          "$ref": "#/$defs/CustomFields"
+        },
+        "paymentInfo": {
+          "$ref": "#/$defs/PaymentInfo"
+        },
+        "locale": {
+          "type": "string"
+        },
+        "inventoryMode": {
+          "$ref": "#/$defs/InventoryMode"
+        },
+        "origin": {
+          "$ref": "#/$defs/CartOrigin"
+        },
+        "taxCalculationMode": {
+          "$ref": "#/$defs/TaxCalculationMode"
+        },
+        "shippingRateInput": {
+          "$ref": "#/$defs/ShippingRateInput"
+        },
+        "itemShippingAddresses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Address"
+          }
+        },
+        "refusedGifts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CartDiscountReference"
+          }
+        }
+      }
+    },
+    "Metadata": {
+      "type": "object",
+      "required": ["x-emc-ubid"],
+      "properties": {
+        "x-emc-ubid": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "x-amzn-RequestId": {
+          "type": "string"
+        },
+        "x-lambda-RequestId": {
+          "type": "string"
+        }
+      }
+    },
+    "Detail": {
+      "type": "object",
+      "required": ["referenced", "correlationId", "payload", "metadata"],
+      "properties": {
+        "referenced": {
+          "type": "boolean"
+        },
+        "correlationId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "payload": {
+          "$ref": "#/$defs/Payload"
+        },
+        "metadata": {
+          "$ref": "#/$defs/Metadata"
+        }
+      }
+    }
+  },
+  "type": "object",
+  "required": ["version", "id", "detail", "detail-type", "time"],
+  "properties": {
+    "version": {
+      "type": "string"
+    },
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "detail-type": {
+      "enum": ["order.created"]
+    },
+    "source": {
+      "type": "string"
+    },
+    "account": {
+      "type": "string"
+    },
+    "time": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "region": {
+      "type": "string"
+    },
+    "detail": {
+      "$ref": "#/$defs/Detail"
+    }
+  }
+}

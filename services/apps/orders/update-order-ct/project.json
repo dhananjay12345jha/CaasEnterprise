@@ -1,0 +1,153 @@
+{
+  "root": "apps/orders/update-order-ct/",
+  "sourceRoot": "apps/orders/update-order-ct/src",
+  "projectType": "application",
+  "targets": {
+    "serve-all": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "yarn kill-port 9000 && cd ../mocks && nx run commerce-tools:serve",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "yarn kill-port 9111 && cd ../mocks && nx run brand-config-service:serve",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "nx run orders-update-order-ct:serve --stage={args.stage}"
+          }
+        ],
+        "parallel": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["apps/orders/update-order-ct/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/orders/update-order-ct"],
+      "options": {
+        "jestConfig": "apps/orders/update-order-ct/jest.config.js",
+        "color": true,
+        "passWithNoTests": true,
+        "testPathPattern": ["./src"],
+        "testPathIgnorePatterns": ["./test"]
+      }
+    },
+    "terminate": {
+      "builder": "@nrwl/workspace:run-commands",
+      "options": {
+        "envFile": "apps/orders/update-order-ct/.env",
+        "commands": [
+          "yarn kill-port --port ${HTTP_SERVER_PORT}",
+          "yarn kill-port --port ${LAMBDA_SERVER_PORT}",
+          "yarn kill-port --port ${SLS_OFFLINE_EVENTBRIDGE_PORT}",
+          "yarn kill-port --port ${SLS_OFFLINE_EVENTBRIDGE_PUB_SUB_PORT}"
+        ],
+        "cwd": "apps/orders/update-order-ct",
+        "parallel": true
+      }
+    },
+    "e2e:feature:env": {
+      "builder": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "echo \"Get the Base URLs for localhost and write them somewhere jest can find\"",
+        "cwd": "apps/orders/update-order-ct",
+        "parallel": false
+      }
+    },
+    "e2e-run-tests": {
+      "executor": "@nrwl/jest:jest",
+      "options": {
+        "jestConfig": "apps/orders/update-order-ct/jest.config.js",
+        "testPathPattern": ["./test/e2e"],
+        "runInBand": true,
+        "passWithNoTests": true
+      }
+    },
+    "e2e-feature": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn start-test \"yarn nx run orders-update-order-ct:serve\" tcp:localhost:${SLS_OFFLINE_EVENTBRIDGE_PORT} \"yarn nx run orders-update-order-ct:e2e-run-tests\"",
+        "color": true,
+        "cwd": "apps/orders/update-order-ct"
+      }
+    },
+    "info": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn sls print --verbose",
+        "color": true,
+        "cwd": "apps/orders/update-order-ct"
+      }
+    },
+    "build": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn sls package --verbose",
+        "color": true,
+        "cwd": "apps/orders/update-order-ct"
+      }
+    },
+    "deploy": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn sls deploy --verbose",
+        "color": true,
+        "cwd": "apps/orders/update-order-ct"
+      }
+    },
+    "e2e:env": {
+      "builder": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "echo \"Get the Base URLs from SERVERLESS_CONFIG_JSON and write them somewhere jest can find\"",
+        "cwd": "apps/orders/update-order-ct",
+        "parallel": false
+      }
+    },
+    "_e2e": {
+      "executor": "@nrwl/jest:jest",
+      "options": {
+        "jestConfig": "apps/orders/update-order-ct/jest.config.js",
+        "testPathPattern": ["./test/e2e"],
+        "runInBand": true,
+        "passWithNoTests": true
+      },
+      "dependsOn": [
+        {
+          "target": "e2e:env",
+          "projects": "self"
+        }
+      ]
+    },
+    "destroy": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn sls remove --verbose",
+        "color": true,
+        "cwd": "apps/orders/update-order-ct"
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn sls offline start --noPrependStageInUrl --httpPort=${SLS_OFFLINE_EVENTBRIDGE_PORT} --lambdaPort=${LAMBDA_SERVER_PORT}",
+        "color": true,
+        "cwd": "apps/orders/update-order-ct"
+      },
+      "dependsOn": [
+        {
+          "target": "terminate",
+          "projects": "self"
+        }
+      ]
+    }
+  },
+  "tags": ["scope:orders", "type:app"],
+  "implicitDependencies": []
+}

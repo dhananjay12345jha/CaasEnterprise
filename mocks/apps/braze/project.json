@@ -1,0 +1,55 @@
+{
+  "root": "mocks/apps/braze",
+  "sourceRoot": "mocks/apps/braze/src",
+  "projectType": "application",
+  "targets": {
+    "_build": {
+      "executor": "@nrwl/node:webpack",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "apps/dist/braze",
+        "main": "apps/braze/src/main.ts",
+        "externalDependencies": "none",
+        "tsConfig": "apps/braze/tsconfig.app.json",
+        "assets": [
+          {
+            "input": "apps/braze/src",
+            "glob": "**/*",
+            "output": "."
+          }
+        ]
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false,
+          "fileReplacements": []
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/node:node",
+      "options": {
+        "inspect": false,
+        "buildTarget": "braze:_build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/braze/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/braze"],
+      "options": {
+        "jestConfig": "apps/braze/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

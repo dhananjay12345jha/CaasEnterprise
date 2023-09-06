@@ -1,0 +1,47 @@
+{
+  "root": ".",
+  "sourceRoot": ".",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["./**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/private/jsonSchema/order/created"],
+      "options": {
+        "jestConfig": "private/jsonSchema/order/created/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "e2e": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "pwd",
+        "color": true,
+        "cwd": "private/jsonSchema/order/created"
+      }
+    },
+    "build": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn run compile",
+        "color": true,
+        "cwd": "private/jsonSchema/order/created"
+      }
+    },
+    "deploy": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "pwd",
+        "color": true,
+        "cwd": "private/jsonSchema/order/created"
+      }
+    }
+  },
+  "tags": ["scope:schemas", "type:library"],
+  "implicitDependencies": []
+}

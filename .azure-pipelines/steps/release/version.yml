@@ -1,0 +1,54 @@
+steps:
+  - bash: |
+      # set -x
+      AFFECTED=$(Agent.TempDirectory)/affected.json
+      echo "{}" > ${AFFECTED}
+      REPO_URL='$(System.CollectionUri)/$(System.TeamProject)/_git/$(Build.Repository.Name)?version=GB$(Build.SourceBranchName)'
+      echo $(jq --arg repo "$(Build.Repository.Name)" --arg branch "$(Build.SourceBranch)" --arg ver "$(Build.SourceVersion)" --arg repourl "${REPO_URL}" '. += {"source": {"repo": $repo, "branch": $branch, "version": $ver, "url": $repourl}}' ${AFFECTED}) > ${AFFECTED}
+      BUILD_DATE=$(date '+%Y/%m/%d %H:%M:%S %Z')
+      BUILD_URL='$(System.CollectionUri)/$(System.TeamProject)/_build/results?buildId=$(Build.BuildId)&view=results'
+      echo $(jq --arg buildid "$(Build.BuildId)" --arg date "${BUILD_DATE}" --arg buildurl "${BUILD_URL}" '. += {"build": {"id": $buildid, "date": $date, "url": $buildurl}}' ${AFFECTED}) > ${AFFECTED}
+      SOURCE_VERSION="$(cat ${AFFECTED} | jq --compact-output '.')"
+      echo "##vso[task.setvariable variable=sourceVersion]${SOURCE_VERSION}"
+      echo ${SOURCE_VERSION}
+      echo 
+    displayName: '[release] source version'
+
+  - bash: |
+      # set -x
+      AFFECTED=$(Agent.TempDirectory)/affected.json
+      echo "{}" > ${AFFECTED}
+      echo $(jq '. += {"nx_workspaces": []}' ${AFFECTED}) > ${AFFECTED}
+      echo "Affected NX Workspaces: $(affected.affectedNxWorkspaces)"
+      echo "Affected NX Params: $(affected.affectedNxParams)"
+      if [[ "$(affected.affectedNxWorkspaces)" != "[none]" ]]
+      then
+        for workspace in $(affected.affectedNxWorkspaces); do
+          echo "  ${workspace}"
+          app_array=()
+          for app in $(yarn workspace ${workspace} run affected:apps --plain $(affected.affectedNxParams)|tr ',' ' '); do app_array+=("${app}"); done
+          app_json=$(jq --null-input '$ARGS.positional' --args -- "${app_array[@]}")
+
+          lib_array=()
+          for lib in $(yarn workspace ${workspace} run affected:libs --plain $(affected.affectedNxParams)|tr ',' ' '); do lib_array+=("${lib}"); done
+          lib_json=$(jq --null-input '$ARGS.positional' --args -- "${lib_array[@]}")
+          
+          echo $(jq --arg wkspc "${workspace}" --argjson apps "${app_json}" --argjson libs "${lib_json}" '.nx_workspaces += [{"name": $wkspc, "apps": $apps, "libs": $libs}]' ${AFFECTED}) > ${AFFECTED}
+        done
+      fi
+      AFFECTED_NX_VERSION="$(cat ${AFFECTED} | jq --compact-output '.')"
+      echo "##vso[task.setvariable variable=affectedNxVersion]${AFFECTED_NX_VERSION}"
+      echo ${AFFECTED_NX_VERSION}
+    displayName: '[release] affected nx version'
+ 
+  - task: AWSShellScript@1
+    inputs:
+      scriptType: "inline"
+      inlineScript: |
+        AFFECTED=$(Agent.TempDirectory)/affected.json
+        echo '$(sourceVersion) $(affectedNxVersion)' | jq --compact-output --slurp add > ${AFFECTED}
+        $XA_WRAPPER aws ssm put-parameter --name '/platform/config/$(DEPLOY_CONTEXT)/$(DELIVERY_STAGE)/version' --value file://${AFFECTED} --type 'SecureString' --overwrite
+    displayName: "[release] ssm put parameter"
+    env:
+      SERVERLESS_CONFIG_JSON: "$(deployTarget.DeployTargetDataFileName)"
+  

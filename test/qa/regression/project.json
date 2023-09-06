@@ -1,0 +1,21 @@
+{
+  "root": "qa/regression",
+  "sourceRoot": "qa/regression/src",
+  "projectType": "application",
+  "targets": {
+    "deploy": {
+      "builder": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "cucumber-js --profile regression --profile {args.profile}",
+            "forwardAllArgs": true
+          }
+        ],
+        "parallel": false
+      }
+    }
+  },
+  "tags": ["scope:test", "type:regression"],
+  "implicitDependencies": []
+}

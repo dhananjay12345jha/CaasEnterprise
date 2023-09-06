@@ -1,0 +1,7 @@
+steps:
+  - task: AWSShellScript@1
+    inputs:
+      scriptType: "inline"
+      inlineScript: |
+        $XA_WRAPPER yarn affected:info $(affected.affectedNxParams)
+    displayName: "[workspace] service info"

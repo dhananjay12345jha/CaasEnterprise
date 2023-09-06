@@ -1,0 +1,443 @@
+schema {
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
+}
+
+type BrandMeta {
+  brandId: ID!
+  etld: String!
+  tenantId: ID!
+}
+
+type BrandMetaConnection {
+  items: [BrandMeta]
+  nextToken: String
+}
+
+type PrivateConfig {
+  brand: BrandMeta
+  identityProvider: IdentityProvider
+  externalProviders: [ExternalProvider]
+}
+
+type PublicConfig {
+  brand: BrandMeta
+  featureFlags: [FeatureFlagBrand]
+}
+
+type RoutingConfig {
+  brand: BrandMeta
+  privateEndpoints: [Endpoint]
+  publicEndpoints: [Endpoint]
+}
+
+type Endpoint {
+  brandId: ID!
+  endpointScope: EndpointScope!
+  token: String
+  type: EndpointType!
+  url: String!
+}
+
+type EndpointConnection {
+  items: [Endpoint]
+  nextToken: String
+}
+
+type FeatureFlag {
+  description: String
+  enable: Boolean!
+  name: String!
+}
+
+type FeatureFlagBrand {
+  brandId: ID!
+  enable: Boolean!
+  name: String!
+  description: String
+}
+
+type FeatureFlagBrandConnection {
+  items: [FeatureFlagBrand]
+  nextToken: String
+}
+
+type FeatureFlagConnection {
+  items: [FeatureFlag]
+  nextToken: String
+}
+
+type IdentityProvider {
+  brandId: ID!
+  clientId: String!
+  clientSecret: String!
+  endpoint: String!
+  provider: String!
+  region: String!
+  userPoolId: String!
+}
+
+type IdentityProviderConnection {
+  items: [IdentityProvider]
+  nextToken: String
+}
+
+type ExternalProvider {
+  brandId: ID!
+  type: String!
+  providerConfigs: [ExternalProviderConfig]
+}
+
+type ExternalProviderConfig {
+  key: String!
+  value: String
+}
+
+type ExternalProviderConnection {
+  items: [ExternalProvider]
+  nextToken: String
+}
+
+type Mutation {
+  createBrandMeta(input: CreateBrandMetaInput!): BrandMeta
+  createEndpoint(input: CreateEndpointInput!): Endpoint
+  createFeatureFlag(input: CreateFeatureFlagInput!): FeatureFlag
+  createFeatureFlagBrand(input: CreateFeatureFlagBrandInput!): FeatureFlagBrand
+  createIdentityProvider(input: CreateIdentityProviderInput!): IdentityProvider
+  createExternalProvider(input: CreateExternalProviderInput!): ExternalProvider
+  deleteBrandMeta(input: DeleteBrandMetaInput!): BrandMeta
+  deleteEndpoint(input: DeleteEndpointInput!): Endpoint
+  deleteFeatureFlag(input: DeleteFeatureFlagInput!): FeatureFlag
+  deleteFeatureFlagBrand(input: DeleteFeatureFlagBrandInput!): FeatureFlagBrand
+  deleteIdentityProvider(input: DeleteIdentityProviderInput!): IdentityProvider
+  deleteExternalProvider(input: DeleteExternalProviderInput!): ExternalProvider
+  updateBrandMeta(input: UpdateBrandMetaInput!): BrandMeta
+  updateEndpoint(input: UpdateEndpointInput!): Endpoint
+  updateFeatureFlag(input: UpdateFeatureFlagInput!): FeatureFlag
+  updateFeatureFlagBrand(input: UpdateFeatureFlagBrandInput!): FeatureFlagBrand
+  updateIdentityProvider(input: UpdateIdentityProviderInput!): IdentityProvider
+}
+
+type Query {
+  featureFlags(brandId: ID!, filter: [String!]): [FeatureFlagBrand]!
+  getBrandMeta(brandId: ID!): BrandMeta
+  getPrivateConfig(brandId: ID!): PrivateConfig!
+  getPublicConfig(brandId: ID!): PublicConfig!
+  getRoutingConfig(etld: String!): RoutingConfig!
+  getEndpoint(type: EndpointType!, url: String!): Endpoint
+  getFeatureFlag(name: String!): FeatureFlag
+  getFeatureFlagBrand(brandId: ID!, name: String!): FeatureFlagBrand
+  getIdentityProvider(region: String!, userPoolId: String!): IdentityProvider
+  getExternalProvider(brandId: String!, type: String!): ExternalProvider
+  listBrandMetas(
+    filter: TableBrandMetaFilterInput
+    limit: Int
+    nextToken: String
+  ): BrandMetaConnection
+  listEndpoints(
+    filter: TableEndpointFilterInput
+    limit: Int
+    nextToken: String
+  ): EndpointConnection
+  listFeatureFlagBrands(
+    filter: TableFeatureFlagBrandFilterInput
+    limit: Int
+    nextToken: String
+  ): FeatureFlagBrandConnection
+  listFeatureFlags(
+    filter: TableFeatureFlagFilterInput
+    limit: Int
+    nextToken: String
+  ): FeatureFlagConnection
+  listIdentityProviders(
+    filter: TableIdentityProviderFilterInput
+    limit: Int
+    nextToken: String
+  ): IdentityProviderConnection
+  listExternalProviders(
+    filter: TableExternalProviderFilterInput
+    limit: Int
+    nextToken: String
+  ): ExternalProviderConnection
+  privateEndpoints(brandId: ID!, filter: [EndpointType]): [Endpoint]!
+  publicEndpoints(brandId: ID!, filter: [EndpointType]): [Endpoint]!
+}
+
+type Subscription {
+  onCreateBrandMeta(brandId: ID, etld: String, tenantId: ID): BrandMeta
+    @aws_subscribe(mutations: ["createBrandMeta"])
+  onCreateEndpoint(token: String, url: String): Endpoint
+    @aws_subscribe(mutations: ["createEndpoint"])
+  onCreateFeatureFlag(
+    default: Boolean
+    enable: Boolean
+    name: String
+  ): FeatureFlag @aws_subscribe(mutations: ["createFeatureFlag"])
+  onCreateFeatureFlagBrand(brandId: ID, name: String): FeatureFlagBrand
+    @aws_subscribe(mutations: ["createFeatureFlagBrand"])
+  onCreateIdentityProvider(
+    clientId: String
+    clientSecret: String
+    endpoint: String
+    provider: String
+    region: String
+  ): IdentityProvider @aws_subscribe(mutations: ["createIdentityProvider"])
+  onCreateExternalProvider(
+    brandId: ID!
+    type: String!
+    providerConfigs: [ExternalProviderConfigInput]
+  ): ExternalProvider @aws_subscribe(mutations: ["createExternalProvider"])
+  onDeleteBrandMeta(brandId: ID, etld: String, tenantId: ID): BrandMeta
+    @aws_subscribe(mutations: ["deleteBrandMeta"])
+  onDeleteEndpoint(token: String, url: String): Endpoint
+    @aws_subscribe(mutations: ["deleteEndpoint"])
+  onDeleteFeatureFlag(
+    default: Boolean
+    enable: Boolean
+    name: String
+  ): FeatureFlag @aws_subscribe(mutations: ["deleteFeatureFlag"])
+  onDeleteFeatureFlagBrand(brandId: ID, name: String): FeatureFlagBrand
+    @aws_subscribe(mutations: ["deleteFeatureFlagBrand"])
+  onDeleteIdentityProvider(
+    clientId: String
+    clientSecret: String
+    endpoint: String
+    provider: String
+    region: String
+  ): IdentityProvider @aws_subscribe(mutations: ["deleteIdentityProvider"])
+  onDeleteExternalProvider(
+    brandId: ID!
+    type: String!
+    providerConfigs: [ExternalProviderConfigInput]
+  ): ExternalProvider @aws_subscribe(mutations: ["deleteExternalProvider"])
+  onUpdateBrandMeta(brandId: ID, etld: String, tenantId: ID): BrandMeta
+    @aws_subscribe(mutations: ["updateBrandMeta"])
+  onUpdateEndpoint(token: String, url: String): Endpoint
+    @aws_subscribe(mutations: ["updateEndpoint"])
+  onUpdateFeatureFlag(
+    default: Boolean
+    enable: Boolean
+    name: String
+  ): FeatureFlag @aws_subscribe(mutations: ["updateFeatureFlag"])
+  onUpdateFeatureFlagBrand(brandId: ID, name: String): FeatureFlagBrand
+    @aws_subscribe(mutations: ["updateFeatureFlagBrand"])
+  onUpdateIdentityProvider(
+    clientId: String
+    clientSecret: String
+    endpoint: String
+    provider: String
+    region: String
+  ): IdentityProvider @aws_subscribe(mutations: ["updateIdentityProvider"])
+}
+
+enum EndpointScope {
+  PRIVATE
+  PUBLIC
+}
+
+enum EndpointType {
+  AUTH
+  COMMERCEAPI
+  GRAPH
+}
+
+input CreateBrandMetaInput {
+  brandId: ID!
+  etld: String!
+  tenantId: ID!
+}
+
+input CreateEndpointInput {
+  brandId: ID!
+  endpointScope: EndpointScope!
+  token: String
+  type: EndpointType!
+  url: String!
+}
+
+input CreateFeatureFlagBrandInput {
+  brandId: ID!
+  enable: Boolean!
+  name: String!
+  description: String
+}
+
+input CreateFeatureFlagInput {
+  description: String
+  enable: Boolean!
+  name: String!
+}
+
+input CreateIdentityProviderInput {
+  brandId: ID!
+  clientId: String!
+  clientSecret: String!
+  endpoint: String!
+  provider: String!
+  region: String!
+  userPoolId: String!
+}
+
+input CreateExternalProviderInput {
+  brandId: ID!
+  type: String!
+  providerConfigs: [ExternalProviderConfigInput]
+}
+
+input ExternalProviderConfigInput {
+  key: String!
+  value: String
+}
+
+input DeleteBrandMetaInput {
+  brandId: ID!
+}
+
+input DeleteEndpointInput {
+  brandId: ID!
+  url: String!
+}
+
+input DeleteFeatureFlagBrandInput {
+  brandId: ID!
+  name: String!
+}
+
+input DeleteFeatureFlagInput {
+  name: String!
+}
+
+input DeleteIdentityProviderInput {
+  region: String!
+  userPoolId: String!
+}
+
+input DeleteExternalProviderInput {
+  brandId: ID!
+  type: String!
+}
+
+input TableBooleanFilterInput {
+  eq: Boolean
+  ne: Boolean
+}
+
+input TableBrandMetaFilterInput {
+  brandId: TableIDFilterInput
+  etld: TableIDFilterInput
+  tenantId: TableIDFilterInput
+}
+
+input TableEndpointFilterInput {
+  brandId: TableStringFilterInput
+  token: TableStringFilterInput
+  url: TableStringFilterInput
+}
+
+input TableFeatureFlagBrandFilterInput {
+  brandId: TableIDFilterInput
+  name: TableStringFilterInput
+}
+
+input TableFeatureFlagFilterInput {
+  description: TableStringFilterInput
+  enable: TableBooleanFilterInput
+}
+
+input TableFloatFilterInput {
+  between: [Float]
+  contains: Float
+  eq: Float
+  ge: Float
+  gt: Float
+  le: Float
+  lt: Float
+  ne: Float
+  notContains: Float
+}
+
+input TableIDFilterInput {
+  beginsWith: ID
+  between: [ID]
+  contains: ID
+  eq: ID
+  ge: ID
+  gt: ID
+  le: ID
+  lt: ID
+  ne: ID
+  notContains: ID
+}
+
+input TableIdentityProviderFilterInput {
+  brandId: TableStringFilterInput
+  clientId: TableStringFilterInput
+  clientSecret: TableStringFilterInput
+  endpoint: TableStringFilterInput
+  provider: TableStringFilterInput
+  region: TableStringFilterInput
+  userPoolId: TableStringFilterInput
+}
+
+input TableExternalProviderFilterInput {
+  brandId: TableStringFilterInput
+  type: TableStringFilterInput
+}
+
+input TableIntFilterInput {
+  between: [Int]
+  contains: Int
+  eq: Int
+  ge: Int
+  gt: Int
+  le: Int
+  lt: Int
+  ne: Int
+  notContains: Int
+}
+
+input TableStringFilterInput {
+  beginsWith: String
+  between: [String]
+  contains: String
+  eq: String
+  ge: String
+  gt: String
+  le: String
+  lt: String
+  ne: String
+  notContains: String
+}
+
+input UpdateBrandMetaInput {
+  brandId: ID!
+  etld: String
+  tenantId: ID
+}
+
+input UpdateEndpointInput {
+  brandId: ID!
+  token: String
+  url: String!
+}
+
+input UpdateFeatureFlagBrandInput {
+  brandId: ID!
+  name: String!
+}
+
+input UpdateFeatureFlagInput {
+  default: Boolean
+  enable: Boolean
+  name: String!
+}
+
+input UpdateIdentityProviderInput {
+  clientId: String
+  clientSecret: String
+  endpoint: String
+  provider: String
+  region: String!
+  userPoolId: String!
+}

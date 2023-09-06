@@ -1,0 +1,64 @@
+parameters:
+- name: buildMetaFile
+  type: string
+  default: "NA"
+- name: buildMetaJSON
+  type: string
+  default: "NA"
+
+steps:
+  - bash: |
+      # set -x
+      BUILD_META_FILE=${BUILD_META_DATA}
+      FULL_BUILD_META_DATA_FILE_NAME=$(System.DefaultWorkingDirectory)/${BUILD_META_FILE}
+      mkdir -p $(dirname ${FULL_BUILD_META_DATA_FILE_NAME})
+
+
+      # use the build meta json if provided
+      BUILD_META_JSON_PARAM="${{ parameters.buildMetaJSON }}"
+      if [[ "${BUILD_META_JSON_PARAM:=NA}" != "NA" ]]
+      then
+        if jq -e . >/dev/null 2>&1 <<<"$BUILD_META_JSON_PARAM"
+        then
+          echo "${BUILD_META_JSON_PARAM}" > "${FULL_BUILD_META_DATA_FILE_NAME}"
+          echo "Copied, verbatim, the value of buildMetaJSON to ${FULL_BUILD_META_DATA_FILE_NAME}"
+        else
+          echo "json provided in buildMetaJSON parameter could not be parsed"
+          echo "${BUILD_META_JSON_PARAM}"
+          jq -e . <<<"$BUILD_META_JSON_PARAM"
+          exit 1
+        fi
+      else
+        BUILD_META_FILE_PARAM="${{ parameters.buildMetaFile }}"
+        # use the build meta file if provided
+        if [[ "${BUILD_META_FILE_PARAM:=NA}" != "NA" ]]
+        then
+          if test -f "$(System.DefaultWorkingDirectory)/${BUILD_META_FILE_PARAM}"
+          then
+            cp -p "$(System.DefaultWorkingDirectory)/${BUILD_META_FILE_PARAM}" "${FULL_BUILD_META_DATA_FILE_NAME}"
+            echo "Copied $(System.DefaultWorkingDirectory)/${BUILD_META_FILE_PARAM} to ${FULL_BUILD_META_DATA_FILE_NAME}"
+          else
+            echo "Provided parameter for buildMetaFile \"${BUILD_META_FILE_PARAM}\" cannot be found relative to $(System.DefaultWorkingDirectory)"
+            exit 1
+          fi
+        else
+          # bail
+            echo "No build meta provided.  Cannot continue"
+            exit 1
+        fi
+      fi
+
+      # replace any available env vars with their current values, otherwise leave them alone
+      echo "substituting env vars in ${FULL_BUILD_META_DATA_FILE_NAME}"
+      SUB_VALS=$(envsubst "$(printf '${%s} ' $(env | sed 's/=.*//'))" < ${FULL_BUILD_META_DATA_FILE_NAME})
+      echo $SUB_VALS > ${FULL_BUILD_META_DATA_FILE_NAME}
+
+      echo "##vso[task.setvariable variable=BuildMetaFileName;isOutput=true]${FULL_BUILD_META_DATA_FILE_NAME}"
+
+      echo "Build Meta file name = ${FULL_BUILD_META_DATA_FILE_NAME}"
+      echo "Build Meta:"
+      jq . ${FULL_BUILD_META_DATA_FILE_NAME}
+      echo
+      echo
+    displayName: "[setup] meta data"
+    name: build_meta
